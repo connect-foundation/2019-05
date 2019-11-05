@@ -1,2 +1,9 @@
+#공통 
+node_modules
+
+#동균
 .idea
 .DS_Store
+
+#승남
+.code
