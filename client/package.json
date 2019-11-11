@@ -1,10 +1,10 @@
 {
-	"name": "2019-05",
+	"name": "quick-kick",
 	"version": "1.0.0",
-	"description": "QuickKick",
+	"description": "Futsal matching platform",
 	"main": "index.js",
-	"repository": "https://github.com/jongnan/2019-05.git",
-	"author": "jong yoon <dhorlawhddbs@naver.com>",
+	"repository": "https://github.com/connect-foundation/2019-05.git",
+	"author": "Team UnderDoggs",
 	"license": "MIT",
 	"scripts": {
 		"build": "webpack",
