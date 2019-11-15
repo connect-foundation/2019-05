@@ -1,0 +1,38 @@
+language: node_js
+
+node_js:
+  - 12.13
+
+cache:
+  - npm
+  - yarn
+
+branches:
+  only:
+    - master
+
+services:
+  - docker
+
+jobs:
+  include:
+    - stage: "TEST"
+      if: type = pull_request
+      name: "FRONT TEST"
+      before_install:
+        - cd ./client
+       # - npm install -g yarn
+       # - npm install -g jest
+      install:
+        - yarn install
+      script:
+        - yarn test
+
+    - stage: "DEPLOY TEST"
+      if: type = push AND branch = master
+      before_script:
+        - docker build -t "$DOCKER_USERNAME/travistest:latest" ./client
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      after_script:
+        - docker push "${DOCKER_USERNAME}/travistest:latest"
