@@ -25,7 +25,8 @@
 
 ### **왜 사용해야 하는가?**
 
--
+-   N사 cafe 게시판에서 글을 하나 하나 찾아야 하는 수고로움을 줄이고,
+-   [ELO](https://https://en.wikipedia.org/wiki/Elo_rating_system)를 토대로 한 티어(레벨)를 제공함으로써 수준이 비슷한 팀들끼리 대전이 가능하게 하기 때문입니다.
 
 ## Install
 
@@ -45,7 +46,7 @@ npm start
 npm run test
 ```
 
-## Author
+## Authors
 
 **🔥Team UnderDoggs**\
 <br />
