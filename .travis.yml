@@ -17,13 +17,19 @@ services:
 jobs:
     include:
         #PULL_REQUEST CHECKING STAGE
-        - stage: ‘TEST’
-          before_script:
-              - GIT_DIFF_RESULT=$(bash diff_checking.sh remotes/origin/develop remotes/upstream/develop)
-              - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f1)
-              - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f2)
+        - stage: ‘DEV TEST’
           name: ‘FRONT TEST’
           if: type = pull_request AND branch = develop
+          before_script:
+              - |
+                  if [ $TRAVIS_PULL_REQUEST_SLUG == $TRAVIS_REPO_SLUG ]; then
+                      GIT_DIFF_RESULT=$(eval "$(echo bash diff_checking.sh remotes/origin/$TRAVIS_PULL_REQUEST_BRANCH remotes/origin/develop)")
+                  else
+                      eval "$(echo git remote add pullRequestOrigin https://github.com/$TRAVIS_PULL_REQUEST_SLUG.git)"
+                      git fetch pullRequestOrigin develop
+                      GIT_DIFF_RESULT=$(eval "$(echo bash diff_checking.sh remotes/pullRequestOrigin/develop remotes/origin/develop)")
+                  fi
+              - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
           script:
               - |
                   if [ $IS_CHANGED_FRONT == true ]; then
@@ -31,8 +37,19 @@ jobs:
                       yarn install
                       yarn test
                   fi
+
         - name: ‘BACK TEST’
           if: type = pull_request AND branch = develop
+          before_script:
+              - |
+                  if [ $TRAVIS_PULL_REQUEST_SLUG == $TRAVIS_REPO_SLUG ]; then
+                      GIT_DIFF_RESULT=$(eval "$(echo bash diff_checking.sh remotes/origin/$TRAVIS_PULL_REQUEST_BRANCH remotes/origin/develop)")
+                  else
+                      eval "$(echo git remote add pullRequestOrigin https://github.com/$TRAVIS_PULL_REQUEST_SLUG.git)"
+                      git fetch pullRequestOrigin develop
+                      GIT_DIFF_RESULT=$(eval "$(echo bash diff_checking.sh remotes/pullRequestOrigin/develop remotes/origin/develop)")
+                  fi
+              - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
           script:
               - |
                   if [ $IS_CHANGED_BACK == true ]; then
@@ -40,27 +57,29 @@ jobs:
                       yarn install
                       echo server~~~
                   fi
+
         #DEVEOP SERVER BUILD STAGE
         - stage: ‘DEV BUILD’
           before_script:
               - GIT_DIFF_RESULT=$(bash diff_checking.sh remotes/origin/develop remotes/upstream/develop)
-              - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f1)
-              - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f2)
+              - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
           name: ‘DEV SERVER FRONT BUILD’
           if: branch = develop AND type = push
           script:
+
         - name: ‘DEV SERVER BACK BUILD’
           if: branch = develop AND type = push
           script:
+
         #PRODUCT SERVER BUILD STAGE
         - stage: ‘PROD BUILD’
           before_script:
               - GIT_DIFF_RESULT=$(bash diff_checking.sh remotes/upstream/develop remotes/upstream/master)
-              - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f1)
-              - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f2)
+              - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
           name: ‘PROD SERVER FRONT BUILD’
           if: branch = master AND type = push
           script:
+
         - name: ‘PROD SERVER BACK BUILD’
           if: branch = master AND type = push
           script:
