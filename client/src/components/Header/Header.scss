@@ -1,0 +1,8 @@
+.header {
+  background-color: tomato;
+  display: flex;
+  justify-content: center;
+  &__message {
+    color: yellow;
+  }
+}
