@@ -23,7 +23,7 @@ jobs:
               - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f1)
               - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f2)
           name: ‘FRONT TEST’
-          if: type = pull_request
+          if: type = pull_request AND branch = develop
           script:
               - |
                   if [ $IS_CHANGED_FRONT == true ]; then
@@ -32,7 +32,7 @@ jobs:
                       yarn test
                   fi
         - name: ‘BACK TEST’
-          if: type = pull_request
+          if: type = pull_request AND branch = develop
           script:
               - |
                   if [ $IS_CHANGED_BACK == true ]; then
