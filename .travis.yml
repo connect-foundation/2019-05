@@ -1,1 +1,66 @@
 language: node_js
+node_js:
+    - 12.13
+cache:
+    - npm
+    - yarn
+git:
+    depth: false
+branches:
+    only:
+        - master
+        - develop
+
+services:
+    - docker
+
+jobs:
+    include:
+        #PULL_REQUEST CHECKING STAGE
+        - stage: ‘TEST’
+          before_script:
+              - GIT_DIFF_RESULT=$(bash diff_checking.sh remotes/origin/develop remotes/upstream/develop)
+              - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f1)
+              - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f2)
+          name: ‘FRONT TEST’
+          if: type = pull_request
+          script:
+              - |
+                  if [ $IS_CHANGED_FRONT == true ]; then
+                      cd client
+                      yarn install
+                      yarn test
+                  fi
+        - name: ‘BACK TEST’
+          if: type = pull_request
+          script:
+              - |
+                  if [ $IS_CHANGED_BACK == true ]; then
+                      cd server
+                      yarn install
+                      echo server~~~
+                  fi
+        #DEVEOP SERVER BUILD STAGE
+        - stage: ‘DEV BUILD’
+          before_script:
+              - GIT_DIFF_RESULT=$(bash diff_checking.sh remotes/origin/develop remotes/upstream/develop)
+              - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f1)
+              - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f2)
+          name: ‘DEV SERVER FRONT BUILD’
+          if: branch = develop AND type = push
+          script:
+        - name: ‘DEV SERVER BACK BUILD’
+          if: branch = develop AND type = push
+          script:
+        #PRODUCT SERVER BUILD STAGE
+        - stage: ‘PROD BUILD’
+          before_script:
+              - GIT_DIFF_RESULT=$(bash diff_checking.sh remotes/upstream/develop remotes/upstream/master)
+              - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f1)
+              - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ‘,’ -f2)
+          name: ‘PROD SERVER FRONT BUILD’
+          if: branch = master AND type = push
+          script:
+        - name: ‘PROD SERVER BACK BUILD’
+          if: branch = master AND type = push
+          script:
