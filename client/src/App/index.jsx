@@ -1,15 +1,14 @@
 import React from 'react';
 import './App.scss';
-import Header from '../components/Header';
-import Footer from "../components/Footer";
+import {Header, Footer} from '../components/common';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <Header/>
       <Footer/>
     </div>
   );
-}
+};
 
 export default App;
