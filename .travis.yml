@@ -30,7 +30,7 @@ jobs:
         - |
           if [ $IS_CHANGED_FRONT != true ]; then 
             echo 'Front directory not change'
-            exit 0 
+            travis_terminate 0
           fi
         - cd client
       install:
@@ -48,7 +48,7 @@ jobs:
         - |
           if [ $IS_CHANGED_BACK != true ]; then
             echo 'Back directory not change'
-            exit 0 
+            travis_terminate 0
           fi
         - cd server
       install:
@@ -68,7 +68,7 @@ jobs:
         - |
           if [ $IS_CHANGED_FRONT != true ]; then 
             echo 'Front directory not change'
-            exit 0 
+            travis_terminate 0
           fi
       script: skip
 
@@ -80,7 +80,7 @@ jobs:
         - |
           if [ $IS_CHANGED_BACK != true ]; then 
             echo 'Back directory not change'
-            exit 0 
+            travis_terminate 0
           fi
       script: skip
 
@@ -94,7 +94,7 @@ jobs:
         - |
           if [ $IS_CHANGED_FRONT != true ]; then 
             echo 'Front directory not change'
-            exit 0 
+            travis_terminate 0
           fi
       script: skip
 
@@ -106,6 +106,6 @@ jobs:
         - |
           if [ $IS_CHANGED_BACK != true ]; then
             echo 'Back directory not change'
-            exit 0 
+            travis_terminate 0
           fi
       script: skip
