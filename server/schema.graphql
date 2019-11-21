@@ -1,0 +1,70 @@
+type Team {
+    seq: Int!
+    name: String!
+    logo: String
+    home_area: Area
+    introduction: String
+}
+
+type Player {
+    seq: Int!
+    playerId: String!
+    team: Team
+    name: String!
+    phone: String
+}
+
+enum Result {
+    WIN
+    DRAW
+    LOSE
+}
+enum Area{
+    SB
+    SN
+    DN
+    DB
+}
+
+type Match {
+    seq: Int!
+    host: Team
+    guest: Team
+    stadium: String!
+    area: Area
+    date: String
+    startTime: String
+    endTime: String
+    description: String
+    result: Result
+}
+
+type Apply{
+    seq: Int!
+    team: Team
+    match: Match
+}
+
+type Notifier{
+    seq: Int!
+    player: Player!
+    area: Area
+    date: String
+    startTime: String
+    endTime: String
+}
+
+type Stadium {
+    seq: Int!
+    name: String
+    address: String
+}
+
+type Query {
+    Matches: [Match]
+    Match(seq:Int, area:Area ): Match
+    Teams: [Team],
+    Team(seq:Int): Team
+    Players: [Player]
+    Player(seq: Int): Player
+}

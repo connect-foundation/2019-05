@@ -1,0 +1,29 @@
+.header {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  height: 110px;
+  padding: 0 50px;
+
+  * {
+    display: flex;
+    align-items: center;
+  }
+
+  &__left {
+    .logo {
+      height: 70%;
+    }
+  }
+
+  &__right {
+    .nav-bar {
+      font-weight: bold;
+      * {
+        margin-left: 10px;
+      }
+    }
+  }
+}
