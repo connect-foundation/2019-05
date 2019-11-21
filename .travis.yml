@@ -25,7 +25,7 @@ jobs:
       name: 'FRONT TEST'
       if: type = pull_request
       before_install:
-        - GIT_DIFF_RESULT=$(eval bash common_job.sh)
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
         - |
           if [ $IS_CHANGED_FRONT != true ]; then 
@@ -43,7 +43,7 @@ jobs:
     - name: 'BACK TEST'
       if: type = pull_request
       before_install:
-        - GIT_DIFF_RESULT=$(eval bash common_job.sh)
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
           if [ $IS_CHANGED_BACK != true ]; then
@@ -63,7 +63,7 @@ jobs:
       name: 'DEV SERVER FRONT BUILD'
       if: branch = develop AND type = push
       before_script:
-        - GIT_DIFF_RESULT=$(eval bash common_job.sh)
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
         - |
           if [ $IS_CHANGED_FRONT != true ]; then 
@@ -75,7 +75,7 @@ jobs:
     - name: 'DEV SERVER BACK BUILD'
       if: branch = develop AND type = push
       before_script:
-        - GIT_DIFF_RESULT=$(eval bash common_job.sh)
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
           if [ $IS_CHANGED_BACK != true ]; then 
@@ -89,7 +89,7 @@ jobs:
       name: 'PROD SERVER FRONT BUILD'
       if: branch = master AND type = push
       before_script:
-        - GIT_DIFF_RESULT=$(eval bash common_job.sh)
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
         - |
           if [ $IS_CHANGED_FRONT != true ]; then 
@@ -101,7 +101,7 @@ jobs:
     - name: 'PROD SERVER BACK BUILD'
       if: branch = master AND type = push
       before_script:
-        - GIT_DIFF_RESULT=$(eval bash common_job.sh)
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
           if [ $IS_CHANGED_BACK != true ]; then
