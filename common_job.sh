@@ -1,4 +1,7 @@
 #!/bin/bash
+if [ "$TRAVIS_PULL_REQUEST_BRANCH" = "" ]; then
+    exit 1
+fi
 if [ "$TRAVIS_PULL_REQUEST_SLUG" = "$TRAVIS_REPO_SLUG" ]; then
   GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh remotes/origin/$TRAVIS_PULL_REQUEST_BRANCH remotes/origin/$TRAVIS_BRANCH))
 else
