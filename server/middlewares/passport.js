@@ -2,13 +2,9 @@ const passport = require('passport');
 const NaverStrategy = require('passport-naver').Strategy;
 const {env} = process;
 
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
+passport.serializeUser((user, done) => done(null, user));
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
+passport.deserializeUser((user, done) => done(null, user));
 
 passport.use(new NaverStrategy({
     clientID: env.NAVER_CLIENT_ID,
