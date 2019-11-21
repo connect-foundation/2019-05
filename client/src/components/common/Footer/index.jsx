@@ -1,22 +1,31 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import './Footer.scss';
-
+import PropTypes from 'prop-types';
 
 const Footer = () => (
   <footer className="footer">
-    <FooterCategoryBlock title="Footer" contents={["this", "is", "footer"]} />
+    <FooterCategoryBlock title="Footer" contents={['this', 'is', 'footer']} />
   </footer>
 );
 
-
 const FooterCategoryBlock = ({ title, contents }) => (
-  <Fragment className="footer__list">
+  <div className="footer__list">
     <h1 className="footer__list-header">{title}</h1>
     <ul className="footer__list-items">
-      {contents.map(content => <li>{content}</li>)}
+      {contents.map((content, idx) => (
+        <li key={idx.toString()}>{content}</li>
+      ))}
     </ul>
-  </Fragment>
-)
+  </div>
+);
 
+FooterCategoryBlock.propTypes = {
+  title: PropTypes.string,
+  contents: PropTypes.arrayOf(PropTypes.string),
+};
 
+FooterCategoryBlock.defaultProps = {
+  title: 'default title',
+  contents: ['1,2,3'],
+};
 export default Footer;
