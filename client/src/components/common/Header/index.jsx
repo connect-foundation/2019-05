@@ -1,23 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './Header.scss';
 import logo from '../../../assets/images/quickkick-logo.png';
 
-const Header = () => {
-  return (
-    <div className="header">
-      <div className="header__left">
-        <ServiceLogo />
-      </div>
-      <div className="header__right">
-        <NavBar />
-      </div>
+const Header = () => (
+  <div className="header">
+    <div className="header__left">
+      <ServiceLogo />
     </div>
-  );
-};
+    <div className="header__right">
+      <NavBar />
+    </div>
+  </div>
+);
 
-const ServiceLogo = () => {
-  return <img className="logo" src={logo} alt="퀵킥 로고" />;
-};
+const ServiceLogo = () => <img className="logo" src={logo} alt="퀵킥 로고" />;
 
 const NavBar = () => {
   const [isLogin, setIsLogin] = useState(false);
