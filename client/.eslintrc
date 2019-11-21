@@ -1,8 +1,15 @@
 {
-	"extends": ["react-app", "airbnb"],
-	"rules": {
-		"quotes": ["error", "single", { "avoidEscape": true }],
-		"indent": ["error", 2],
-		"semi": "warn"
-	}
+  "extends": ["react-app", "airbnb"],
+  "rules": {
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "indent": ["error", 2],
+    "semi": "warn"
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": false
+    }
+  },
+  "plugins": ["react"],
+  "parser": "babel-eslint"
 }
