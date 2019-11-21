@@ -1,12 +1,21 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+require('dotenv').config();
+const createError = require('http-errors');
+const express = require('express');
+const { GraphQLServer } = require('graphql-yoga');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const resolvers = require('./resolver');
+const { prisma } = require('./generated/prisma-client');
 
-var indexRouter = require('./routes/index');
 
-var app = express();
+const server = new GraphQLServer({
+  typeDefs: './schema.graphql',
+  resolvers,
+  context: { prisma }
+});
+
+const app = server.express;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -18,8 +27,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+server.express.get('/', (req, res, next)=>{
+  return res.send('hello');
+});
+server.express.use('/auth', (req, res, next) => {
+  return res.send('ok');
+});
+
+
+server.start({
+  port: 4000,
+  endpoint: '/graphql',
+  playground: '/playground',
+},({ port })=> console.log(`${port} open`));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,4 +58,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+
+//module.exports = app;
