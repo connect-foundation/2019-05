@@ -1,5 +1,5 @@
 #!/bin/bash
-git diff $1..$2 --name-only > diff.txt
+git diff $1 --name-only > diff.txt
 IS_CLIENT_PUSHED=false
 IS_SERVER_PUSHED=false
 while read diff_file_name; do
