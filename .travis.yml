@@ -1,1 +1,111 @@
 language: node_js
+
+node_js:
+  - 12.13
+
+cache:
+  - npm
+  - yarn
+
+git:
+  depth: false
+
+services:
+  - docker
+
+branches:
+  only:
+    - master
+    - develop
+
+jobs:
+  include:
+    #PULL_REQUEST CHECKING STAGE
+    - stage: 'TEST'
+      name: 'FRONT TEST'
+      if: type = pull_request
+      before_install:
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
+        - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
+        - |
+          if [ $IS_CHANGED_FRONT != true ]; then 
+            echo 'Front directory not change'
+            travis_terminate 0
+          fi
+        - cd client
+      install:
+        - yarn
+      script:
+        - echo 'Front test start!'
+        - yarn test
+        - echo 'Front test done...'
+
+    - name: 'BACK TEST'
+      if: type = pull_request
+      before_install:
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
+        - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
+        - |
+          if [ $IS_CHANGED_BACK != true ]; then
+            echo 'Back directory not change'
+            travis_terminate 0
+          fi
+        - cd server
+      install:
+        - npm
+      script:
+        - echo 'Server test start!'
+        - npm test
+        - echo 'Server test done...'
+
+    #DEVELOP SERVER BUILD STAGE
+    - stage: 'DEV BUILD'
+      name: 'DEV SERVER FRONT BUILD'
+      if: branch = develop AND type = push
+      before_script:
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
+        - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
+        - |
+          if [ $IS_CHANGED_FRONT != true ]; then 
+            echo 'Front directory not change'
+            travis_terminate 0
+          fi
+      script: skip
+
+    - name: 'DEV SERVER BACK BUILD'
+      if: branch = develop AND type = push
+      before_script:
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
+        - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
+        - |
+          if [ $IS_CHANGED_BACK != true ]; then 
+            echo 'Back directory not change'
+            travis_terminate 0
+          fi
+      script: skip
+
+    #PRODUCT SERVER BUILD STAGE
+    - stage: 'PROD BUILD'
+      name: 'PROD SERVER FRONT BUILD'
+      if: branch = master AND type = push
+      before_script:
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
+        - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
+        - |
+          if [ $IS_CHANGED_FRONT != true ]; then 
+            echo 'Front directory not change'
+            travis_terminate 0
+          fi
+      script: skip
+
+    - name: 'PROD SERVER BACK BUILD'
+      if: branch = master AND type = push
+      before_script:
+        - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
+        - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
+        - |
+          if [ $IS_CHANGED_BACK != true ]; then
+            echo 'Back directory not change'
+            travis_terminate 0
+          fi
+      script: skip

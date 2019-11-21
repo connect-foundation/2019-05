@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Header.scss';
 import logo from '../../../assets/images/quickkick-logo.png';
 
@@ -15,14 +15,33 @@ const Header = () => (
 
 const ServiceLogo = () => <img className="logo" src={logo} alt="퀵킥 로고" />;
 
-const NavBar = () => (
-  <nav className="nav-bar">
-    <div className="nav-bar__button">Quick Match</div>
-    <div className="nav-bar__button">Quick Team</div>
-    <UserIcon className="nav-bar__userInfo" />
-  </nav>
-);
+const NavBar = () => {
+  const [isLogin, setIsLogin] = useState(false);
 
-const UserIcon = (className) => <div className={className}>유저아이콘</div>;
+  useEffect(() => {
+    const cookie = document.cookie.split('=')[1];
+    setIsLogin(cookie === 'true');
+  }, []);
+
+  return (
+    <nav className="nav-bar">
+      <div className="nav-bar__button">Quick Match</div>
+      <div className="nav-bar__button">Quick Team</div>
+      {isLogin ? <UserIcon /> : <LoginBtn />}
+    </nav>
+  );
+};
+
+const LoginBtn = () => {
+  return (
+    <div className="nav-bar__userInfo">
+      <a href="http://127.0.0.1:4000/auth/naver">로그인</a>
+    </div>
+  );
+};
+
+const UserIcon = () => {
+  return <div className="nav-bar__userInfo">로그아웃</div>;
+};
 
 export default Header;
