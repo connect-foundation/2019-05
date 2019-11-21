@@ -1,0 +1,11 @@
+.footer {
+  background-color: #17252a;
+  color: whitesmoke;
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+
+  &__list-items {
+    list-style-type: none;
+  }
+}
