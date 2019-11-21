@@ -32,16 +32,12 @@ const NavBar = () => {
   );
 };
 
-const LoginBtn = () => {
-  return (
-    <div className="nav-bar__userInfo">
-      <a href="http://127.0.0.1:4000/auth/naver">로그인</a>
-    </div>
-  );
-};
+const LoginBtn = () => (
+  <div className="nav-bar__userInfo">
+    <a href="http://127.0.0.1:4000/auth/naver">로그인</a>
+  </div>
+);
 
-const UserIcon = () => {
-  return <div className="nav-bar__userInfo">로그아웃</div>;
-};
+const UserIcon = () => <div className="nav-bar__userInfo">로그아웃</div>;
 
 export default Header;
