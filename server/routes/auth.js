@@ -12,6 +12,7 @@ const naverLoginResult = () => passport.authenticate("naver", {
 
 const successLogin = (req, res) => {
   console.log(req.user);
+  res.cookie('isLogin', 'true');
   res.redirect("http://127.0.0.1:3000");
 };
 
