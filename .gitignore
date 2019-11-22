@@ -27,3 +27,6 @@ yarn-error.log*
 .idea/
 .vscode/
 .cache/
+
+#prisma setup
+prisma/
