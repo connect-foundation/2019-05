@@ -17,6 +17,7 @@ const server = new GraphQLServer({
   context: { prisma }
 });
 
+
 const app = server.express;
 
 app.set('views', path.join(__dirname, 'views'));
@@ -32,18 +33,11 @@ app.use(passport.initialize());
 
 app.use('/auth', authRouter);
 
-server.express.get('/', (req, res, next)=>{
-  return res.send('hello');
-});
-server.express.use('/auth', (req, res, next) => {
-  return res.send('ok');
-});
-
 server.start({
   port: 4000,
   endpoint: '/graphql',
   playground: '/playground',
-},({ port })=> console.log(`${port} open`));
+},({ port })=> console.log(`QuickKick API Server is opened on ${port}`));
 
 app.use(createError);
 app.use(errorRouter);
