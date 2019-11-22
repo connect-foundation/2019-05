@@ -355,8 +355,8 @@ export type TeamOrderByInput =
   | "name_DESC"
   | "logo_ASC"
   | "logo_DESC"
-  | "home_area_ASC"
-  | "home_area_DESC"
+  | "homeArea_ASC"
+  | "homeArea_DESC"
   | "introduction_ASC"
   | "introduction_DESC";
 
@@ -432,9 +432,9 @@ export interface PlayerWhereInput {
   email_not_starts_with?: Maybe<String>;
   email_ends_with?: Maybe<String>;
   email_not_ends_with?: Maybe<String>;
-  noti_list_every?: Maybe<NotifierWhereInput>;
-  noti_list_some?: Maybe<NotifierWhereInput>;
-  noti_list_none?: Maybe<NotifierWhereInput>;
+  notiList_every?: Maybe<NotifierWhereInput>;
+  notiList_some?: Maybe<NotifierWhereInput>;
+  notiList_none?: Maybe<NotifierWhereInput>;
   AND?: Maybe<PlayerWhereInput[] | PlayerWhereInput>;
   OR?: Maybe<PlayerWhereInput[] | PlayerWhereInput>;
   NOT?: Maybe<PlayerWhereInput[] | PlayerWhereInput>;
@@ -477,10 +477,10 @@ export interface TeamWhereInput {
   logo_not_starts_with?: Maybe<String>;
   logo_ends_with?: Maybe<String>;
   logo_not_ends_with?: Maybe<String>;
-  home_area?: Maybe<Area>;
-  home_area_not?: Maybe<Area>;
-  home_area_in?: Maybe<Area[] | Area>;
-  home_area_not_in?: Maybe<Area[] | Area>;
+  homeArea?: Maybe<Area>;
+  homeArea_not?: Maybe<Area>;
+  homeArea_in?: Maybe<Area[] | Area>;
+  homeArea_not_in?: Maybe<Area[] | Area>;
   introduction?: Maybe<String>;
   introduction_not?: Maybe<String>;
   introduction_in?: Maybe<String[] | String>;
@@ -498,15 +498,15 @@ export interface TeamWhereInput {
   members_every?: Maybe<PlayerWhereInput>;
   members_some?: Maybe<PlayerWhereInput>;
   members_none?: Maybe<PlayerWhereInput>;
-  upload_match_list_every?: Maybe<MatchWhereInput>;
-  upload_match_list_some?: Maybe<MatchWhereInput>;
-  upload_match_list_none?: Maybe<MatchWhereInput>;
-  applyEnd_match_list_every?: Maybe<MatchWhereInput>;
-  applyEnd_match_list_some?: Maybe<MatchWhereInput>;
-  applyEnd_match_list_none?: Maybe<MatchWhereInput>;
-  applyOn_list_every?: Maybe<ApplyWhereInput>;
-  applyOn_list_some?: Maybe<ApplyWhereInput>;
-  applyOn_list_none?: Maybe<ApplyWhereInput>;
+  uploadMatchList_every?: Maybe<MatchWhereInput>;
+  uploadMatchList_some?: Maybe<MatchWhereInput>;
+  uploadMatchList_none?: Maybe<MatchWhereInput>;
+  matchingDoneList_every?: Maybe<MatchWhereInput>;
+  matchingDoneList_some?: Maybe<MatchWhereInput>;
+  matchingDoneList_none?: Maybe<MatchWhereInput>;
+  onApplyingList_every?: Maybe<ApplyWhereInput>;
+  onApplyingList_some?: Maybe<ApplyWhereInput>;
+  onApplyingList_none?: Maybe<ApplyWhereInput>;
   AND?: Maybe<TeamWhereInput[] | TeamWhereInput>;
   OR?: Maybe<TeamWhereInput[] | TeamWhereInput>;
   NOT?: Maybe<TeamWhereInput[] | TeamWhereInput>;
@@ -752,24 +752,24 @@ export type TeamWhereUniqueInput = AtLeastOne<{
 
 export interface ApplyCreateInput {
   seq?: Maybe<Int>;
-  team?: Maybe<TeamCreateOneWithoutApplyOn_listInput>;
+  team?: Maybe<TeamCreateOneWithoutOnApplyingListInput>;
   match?: Maybe<MatchCreateOneWithoutAppliedListsInput>;
 }
 
-export interface TeamCreateOneWithoutApplyOn_listInput {
-  create?: Maybe<TeamCreateWithoutApplyOn_listInput>;
+export interface TeamCreateOneWithoutOnApplyingListInput {
+  create?: Maybe<TeamCreateWithoutOnApplyingListInput>;
   connect?: Maybe<TeamWhereUniqueInput>;
 }
 
-export interface TeamCreateWithoutApplyOn_listInput {
+export interface TeamCreateWithoutOnApplyingListInput {
   seq?: Maybe<Int>;
   name: String;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
-  upload_match_list?: Maybe<MatchCreateManyWithoutHostInput>;
-  applyEnd_match_list?: Maybe<MatchCreateManyWithoutGuestInput>;
+  uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
+  matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
 }
 
 export interface PlayerCreateManyWithoutTeamInput {
@@ -783,7 +783,7 @@ export interface PlayerCreateWithoutTeamInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
-  noti_list?: Maybe<NotifierCreateManyWithoutPlayerInput>;
+  notiList?: Maybe<NotifierCreateManyWithoutPlayerInput>;
 }
 
 export interface NotifierCreateManyWithoutPlayerInput {
@@ -808,7 +808,7 @@ export interface MatchCreateManyWithoutHostInput {
 
 export interface MatchCreateWithoutHostInput {
   seq?: Maybe<Int>;
-  guest?: Maybe<TeamCreateOneWithoutApplyEnd_match_listInput>;
+  guest?: Maybe<TeamCreateOneWithoutMatchingDoneListInput>;
   stadium: String;
   area?: Maybe<Area>;
   date?: Maybe<String>;
@@ -819,20 +819,20 @@ export interface MatchCreateWithoutHostInput {
   appliedLists?: Maybe<ApplyCreateManyWithoutMatchInput>;
 }
 
-export interface TeamCreateOneWithoutApplyEnd_match_listInput {
-  create?: Maybe<TeamCreateWithoutApplyEnd_match_listInput>;
+export interface TeamCreateOneWithoutMatchingDoneListInput {
+  create?: Maybe<TeamCreateWithoutMatchingDoneListInput>;
   connect?: Maybe<TeamWhereUniqueInput>;
 }
 
-export interface TeamCreateWithoutApplyEnd_match_listInput {
+export interface TeamCreateWithoutMatchingDoneListInput {
   seq?: Maybe<Int>;
   name: String;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
-  upload_match_list?: Maybe<MatchCreateManyWithoutHostInput>;
-  applyOn_list?: Maybe<ApplyCreateManyWithoutTeamInput>;
+  uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
+  onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
 }
 
 export interface ApplyCreateManyWithoutTeamInput {
@@ -852,8 +852,8 @@ export interface MatchCreateOneWithoutAppliedListsInput {
 
 export interface MatchCreateWithoutAppliedListsInput {
   seq?: Maybe<Int>;
-  host?: Maybe<TeamCreateOneWithoutUpload_match_listInput>;
-  guest?: Maybe<TeamCreateOneWithoutApplyEnd_match_listInput>;
+  host?: Maybe<TeamCreateOneWithoutUploadMatchListInput>;
+  guest?: Maybe<TeamCreateOneWithoutMatchingDoneListInput>;
   stadium: String;
   area?: Maybe<Area>;
   date?: Maybe<String>;
@@ -863,20 +863,20 @@ export interface MatchCreateWithoutAppliedListsInput {
   result?: Maybe<Result>;
 }
 
-export interface TeamCreateOneWithoutUpload_match_listInput {
-  create?: Maybe<TeamCreateWithoutUpload_match_listInput>;
+export interface TeamCreateOneWithoutUploadMatchListInput {
+  create?: Maybe<TeamCreateWithoutUploadMatchListInput>;
   connect?: Maybe<TeamWhereUniqueInput>;
 }
 
-export interface TeamCreateWithoutUpload_match_listInput {
+export interface TeamCreateWithoutUploadMatchListInput {
   seq?: Maybe<Int>;
   name: String;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
-  applyEnd_match_list?: Maybe<MatchCreateManyWithoutGuestInput>;
-  applyOn_list?: Maybe<ApplyCreateManyWithoutTeamInput>;
+  matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
+  onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
 }
 
 export interface MatchCreateManyWithoutGuestInput {
@@ -886,7 +886,7 @@ export interface MatchCreateManyWithoutGuestInput {
 
 export interface MatchCreateWithoutGuestInput {
   seq?: Maybe<Int>;
-  host?: Maybe<TeamCreateOneWithoutUpload_match_listInput>;
+  host?: Maybe<TeamCreateOneWithoutUploadMatchListInput>;
   stadium: String;
   area?: Maybe<Area>;
   date?: Maybe<String>;
@@ -904,31 +904,31 @@ export interface ApplyCreateManyWithoutMatchInput {
 
 export interface ApplyCreateWithoutMatchInput {
   seq?: Maybe<Int>;
-  team?: Maybe<TeamCreateOneWithoutApplyOn_listInput>;
+  team?: Maybe<TeamCreateOneWithoutOnApplyingListInput>;
 }
 
 export interface ApplyUpdateInput {
-  team?: Maybe<TeamUpdateOneWithoutApplyOn_listInput>;
+  team?: Maybe<TeamUpdateOneWithoutOnApplyingListInput>;
   match?: Maybe<MatchUpdateOneWithoutAppliedListsInput>;
 }
 
-export interface TeamUpdateOneWithoutApplyOn_listInput {
-  create?: Maybe<TeamCreateWithoutApplyOn_listInput>;
-  update?: Maybe<TeamUpdateWithoutApplyOn_listDataInput>;
-  upsert?: Maybe<TeamUpsertWithoutApplyOn_listInput>;
+export interface TeamUpdateOneWithoutOnApplyingListInput {
+  create?: Maybe<TeamCreateWithoutOnApplyingListInput>;
+  update?: Maybe<TeamUpdateWithoutOnApplyingListDataInput>;
+  upsert?: Maybe<TeamUpsertWithoutOnApplyingListInput>;
   delete?: Maybe<Boolean>;
   disconnect?: Maybe<Boolean>;
   connect?: Maybe<TeamWhereUniqueInput>;
 }
 
-export interface TeamUpdateWithoutApplyOn_listDataInput {
+export interface TeamUpdateWithoutOnApplyingListDataInput {
   name?: Maybe<String>;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
-  upload_match_list?: Maybe<MatchUpdateManyWithoutHostInput>;
-  applyEnd_match_list?: Maybe<MatchUpdateManyWithoutGuestInput>;
+  uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
+  matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
 }
 
 export interface PlayerUpdateManyWithoutTeamInput {
@@ -962,7 +962,7 @@ export interface PlayerUpdateWithoutTeamDataInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
-  noti_list?: Maybe<NotifierUpdateManyWithoutPlayerInput>;
+  notiList?: Maybe<NotifierUpdateManyWithoutPlayerInput>;
 }
 
 export interface NotifierUpdateManyWithoutPlayerInput {
@@ -1192,7 +1192,7 @@ export interface MatchUpdateWithWhereUniqueWithoutHostInput {
 }
 
 export interface MatchUpdateWithoutHostDataInput {
-  guest?: Maybe<TeamUpdateOneWithoutApplyEnd_match_listInput>;
+  guest?: Maybe<TeamUpdateOneWithoutMatchingDoneListInput>;
   stadium?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
@@ -1203,23 +1203,23 @@ export interface MatchUpdateWithoutHostDataInput {
   appliedLists?: Maybe<ApplyUpdateManyWithoutMatchInput>;
 }
 
-export interface TeamUpdateOneWithoutApplyEnd_match_listInput {
-  create?: Maybe<TeamCreateWithoutApplyEnd_match_listInput>;
-  update?: Maybe<TeamUpdateWithoutApplyEnd_match_listDataInput>;
-  upsert?: Maybe<TeamUpsertWithoutApplyEnd_match_listInput>;
+export interface TeamUpdateOneWithoutMatchingDoneListInput {
+  create?: Maybe<TeamCreateWithoutMatchingDoneListInput>;
+  update?: Maybe<TeamUpdateWithoutMatchingDoneListDataInput>;
+  upsert?: Maybe<TeamUpsertWithoutMatchingDoneListInput>;
   delete?: Maybe<Boolean>;
   disconnect?: Maybe<Boolean>;
   connect?: Maybe<TeamWhereUniqueInput>;
 }
 
-export interface TeamUpdateWithoutApplyEnd_match_listDataInput {
+export interface TeamUpdateWithoutMatchingDoneListDataInput {
   name?: Maybe<String>;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
-  upload_match_list?: Maybe<MatchUpdateManyWithoutHostInput>;
-  applyOn_list?: Maybe<ApplyUpdateManyWithoutTeamInput>;
+  uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
+  onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
 }
 
 export interface ApplyUpdateManyWithoutTeamInput {
@@ -1258,8 +1258,8 @@ export interface MatchUpdateOneWithoutAppliedListsInput {
 }
 
 export interface MatchUpdateWithoutAppliedListsDataInput {
-  host?: Maybe<TeamUpdateOneWithoutUpload_match_listInput>;
-  guest?: Maybe<TeamUpdateOneWithoutApplyEnd_match_listInput>;
+  host?: Maybe<TeamUpdateOneWithoutUploadMatchListInput>;
+  guest?: Maybe<TeamUpdateOneWithoutMatchingDoneListInput>;
   stadium?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
@@ -1269,23 +1269,23 @@ export interface MatchUpdateWithoutAppliedListsDataInput {
   result?: Maybe<Result>;
 }
 
-export interface TeamUpdateOneWithoutUpload_match_listInput {
-  create?: Maybe<TeamCreateWithoutUpload_match_listInput>;
-  update?: Maybe<TeamUpdateWithoutUpload_match_listDataInput>;
-  upsert?: Maybe<TeamUpsertWithoutUpload_match_listInput>;
+export interface TeamUpdateOneWithoutUploadMatchListInput {
+  create?: Maybe<TeamCreateWithoutUploadMatchListInput>;
+  update?: Maybe<TeamUpdateWithoutUploadMatchListDataInput>;
+  upsert?: Maybe<TeamUpsertWithoutUploadMatchListInput>;
   delete?: Maybe<Boolean>;
   disconnect?: Maybe<Boolean>;
   connect?: Maybe<TeamWhereUniqueInput>;
 }
 
-export interface TeamUpdateWithoutUpload_match_listDataInput {
+export interface TeamUpdateWithoutUploadMatchListDataInput {
   name?: Maybe<String>;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
-  applyEnd_match_list?: Maybe<MatchUpdateManyWithoutGuestInput>;
-  applyOn_list?: Maybe<ApplyUpdateManyWithoutTeamInput>;
+  matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
+  onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
 }
 
 export interface MatchUpdateManyWithoutGuestInput {
@@ -1314,7 +1314,7 @@ export interface MatchUpdateWithWhereUniqueWithoutGuestInput {
 }
 
 export interface MatchUpdateWithoutGuestDataInput {
-  host?: Maybe<TeamUpdateOneWithoutUpload_match_listInput>;
+  host?: Maybe<TeamUpdateOneWithoutUploadMatchListInput>;
   stadium?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
@@ -1348,7 +1348,7 @@ export interface ApplyUpdateWithWhereUniqueWithoutMatchInput {
 }
 
 export interface ApplyUpdateWithoutMatchDataInput {
-  team?: Maybe<TeamUpdateOneWithoutApplyOn_listInput>;
+  team?: Maybe<TeamUpdateOneWithoutOnApplyingListInput>;
 }
 
 export interface ApplyUpsertWithWhereUniqueWithoutMatchInput {
@@ -1484,9 +1484,9 @@ export interface MatchUpdateManyDataInput {
   result?: Maybe<Result>;
 }
 
-export interface TeamUpsertWithoutUpload_match_listInput {
-  update: TeamUpdateWithoutUpload_match_listDataInput;
-  create: TeamCreateWithoutUpload_match_listInput;
+export interface TeamUpsertWithoutUploadMatchListInput {
+  update: TeamUpdateWithoutUploadMatchListDataInput;
+  create: TeamCreateWithoutUploadMatchListInput;
 }
 
 export interface MatchUpsertWithoutAppliedListsInput {
@@ -1500,9 +1500,9 @@ export interface ApplyUpsertWithWhereUniqueWithoutTeamInput {
   create: ApplyCreateWithoutTeamInput;
 }
 
-export interface TeamUpsertWithoutApplyEnd_match_listInput {
-  update: TeamUpdateWithoutApplyEnd_match_listDataInput;
-  create: TeamCreateWithoutApplyEnd_match_listInput;
+export interface TeamUpsertWithoutMatchingDoneListInput {
+  update: TeamUpdateWithoutMatchingDoneListDataInput;
+  create: TeamCreateWithoutMatchingDoneListInput;
 }
 
 export interface MatchUpsertWithWhereUniqueWithoutHostInput {
@@ -1511,15 +1511,15 @@ export interface MatchUpsertWithWhereUniqueWithoutHostInput {
   create: MatchCreateWithoutHostInput;
 }
 
-export interface TeamUpsertWithoutApplyOn_listInput {
-  update: TeamUpdateWithoutApplyOn_listDataInput;
-  create: TeamCreateWithoutApplyOn_listInput;
+export interface TeamUpsertWithoutOnApplyingListInput {
+  update: TeamUpdateWithoutOnApplyingListDataInput;
+  create: TeamCreateWithoutOnApplyingListInput;
 }
 
 export interface MatchCreateInput {
   seq?: Maybe<Int>;
-  host?: Maybe<TeamCreateOneWithoutUpload_match_listInput>;
-  guest?: Maybe<TeamCreateOneWithoutApplyEnd_match_listInput>;
+  host?: Maybe<TeamCreateOneWithoutUploadMatchListInput>;
+  guest?: Maybe<TeamCreateOneWithoutMatchingDoneListInput>;
   stadium: String;
   area?: Maybe<Area>;
   date?: Maybe<String>;
@@ -1531,8 +1531,8 @@ export interface MatchCreateInput {
 }
 
 export interface MatchUpdateInput {
-  host?: Maybe<TeamUpdateOneWithoutUpload_match_listInput>;
-  guest?: Maybe<TeamUpdateOneWithoutApplyEnd_match_listInput>;
+  host?: Maybe<TeamUpdateOneWithoutUploadMatchListInput>;
+  guest?: Maybe<TeamUpdateOneWithoutMatchingDoneListInput>;
   stadium?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
@@ -1555,19 +1555,19 @@ export interface MatchUpdateManyMutationInput {
 
 export interface NotifierCreateInput {
   seq?: Maybe<Int>;
-  player: PlayerCreateOneWithoutNoti_listInput;
+  player: PlayerCreateOneWithoutNotiListInput;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
 }
 
-export interface PlayerCreateOneWithoutNoti_listInput {
-  create?: Maybe<PlayerCreateWithoutNoti_listInput>;
+export interface PlayerCreateOneWithoutNotiListInput {
+  create?: Maybe<PlayerCreateWithoutNotiListInput>;
   connect?: Maybe<PlayerWhereUniqueInput>;
 }
 
-export interface PlayerCreateWithoutNoti_listInput {
+export interface PlayerCreateWithoutNotiListInput {
   seq?: Maybe<Int>;
   playerId: String;
   team?: Maybe<TeamCreateOneWithoutMembersInput>;
@@ -1585,29 +1585,29 @@ export interface TeamCreateWithoutMembersInput {
   seq?: Maybe<Int>;
   name: String;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
-  upload_match_list?: Maybe<MatchCreateManyWithoutHostInput>;
-  applyEnd_match_list?: Maybe<MatchCreateManyWithoutGuestInput>;
-  applyOn_list?: Maybe<ApplyCreateManyWithoutTeamInput>;
+  uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
+  matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
+  onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
 }
 
 export interface NotifierUpdateInput {
-  player?: Maybe<PlayerUpdateOneRequiredWithoutNoti_listInput>;
+  player?: Maybe<PlayerUpdateOneRequiredWithoutNotiListInput>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
 }
 
-export interface PlayerUpdateOneRequiredWithoutNoti_listInput {
-  create?: Maybe<PlayerCreateWithoutNoti_listInput>;
-  update?: Maybe<PlayerUpdateWithoutNoti_listDataInput>;
-  upsert?: Maybe<PlayerUpsertWithoutNoti_listInput>;
+export interface PlayerUpdateOneRequiredWithoutNotiListInput {
+  create?: Maybe<PlayerCreateWithoutNotiListInput>;
+  update?: Maybe<PlayerUpdateWithoutNotiListDataInput>;
+  upsert?: Maybe<PlayerUpsertWithoutNotiListInput>;
   connect?: Maybe<PlayerWhereUniqueInput>;
 }
 
-export interface PlayerUpdateWithoutNoti_listDataInput {
+export interface PlayerUpdateWithoutNotiListDataInput {
   playerId?: Maybe<String>;
   team?: Maybe<TeamUpdateOneWithoutMembersInput>;
   name?: Maybe<String>;
@@ -1627,11 +1627,11 @@ export interface TeamUpdateOneWithoutMembersInput {
 export interface TeamUpdateWithoutMembersDataInput {
   name?: Maybe<String>;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
-  upload_match_list?: Maybe<MatchUpdateManyWithoutHostInput>;
-  applyEnd_match_list?: Maybe<MatchUpdateManyWithoutGuestInput>;
-  applyOn_list?: Maybe<ApplyUpdateManyWithoutTeamInput>;
+  uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
+  matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
+  onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
 }
 
 export interface TeamUpsertWithoutMembersInput {
@@ -1639,9 +1639,9 @@ export interface TeamUpsertWithoutMembersInput {
   create: TeamCreateWithoutMembersInput;
 }
 
-export interface PlayerUpsertWithoutNoti_listInput {
-  update: PlayerUpdateWithoutNoti_listDataInput;
-  create: PlayerCreateWithoutNoti_listInput;
+export interface PlayerUpsertWithoutNotiListInput {
+  update: PlayerUpdateWithoutNotiListDataInput;
+  create: PlayerCreateWithoutNotiListInput;
 }
 
 export interface NotifierUpdateManyMutationInput {
@@ -1658,7 +1658,7 @@ export interface PlayerCreateInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
-  noti_list?: Maybe<NotifierCreateManyWithoutPlayerInput>;
+  notiList?: Maybe<NotifierCreateManyWithoutPlayerInput>;
 }
 
 export interface PlayerUpdateInput {
@@ -1667,7 +1667,7 @@ export interface PlayerUpdateInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
-  noti_list?: Maybe<NotifierUpdateManyWithoutPlayerInput>;
+  notiList?: Maybe<NotifierUpdateManyWithoutPlayerInput>;
 }
 
 export interface PlayerUpdateManyMutationInput {
@@ -1697,29 +1697,29 @@ export interface TeamCreateInput {
   seq?: Maybe<Int>;
   name: String;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
-  upload_match_list?: Maybe<MatchCreateManyWithoutHostInput>;
-  applyEnd_match_list?: Maybe<MatchCreateManyWithoutGuestInput>;
-  applyOn_list?: Maybe<ApplyCreateManyWithoutTeamInput>;
+  uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
+  matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
+  onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
 }
 
 export interface TeamUpdateInput {
   name?: Maybe<String>;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
-  upload_match_list?: Maybe<MatchUpdateManyWithoutHostInput>;
-  applyEnd_match_list?: Maybe<MatchUpdateManyWithoutGuestInput>;
-  applyOn_list?: Maybe<ApplyUpdateManyWithoutTeamInput>;
+  uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
+  matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
+  onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
 }
 
 export interface TeamUpdateManyMutationInput {
   name?: Maybe<String>;
   logo?: Maybe<String>;
-  home_area?: Maybe<Area>;
+  homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
 }
 
@@ -1827,7 +1827,7 @@ export interface Team {
   seq: Int;
   name: String;
   logo?: String;
-  home_area?: Area;
+  homeArea?: Area;
   introduction?: String;
 }
 
@@ -1835,7 +1835,7 @@ export interface TeamPromise extends Promise<Team>, Fragmentable {
   seq: () => Promise<Int>;
   name: () => Promise<String>;
   logo: () => Promise<String>;
-  home_area: () => Promise<Area>;
+  homeArea: () => Promise<Area>;
   introduction: () => Promise<String>;
   members: <T = FragmentableArray<Player>>(args?: {
     where?: PlayerWhereInput;
@@ -1846,7 +1846,7 @@ export interface TeamPromise extends Promise<Team>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
-  upload_match_list: <T = FragmentableArray<Match>>(args?: {
+  uploadMatchList: <T = FragmentableArray<Match>>(args?: {
     where?: MatchWhereInput;
     orderBy?: MatchOrderByInput;
     skip?: Int;
@@ -1855,7 +1855,7 @@ export interface TeamPromise extends Promise<Team>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
-  applyEnd_match_list: <T = FragmentableArray<Match>>(args?: {
+  matchingDoneList: <T = FragmentableArray<Match>>(args?: {
     where?: MatchWhereInput;
     orderBy?: MatchOrderByInput;
     skip?: Int;
@@ -1864,7 +1864,7 @@ export interface TeamPromise extends Promise<Team>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
-  applyOn_list: <T = FragmentableArray<Apply>>(args?: {
+  onApplyingList: <T = FragmentableArray<Apply>>(args?: {
     where?: ApplyWhereInput;
     orderBy?: ApplyOrderByInput;
     skip?: Int;
@@ -1881,7 +1881,7 @@ export interface TeamSubscription
   seq: () => Promise<AsyncIterator<Int>>;
   name: () => Promise<AsyncIterator<String>>;
   logo: () => Promise<AsyncIterator<String>>;
-  home_area: () => Promise<AsyncIterator<Area>>;
+  homeArea: () => Promise<AsyncIterator<Area>>;
   introduction: () => Promise<AsyncIterator<String>>;
   members: <T = Promise<AsyncIterator<PlayerSubscription>>>(args?: {
     where?: PlayerWhereInput;
@@ -1892,7 +1892,7 @@ export interface TeamSubscription
     first?: Int;
     last?: Int;
   }) => T;
-  upload_match_list: <T = Promise<AsyncIterator<MatchSubscription>>>(args?: {
+  uploadMatchList: <T = Promise<AsyncIterator<MatchSubscription>>>(args?: {
     where?: MatchWhereInput;
     orderBy?: MatchOrderByInput;
     skip?: Int;
@@ -1901,7 +1901,7 @@ export interface TeamSubscription
     first?: Int;
     last?: Int;
   }) => T;
-  applyEnd_match_list: <T = Promise<AsyncIterator<MatchSubscription>>>(args?: {
+  matchingDoneList: <T = Promise<AsyncIterator<MatchSubscription>>>(args?: {
     where?: MatchWhereInput;
     orderBy?: MatchOrderByInput;
     skip?: Int;
@@ -1910,7 +1910,7 @@ export interface TeamSubscription
     first?: Int;
     last?: Int;
   }) => T;
-  applyOn_list: <T = Promise<AsyncIterator<ApplySubscription>>>(args?: {
+  onApplyingList: <T = Promise<AsyncIterator<ApplySubscription>>>(args?: {
     where?: ApplyWhereInput;
     orderBy?: ApplyOrderByInput;
     skip?: Int;
@@ -1927,7 +1927,7 @@ export interface TeamNullablePromise
   seq: () => Promise<Int>;
   name: () => Promise<String>;
   logo: () => Promise<String>;
-  home_area: () => Promise<Area>;
+  homeArea: () => Promise<Area>;
   introduction: () => Promise<String>;
   members: <T = FragmentableArray<Player>>(args?: {
     where?: PlayerWhereInput;
@@ -1938,7 +1938,7 @@ export interface TeamNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
-  upload_match_list: <T = FragmentableArray<Match>>(args?: {
+  uploadMatchList: <T = FragmentableArray<Match>>(args?: {
     where?: MatchWhereInput;
     orderBy?: MatchOrderByInput;
     skip?: Int;
@@ -1947,7 +1947,7 @@ export interface TeamNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
-  applyEnd_match_list: <T = FragmentableArray<Match>>(args?: {
+  matchingDoneList: <T = FragmentableArray<Match>>(args?: {
     where?: MatchWhereInput;
     orderBy?: MatchOrderByInput;
     skip?: Int;
@@ -1956,7 +1956,7 @@ export interface TeamNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
-  applyOn_list: <T = FragmentableArray<Apply>>(args?: {
+  onApplyingList: <T = FragmentableArray<Apply>>(args?: {
     where?: ApplyWhereInput;
     orderBy?: ApplyOrderByInput;
     skip?: Int;
@@ -1982,7 +1982,7 @@ export interface PlayerPromise extends Promise<Player>, Fragmentable {
   name: () => Promise<String>;
   phone: () => Promise<String>;
   email: () => Promise<String>;
-  noti_list: <T = FragmentableArray<Notifier>>(args?: {
+  notiList: <T = FragmentableArray<Notifier>>(args?: {
     where?: NotifierWhereInput;
     orderBy?: NotifierOrderByInput;
     skip?: Int;
@@ -2002,7 +2002,7 @@ export interface PlayerSubscription
   name: () => Promise<AsyncIterator<String>>;
   phone: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
-  noti_list: <T = Promise<AsyncIterator<NotifierSubscription>>>(args?: {
+  notiList: <T = Promise<AsyncIterator<NotifierSubscription>>>(args?: {
     where?: NotifierWhereInput;
     orderBy?: NotifierOrderByInput;
     skip?: Int;
@@ -2022,7 +2022,7 @@ export interface PlayerNullablePromise
   name: () => Promise<String>;
   phone: () => Promise<String>;
   email: () => Promise<String>;
-  noti_list: <T = FragmentableArray<Notifier>>(args?: {
+  notiList: <T = FragmentableArray<Notifier>>(args?: {
     where?: NotifierWhereInput;
     orderBy?: NotifierOrderByInput;
     skip?: Int;
@@ -2831,7 +2831,7 @@ export interface TeamPreviousValues {
   seq: Int;
   name: String;
   logo?: String;
-  home_area?: Area;
+  homeArea?: Area;
   introduction?: String;
 }
 
@@ -2841,7 +2841,7 @@ export interface TeamPreviousValuesPromise
   seq: () => Promise<Int>;
   name: () => Promise<String>;
   logo: () => Promise<String>;
-  home_area: () => Promise<Area>;
+  homeArea: () => Promise<Area>;
   introduction: () => Promise<String>;
 }
 
@@ -2851,7 +2851,7 @@ export interface TeamPreviousValuesSubscription
   seq: () => Promise<AsyncIterator<Int>>;
   name: () => Promise<AsyncIterator<String>>;
   logo: () => Promise<AsyncIterator<String>>;
-  home_area: () => Promise<AsyncIterator<Area>>;
+  homeArea: () => Promise<AsyncIterator<Area>>;
   introduction: () => Promise<AsyncIterator<String>>;
 }
 

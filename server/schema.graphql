@@ -2,12 +2,12 @@ type Team {
     seq: Int!
     name: String!
     logo: String
-    home_area: Area
+    homeArea: Area
     introduction: String
     members: [Player!]
-    upload_match_list: [Match!]
-    applyEnd_match_list: [Match!]
-    applyOn_list: [Apply!]
+    uploadMatchList: [Match!]
+    matchingDoneList: [Match!]
+    onApplyingList: [Apply!]
 }
 
 type Player {
@@ -17,7 +17,7 @@ type Player {
     name: String
     phone: String
     email: String
-    noti_list: [Notifier!]
+    notiList: [Notifier!]
 }
 
 enum Result {
@@ -67,11 +67,11 @@ type Stadium {
     address: String
 }
 
-
 type Query {
-    Matches(seq:Int, area:Area, hostSeq:Int): [Match]
+    Matches(seq:Int, area:Area, host:Int, guest:Int): [Match!]
+    PendingMatches(host:Int): [Match!]
     Match(seq:Int): Match
-    Teams: [Team]
+    Teams(seq: Int): [Team]
     Team(seq:Int): Team
     Players: [Player]
     Player(seq: Int): Player

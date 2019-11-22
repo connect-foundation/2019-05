@@ -2,42 +2,69 @@
 
 const resolvers = {
     Query: {
-        Matches: (root, args, {prisma}) => {
-            return prisma.matches({})
-        },
-        Match: (_, args, {prisma}) => {
-            return prisma.match({
-                seq: args.seq,
-            })
-        },
-        Teams: (root, args, {prisma}) => {
-            return prisma.teams();
-        },
-        Team: (root, args, {prisma}) => {
-            return prisma.team({
-                seq: args.seq
+        Matches: (_, {seq,area,host}, {prisma}) => {
+            return prisma.matches({
+              where: {
+                  seq,
+                  area,
+                  host: {
+                      seq: host
+                  }
+
+              }
             });
         },
-        Players: (root, args, {prisma}) => {
+        PendingMatches: (_, {host}, {prisma}) => {
+            return prisma.matches({
+              where: {
+                  host,
+                  guest: null
+              }
+            })
+        },
+        Match: (_, {seq}, {prisma}) => {
+            return prisma.match({ seq });
+        },
+        Teams: (_, {seq}, {prisma}) => {
+            return prisma.teams({
+              where: {
+                  seq
+              }
+            });
+        },
+        Team: (_, {seq}, {prisma}) => {
+            return prisma.team({seq});
+        },
+        Players: (_, args, {prisma}) => {
 
         },
-        Player: (root, args, {prisma}) => {
+        Player: (_, args, {prisma}) => {
             return prisma.player({
                 seq: args.seq
             })
         }
     },
     Match: {
-        host: (o,_,{prisma}) => {
-           return prisma.match({seq:o.seq}).host();
+        host: ({seq}, _ ,{prisma}) => {
+           return prisma.match({seq}).host();
         },
+        guest: ({seq}, _ ,{prisma}) => {
+            return prisma.match({seq}).guest();
+        }
     },
     Team: {
-        seq: o => o.seq,
-        name: o => o.name,
-        logo: o => o.logo,
-        home_area: o => o.home_area,
-        introduction: o => o.introduction
+        members: ({seq}, _, {prisma}) => {
+            return prisma.team({seq}).members();
+        },
+        uploadMatchList: ({seq}, _, {prisma}) => {
+            return prisma.team({seq}).uploadMatchList();
+        },
+        matchingDoneList: ({seq}, _, {prisma}) => {
+        return prisma.team({seq}).matchingDoneList();
+        },
+        onApplyingList: ({seq}, _, {prisma}) => {
+        return prisma.team({seq}).onApplyingList();
+        }
     }
 };
 
