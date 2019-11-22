@@ -15,6 +15,7 @@ const server = new GraphQLServer({
   context: { prisma }
 });
 
+
 const app = server.express;
 
 // view engine setup
@@ -27,19 +28,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-server.express.get('/', (req, res, next)=>{
-  return res.send('hello');
-});
-server.express.use('/auth', (req, res, next) => {
-  return res.send('ok');
-});
-
 
 server.start({
   port: 4000,
   endpoint: '/graphql',
   playground: '/playground',
-},({ port })=> console.log(`${port} open`));
+},({ port })=> console.log(`QuickKick API Server is opened on ${port}`));
 
 
 // catch 404 and forward to error handler
