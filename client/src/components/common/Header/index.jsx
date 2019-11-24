@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Header.scss';
 import logo from '../../../assets/images/quickkick-logo.png';
+import { Link } from 'react-router-dom';
 
 const Header = () => (
   <div className="header">
@@ -13,7 +14,11 @@ const Header = () => (
   </div>
 );
 
-const ServiceLogo = () => <img className="logo" src={logo} alt="퀵킥 로고" />;
+const ServiceLogo = () => (
+  <Link to="/">
+    <img className="logo" src={logo} alt="퀵킥 로고" />
+  </Link>
+);
 
 const NavBar = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -25,8 +30,16 @@ const NavBar = () => {
 
   return (
     <nav className="nav-bar">
-      <div className="nav-bar__button">Quick Match</div>
-      <div className="nav-bar__button">Quick Team</div>
+      <div className="nav-bar__button">
+        <Link to="/match">
+          Quick Match
+        </Link>
+      </div>
+      <div className="nav-bar__button">
+        <Link to="/team">
+          Quick Team
+        </Link>
+      </div>
       {isLogin ? <UserIcon /> : <LoginBtn />}
     </nav>
   );
