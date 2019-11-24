@@ -1,11 +1,12 @@
 import React from 'react';
-import './App.scss';
-import { Header, Footer } from '../components/common';
+import { Route } from 'react-router-dom';
+import { home, match, team } from '../view';
 
 const App = () => (
   <div className="App">
-    <Header />
-    <Footer />
+    <Route exact path="/" component={home} />
+    <Route path="/team" component={team} />
+    <Route path="/match" component={match} />
   </div>
 );
 
