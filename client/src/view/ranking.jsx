@@ -1,12 +1,14 @@
 import React from 'react';
 import { Header, Footer } from '../components/common';
 
-const Myteam = () => (
-  <div className="myTeam">
+const ranking = () => (
+  <div className="team">
     <Header />
-    <div>내팀내팀내팀</div>
+    <div>
+      랭킹랭킹랭킹
+    </div>
     <Footer />
   </div>
 );
 
-export default Myteam;
+export default ranking;

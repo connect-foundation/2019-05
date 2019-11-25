@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { home, match, team, myteam } from '../view';
+import { home, match, team, myteam, ranking } from '../view';
 
 const App = () => (
   <div className="App">
@@ -8,6 +8,7 @@ const App = () => (
     <Route path="/team" component={team} />
     <Route path="/match" component={match} />
     <Route path="/myteam" component={myteam} />
+    <Route path="/ranking" component={ranking} />
   </div>
 );
 
