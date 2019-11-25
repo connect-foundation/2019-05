@@ -2,19 +2,25 @@
   background-color: white;
   position: sticky;
   top: 0;
-  display: flex;
-  justify-content: space-between;
   height: 110px;
-  padding: 0 50px;
 
-  * {
+  .grid-container {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    height: 110px;
+
+    * {
+      display: flex;
+      align-items: center;
+    }
   }
 
   &__left {
+    a {
+      width: 220px;
+    }
     .logo {
-      height: 70%;
+      width:100%;
     }
   }
 
@@ -26,4 +32,6 @@
       }
     }
   }
+
+
 }
