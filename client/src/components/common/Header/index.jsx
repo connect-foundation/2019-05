@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Header.scss';
 import logo from '../../../assets/images/quickkick-logo.png';
-import { Link } from 'react-router-dom';
 
 const Header = () => (
   <div className="header">
