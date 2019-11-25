@@ -4,7 +4,8 @@
   display: flex;
   margin: 0 auto;
   justify-content: center;
-
+  align-items: center;
+  height: 80px;
   &__list-items {
     list-style-type: none;
   }
