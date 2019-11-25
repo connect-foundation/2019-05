@@ -12,8 +12,8 @@ const FooterCategoryBlock = ({ title, contents }) => (
   <div className="footer__list">
     <h1 className="footer__list-header">{title}</h1>
     <ul className="footer__list-items">
-      {contents.map((content, idx) => (
-        <li key={idx.toString()}>{content}</li>
+      {contents.map((content) => (
+        <li key={content}>{content}</li>
       ))}
     </ul>
   </div>
