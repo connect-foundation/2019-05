@@ -9,6 +9,9 @@
     ]
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
+    "@fortawesome/react-fontawesome": "^0.1.7",
     "enzyme-to-json": "^3.4.3",
     "node-sass": "^4.13.0",
     "prop-types": "^15.7.2",
