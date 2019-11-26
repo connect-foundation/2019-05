@@ -1,0 +1,10 @@
+.match-list {
+  border: 1px solid red;
+  .match-card {
+    display: flex;
+    .button-box {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
