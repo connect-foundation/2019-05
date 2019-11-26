@@ -9,7 +9,7 @@
     justify-content: space-between;
     height: 110px;
 
-    * {
+    > * {
       display: flex;
       align-items: center;
     }
@@ -26,8 +26,9 @@
 
   &__right {
     .nav-bar {
+      display: flex;
       font-weight: bold;
-      * {
+      > * {
         margin-left: 10px;
       }
     }
