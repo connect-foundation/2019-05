@@ -20,7 +20,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --verbose --coverage --watchAll",
+    "test": "react-scripts test --verbose --coverage",
+    "test-all": "react-scripts test --verbose --coverage --watchAll",
     "eject": "react-scripts eject"
   },
   "browserslist": {

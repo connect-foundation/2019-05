@@ -1,17 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Header from '.';
 
 describe('Header component', () => {
   it('renders without crashing', () => {
-    const HeaderInRouter = (
+    const { getByText } = render(
       <BrowserRouter>
         <Header />
       </BrowserRouter>
     );
-    const { getByText } = render(HeaderInRouter);
     const quickMatch = getByText('Quick Match');
     expect(quickMatch).toBeInTheDocument();
   });
