@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { home, match, team, myteam, ranking } from '../view';
+import { home, match, team, myteam, ranking } from '../views';
 
 const App = () => (
   <div className="App">
