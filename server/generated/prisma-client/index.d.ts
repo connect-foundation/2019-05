@@ -294,7 +294,7 @@ export interface ClientConstructor<T> {
 
 export type Area = "SB" | "SN" | "DN" | "DB";
 
-export type Result = "WIN" | "DRAW" | "LOSE";
+export type Result = "HOST" | "GUEST" | "DRAW";
 
 export type PlayerOrderByInput =
   | "seq_ASC"
@@ -311,8 +311,6 @@ export type PlayerOrderByInput =
 export type NotifierOrderByInput =
   | "seq_ASC"
   | "seq_DESC"
-  | "area_ASC"
-  | "area_DESC"
   | "date_ASC"
   | "date_DESC"
   | "startTime_ASC"
@@ -358,7 +356,15 @@ export type TeamOrderByInput =
   | "homeArea_ASC"
   | "homeArea_DESC"
   | "introduction_ASC"
-  | "introduction_DESC";
+  | "introduction_DESC"
+  | "win_ASC"
+  | "win_DESC"
+  | "draw_ASC"
+  | "draw_DESC"
+  | "lose_ASC"
+  | "lose_DESC"
+  | "rating_ASC"
+  | "rating_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
@@ -495,6 +501,38 @@ export interface TeamWhereInput {
   introduction_not_starts_with?: Maybe<String>;
   introduction_ends_with?: Maybe<String>;
   introduction_not_ends_with?: Maybe<String>;
+  win?: Maybe<Int>;
+  win_not?: Maybe<Int>;
+  win_in?: Maybe<Int[] | Int>;
+  win_not_in?: Maybe<Int[] | Int>;
+  win_lt?: Maybe<Int>;
+  win_lte?: Maybe<Int>;
+  win_gt?: Maybe<Int>;
+  win_gte?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  draw_not?: Maybe<Int>;
+  draw_in?: Maybe<Int[] | Int>;
+  draw_not_in?: Maybe<Int[] | Int>;
+  draw_lt?: Maybe<Int>;
+  draw_lte?: Maybe<Int>;
+  draw_gt?: Maybe<Int>;
+  draw_gte?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  lose_not?: Maybe<Int>;
+  lose_in?: Maybe<Int[] | Int>;
+  lose_not_in?: Maybe<Int[] | Int>;
+  lose_lt?: Maybe<Int>;
+  lose_lte?: Maybe<Int>;
+  lose_gt?: Maybe<Int>;
+  lose_gte?: Maybe<Int>;
+  rating?: Maybe<Int>;
+  rating_not?: Maybe<Int>;
+  rating_in?: Maybe<Int[] | Int>;
+  rating_not_in?: Maybe<Int[] | Int>;
+  rating_lt?: Maybe<Int>;
+  rating_lte?: Maybe<Int>;
+  rating_gt?: Maybe<Int>;
+  rating_gte?: Maybe<Int>;
   members_every?: Maybe<PlayerWhereInput>;
   members_some?: Maybe<PlayerWhereInput>;
   members_none?: Maybe<PlayerWhereInput>;
@@ -635,10 +673,6 @@ export interface NotifierWhereInput {
   seq_gt?: Maybe<Int>;
   seq_gte?: Maybe<Int>;
   player?: Maybe<PlayerWhereInput>;
-  area?: Maybe<Area>;
-  area_not?: Maybe<Area>;
-  area_in?: Maybe<Area[] | Area>;
-  area_not_in?: Maybe<Area[] | Area>;
   date?: Maybe<String>;
   date_not?: Maybe<String>;
   date_in?: Maybe<String[] | String>;
@@ -767,6 +801,10 @@ export interface TeamCreateWithoutOnApplyingListInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
@@ -795,10 +833,14 @@ export interface NotifierCreateManyWithoutPlayerInput {
 
 export interface NotifierCreateWithoutPlayerInput {
   seq?: Maybe<Int>;
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierCreateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
+}
+
+export interface NotifierCreateareaInput {
+  set?: Maybe<Area[] | Area>;
 }
 
 export interface MatchCreateManyWithoutHostInput {
@@ -830,6 +872,10 @@ export interface TeamCreateWithoutMatchingDoneListInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
@@ -874,6 +920,10 @@ export interface TeamCreateWithoutUploadMatchListInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
@@ -926,6 +976,10 @@ export interface TeamUpdateWithoutOnApplyingListDataInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
@@ -994,10 +1048,14 @@ export interface NotifierUpdateWithWhereUniqueWithoutPlayerInput {
 }
 
 export interface NotifierUpdateWithoutPlayerDataInput {
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierUpdateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
+}
+
+export interface NotifierUpdateareaInput {
+  set?: Maybe<Area[] | Area>;
 }
 
 export interface NotifierUpsertWithWhereUniqueWithoutPlayerInput {
@@ -1015,10 +1073,6 @@ export interface NotifierScalarWhereInput {
   seq_lte?: Maybe<Int>;
   seq_gt?: Maybe<Int>;
   seq_gte?: Maybe<Int>;
-  area?: Maybe<Area>;
-  area_not?: Maybe<Area>;
-  area_in?: Maybe<Area[] | Area>;
-  area_not_in?: Maybe<Area[] | Area>;
   date?: Maybe<String>;
   date_not?: Maybe<String>;
   date_in?: Maybe<String[] | String>;
@@ -1072,7 +1126,7 @@ export interface NotifierUpdateManyWithWhereNestedInput {
 }
 
 export interface NotifierUpdateManyDataInput {
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierUpdateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
@@ -1217,6 +1271,10 @@ export interface TeamUpdateWithoutMatchingDoneListDataInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
@@ -1283,6 +1341,10 @@ export interface TeamUpdateWithoutUploadMatchListDataInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
@@ -1556,7 +1618,7 @@ export interface MatchUpdateManyMutationInput {
 export interface NotifierCreateInput {
   seq?: Maybe<Int>;
   player: PlayerCreateOneWithoutNotiListInput;
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierCreateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
@@ -1587,6 +1649,10 @@ export interface TeamCreateWithoutMembersInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
@@ -1594,7 +1660,7 @@ export interface TeamCreateWithoutMembersInput {
 
 export interface NotifierUpdateInput {
   player?: Maybe<PlayerUpdateOneRequiredWithoutNotiListInput>;
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierUpdateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
@@ -1629,6 +1695,10 @@ export interface TeamUpdateWithoutMembersDataInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
@@ -1645,7 +1715,7 @@ export interface PlayerUpsertWithoutNotiListInput {
 }
 
 export interface NotifierUpdateManyMutationInput {
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierUpdateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
@@ -1699,6 +1769,10 @@ export interface TeamCreateInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
@@ -1710,6 +1784,10 @@ export interface TeamUpdateInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
@@ -1721,6 +1799,10 @@ export interface TeamUpdateManyMutationInput {
   logo?: Maybe<String>;
   homeArea?: Maybe<Area>;
   introduction?: Maybe<String>;
+  win?: Maybe<Int>;
+  draw?: Maybe<Int>;
+  lose?: Maybe<Int>;
+  rating?: Maybe<Int>;
 }
 
 export interface ApplySubscriptionWhereInput {
@@ -1829,6 +1911,10 @@ export interface Team {
   logo?: String;
   homeArea?: Area;
   introduction?: String;
+  win: Int;
+  draw: Int;
+  lose: Int;
+  rating: Int;
 }
 
 export interface TeamPromise extends Promise<Team>, Fragmentable {
@@ -1837,6 +1923,10 @@ export interface TeamPromise extends Promise<Team>, Fragmentable {
   logo: () => Promise<String>;
   homeArea: () => Promise<Area>;
   introduction: () => Promise<String>;
+  win: () => Promise<Int>;
+  draw: () => Promise<Int>;
+  lose: () => Promise<Int>;
+  rating: () => Promise<Int>;
   members: <T = FragmentableArray<Player>>(args?: {
     where?: PlayerWhereInput;
     orderBy?: PlayerOrderByInput;
@@ -1883,6 +1973,10 @@ export interface TeamSubscription
   logo: () => Promise<AsyncIterator<String>>;
   homeArea: () => Promise<AsyncIterator<Area>>;
   introduction: () => Promise<AsyncIterator<String>>;
+  win: () => Promise<AsyncIterator<Int>>;
+  draw: () => Promise<AsyncIterator<Int>>;
+  lose: () => Promise<AsyncIterator<Int>>;
+  rating: () => Promise<AsyncIterator<Int>>;
   members: <T = Promise<AsyncIterator<PlayerSubscription>>>(args?: {
     where?: PlayerWhereInput;
     orderBy?: PlayerOrderByInput;
@@ -1929,6 +2023,10 @@ export interface TeamNullablePromise
   logo: () => Promise<String>;
   homeArea: () => Promise<Area>;
   introduction: () => Promise<String>;
+  win: () => Promise<Int>;
+  draw: () => Promise<Int>;
+  lose: () => Promise<Int>;
+  rating: () => Promise<Int>;
   members: <T = FragmentableArray<Player>>(args?: {
     where?: PlayerWhereInput;
     orderBy?: PlayerOrderByInput;
@@ -2035,7 +2133,7 @@ export interface PlayerNullablePromise
 
 export interface Notifier {
   seq: Int;
-  area?: Area;
+  area: Area[];
   date?: String;
   startTime?: String;
   endTime?: String;
@@ -2044,7 +2142,7 @@ export interface Notifier {
 export interface NotifierPromise extends Promise<Notifier>, Fragmentable {
   seq: () => Promise<Int>;
   player: <T = PlayerPromise>() => T;
-  area: () => Promise<Area>;
+  area: () => Promise<Area[]>;
   date: () => Promise<String>;
   startTime: () => Promise<String>;
   endTime: () => Promise<String>;
@@ -2055,7 +2153,7 @@ export interface NotifierSubscription
     Fragmentable {
   seq: () => Promise<AsyncIterator<Int>>;
   player: <T = PlayerSubscription>() => T;
-  area: () => Promise<AsyncIterator<Area>>;
+  area: () => Promise<AsyncIterator<Area[]>>;
   date: () => Promise<AsyncIterator<String>>;
   startTime: () => Promise<AsyncIterator<String>>;
   endTime: () => Promise<AsyncIterator<String>>;
@@ -2066,7 +2164,7 @@ export interface NotifierNullablePromise
     Fragmentable {
   seq: () => Promise<Int>;
   player: <T = PlayerPromise>() => T;
-  area: () => Promise<Area>;
+  area: () => Promise<Area[]>;
   date: () => Promise<String>;
   startTime: () => Promise<String>;
   endTime: () => Promise<String>;
@@ -2676,7 +2774,7 @@ export interface NotifierSubscriptionPayloadSubscription
 
 export interface NotifierPreviousValues {
   seq: Int;
-  area?: Area;
+  area: Area[];
   date?: String;
   startTime?: String;
   endTime?: String;
@@ -2686,7 +2784,7 @@ export interface NotifierPreviousValuesPromise
   extends Promise<NotifierPreviousValues>,
     Fragmentable {
   seq: () => Promise<Int>;
-  area: () => Promise<Area>;
+  area: () => Promise<Area[]>;
   date: () => Promise<String>;
   startTime: () => Promise<String>;
   endTime: () => Promise<String>;
@@ -2696,7 +2794,7 @@ export interface NotifierPreviousValuesSubscription
   extends Promise<AsyncIterator<NotifierPreviousValues>>,
     Fragmentable {
   seq: () => Promise<AsyncIterator<Int>>;
-  area: () => Promise<AsyncIterator<Area>>;
+  area: () => Promise<AsyncIterator<Area[]>>;
   date: () => Promise<AsyncIterator<String>>;
   startTime: () => Promise<AsyncIterator<String>>;
   endTime: () => Promise<AsyncIterator<String>>;
@@ -2833,6 +2931,10 @@ export interface TeamPreviousValues {
   logo?: String;
   homeArea?: Area;
   introduction?: String;
+  win: Int;
+  draw: Int;
+  lose: Int;
+  rating: Int;
 }
 
 export interface TeamPreviousValuesPromise
@@ -2843,6 +2945,10 @@ export interface TeamPreviousValuesPromise
   logo: () => Promise<String>;
   homeArea: () => Promise<Area>;
   introduction: () => Promise<String>;
+  win: () => Promise<Int>;
+  draw: () => Promise<Int>;
+  lose: () => Promise<Int>;
+  rating: () => Promise<Int>;
 }
 
 export interface TeamPreviousValuesSubscription
@@ -2853,6 +2959,10 @@ export interface TeamPreviousValuesSubscription
   logo: () => Promise<AsyncIterator<String>>;
   homeArea: () => Promise<AsyncIterator<Area>>;
   introduction: () => Promise<AsyncIterator<String>>;
+  win: () => Promise<AsyncIterator<Int>>;
+  draw: () => Promise<AsyncIterator<Int>>;
+  lose: () => Promise<AsyncIterator<Int>>;
+  rating: () => Promise<AsyncIterator<Int>>;
 }
 
 /*

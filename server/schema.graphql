@@ -4,6 +4,10 @@ type Team {
     logo: String
     homeArea: Area
     introduction: String
+    win: Int!
+    draw: Int!
+    lose: Int!
+    rating: Int!
     members: [Player!]
     uploadMatchList: [Match!]
     matchingDoneList: [Match!]
@@ -21,9 +25,9 @@ type Player {
 }
 
 enum Result {
-    WIN
+    HOST
+    GUEST
     DRAW
-    LOSE
 }
 enum Area{
     SB
@@ -55,7 +59,7 @@ type Apply{
 type Notifier{
     seq: Int!
     player: Player!
-    area: Area
+    area: [Area]
     date: String
     startTime: String
     endTime: String
@@ -68,11 +72,23 @@ type Stadium {
 }
 
 type Query {
-    Matches(seq:Int, area:Area, host:Int, guest:Int): [Match!]
+    Matches(seq:Int, area:Area, host:Int): [Match!]
     PendingMatches(host:Int): [Match!]
     Match(seq:Int): Match
     Teams(seq: Int): [Team]
     Team(seq:Int): Team
-    Players: [Player]
-    Player(seq: Int): Player
+    Players(seq:Int, playerId:String, team:Int): [Player]
+    Player(seq: Int, playerId: String): Player
+    Notifiers(seq:Int, player:Int): [Notifier]
+    Notifier(seq:Int): Notifier
+
+}
+
+type Mutation {
+    CreateTeam(name: String, logo:String, homeArea: Area, introduction: String ): Team
+    CreatePlayer(playerId:String, team:Int, name: String, phone: String, email:String): Player
+    CreateMatch(host: Int, stadium: String, area:Area, date:String, startTime: String, endTime: String, description: String): Match
+    MatchGuest(seq: Int, guest: Int): Match
+    CreateNotifier(player:Int, area:[Area], date:String, startTime: String, endTime: String): Notifier
+
 }
