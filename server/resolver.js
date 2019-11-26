@@ -83,7 +83,11 @@ const resolvers = {
         email,
       });
     },
-    CreateMatch: (_, { host, stadium, area, date, startTime, endTime, description }, { prisma }) => {
+    CreateMatch: (
+      _,
+      { host, stadium, area, date, startTime, endTime, description },
+      { prisma }
+    ) => {
       return prisma.createMatch({
         host: {
           connect: {
@@ -110,6 +114,25 @@ const resolvers = {
         where: {
           seq,
         },
+      });
+    },
+    CreateNotifier: (
+      _,
+      { player, area, date, startTime, endTime },
+      { prisma }
+    ) => {
+      return prisma.createNotifier({
+        player: {
+          connect: {
+            seq: player,
+          },
+        },
+        area: {
+          set: area,
+        },
+        date,
+        startTime,
+        endTime,
       });
     },
   }, // mutation

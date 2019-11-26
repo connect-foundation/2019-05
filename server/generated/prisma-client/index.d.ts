@@ -311,8 +311,6 @@ export type PlayerOrderByInput =
 export type NotifierOrderByInput =
   | "seq_ASC"
   | "seq_DESC"
-  | "area_ASC"
-  | "area_DESC"
   | "date_ASC"
   | "date_DESC"
   | "startTime_ASC"
@@ -675,10 +673,6 @@ export interface NotifierWhereInput {
   seq_gt?: Maybe<Int>;
   seq_gte?: Maybe<Int>;
   player?: Maybe<PlayerWhereInput>;
-  area?: Maybe<Area>;
-  area_not?: Maybe<Area>;
-  area_in?: Maybe<Area[] | Area>;
-  area_not_in?: Maybe<Area[] | Area>;
   date?: Maybe<String>;
   date_not?: Maybe<String>;
   date_in?: Maybe<String[] | String>;
@@ -839,10 +833,14 @@ export interface NotifierCreateManyWithoutPlayerInput {
 
 export interface NotifierCreateWithoutPlayerInput {
   seq?: Maybe<Int>;
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierCreateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
+}
+
+export interface NotifierCreateareaInput {
+  set?: Maybe<Area[] | Area>;
 }
 
 export interface MatchCreateManyWithoutHostInput {
@@ -1050,10 +1048,14 @@ export interface NotifierUpdateWithWhereUniqueWithoutPlayerInput {
 }
 
 export interface NotifierUpdateWithoutPlayerDataInput {
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierUpdateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
+}
+
+export interface NotifierUpdateareaInput {
+  set?: Maybe<Area[] | Area>;
 }
 
 export interface NotifierUpsertWithWhereUniqueWithoutPlayerInput {
@@ -1071,10 +1073,6 @@ export interface NotifierScalarWhereInput {
   seq_lte?: Maybe<Int>;
   seq_gt?: Maybe<Int>;
   seq_gte?: Maybe<Int>;
-  area?: Maybe<Area>;
-  area_not?: Maybe<Area>;
-  area_in?: Maybe<Area[] | Area>;
-  area_not_in?: Maybe<Area[] | Area>;
   date?: Maybe<String>;
   date_not?: Maybe<String>;
   date_in?: Maybe<String[] | String>;
@@ -1128,7 +1126,7 @@ export interface NotifierUpdateManyWithWhereNestedInput {
 }
 
 export interface NotifierUpdateManyDataInput {
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierUpdateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
@@ -1620,7 +1618,7 @@ export interface MatchUpdateManyMutationInput {
 export interface NotifierCreateInput {
   seq?: Maybe<Int>;
   player: PlayerCreateOneWithoutNotiListInput;
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierCreateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
@@ -1662,7 +1660,7 @@ export interface TeamCreateWithoutMembersInput {
 
 export interface NotifierUpdateInput {
   player?: Maybe<PlayerUpdateOneRequiredWithoutNotiListInput>;
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierUpdateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
@@ -1717,7 +1715,7 @@ export interface PlayerUpsertWithoutNotiListInput {
 }
 
 export interface NotifierUpdateManyMutationInput {
-  area?: Maybe<Area>;
+  area?: Maybe<NotifierUpdateareaInput>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
   endTime?: Maybe<String>;
@@ -2135,7 +2133,7 @@ export interface PlayerNullablePromise
 
 export interface Notifier {
   seq: Int;
-  area?: Area;
+  area: Area[];
   date?: String;
   startTime?: String;
   endTime?: String;
@@ -2144,7 +2142,7 @@ export interface Notifier {
 export interface NotifierPromise extends Promise<Notifier>, Fragmentable {
   seq: () => Promise<Int>;
   player: <T = PlayerPromise>() => T;
-  area: () => Promise<Area>;
+  area: () => Promise<Area[]>;
   date: () => Promise<String>;
   startTime: () => Promise<String>;
   endTime: () => Promise<String>;
@@ -2155,7 +2153,7 @@ export interface NotifierSubscription
     Fragmentable {
   seq: () => Promise<AsyncIterator<Int>>;
   player: <T = PlayerSubscription>() => T;
-  area: () => Promise<AsyncIterator<Area>>;
+  area: () => Promise<AsyncIterator<Area[]>>;
   date: () => Promise<AsyncIterator<String>>;
   startTime: () => Promise<AsyncIterator<String>>;
   endTime: () => Promise<AsyncIterator<String>>;
@@ -2166,7 +2164,7 @@ export interface NotifierNullablePromise
     Fragmentable {
   seq: () => Promise<Int>;
   player: <T = PlayerPromise>() => T;
-  area: () => Promise<Area>;
+  area: () => Promise<Area[]>;
   date: () => Promise<String>;
   startTime: () => Promise<String>;
   endTime: () => Promise<String>;
@@ -2776,7 +2774,7 @@ export interface NotifierSubscriptionPayloadSubscription
 
 export interface NotifierPreviousValues {
   seq: Int;
-  area?: Area;
+  area: Area[];
   date?: String;
   startTime?: String;
   endTime?: String;
@@ -2786,7 +2784,7 @@ export interface NotifierPreviousValuesPromise
   extends Promise<NotifierPreviousValues>,
     Fragmentable {
   seq: () => Promise<Int>;
-  area: () => Promise<Area>;
+  area: () => Promise<Area[]>;
   date: () => Promise<String>;
   startTime: () => Promise<String>;
   endTime: () => Promise<String>;
@@ -2796,7 +2794,7 @@ export interface NotifierPreviousValuesSubscription
   extends Promise<AsyncIterator<NotifierPreviousValues>>,
     Fragmentable {
   seq: () => Promise<AsyncIterator<Int>>;
-  area: () => Promise<AsyncIterator<Area>>;
+  area: () => Promise<AsyncIterator<Area[]>>;
   date: () => Promise<AsyncIterator<String>>;
   startTime: () => Promise<AsyncIterator<String>>;
   endTime: () => Promise<AsyncIterator<String>>;

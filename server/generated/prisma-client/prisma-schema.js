@@ -681,19 +681,42 @@ module.exports = {
 
       type Mutation {
         createApply(data: ApplyCreateInput!): Apply!
-        updateApply(data: ApplyUpdateInput!, where: ApplyWhereUniqueInput!): Apply
-        upsertApply(where: ApplyWhereUniqueInput!, create: ApplyCreateInput!, update: ApplyUpdateInput!): Apply!
+        updateApply(
+          data: ApplyUpdateInput!
+          where: ApplyWhereUniqueInput!
+        ): Apply
+        upsertApply(
+          where: ApplyWhereUniqueInput!
+          create: ApplyCreateInput!
+          update: ApplyUpdateInput!
+        ): Apply!
         deleteApply(where: ApplyWhereUniqueInput!): Apply
         deleteManyApplies(where: ApplyWhereInput): BatchPayload!
         createMatch(data: MatchCreateInput!): Match!
-        updateMatch(data: MatchUpdateInput!, where: MatchWhereUniqueInput!): Match
-        updateManyMatches(data: MatchUpdateManyMutationInput!, where: MatchWhereInput): BatchPayload!
-        upsertMatch(where: MatchWhereUniqueInput!, create: MatchCreateInput!, update: MatchUpdateInput!): Match!
+        updateMatch(
+          data: MatchUpdateInput!
+          where: MatchWhereUniqueInput!
+        ): Match
+        updateManyMatches(
+          data: MatchUpdateManyMutationInput!
+          where: MatchWhereInput
+        ): BatchPayload!
+        upsertMatch(
+          where: MatchWhereUniqueInput!
+          create: MatchCreateInput!
+          update: MatchUpdateInput!
+        ): Match!
         deleteMatch(where: MatchWhereUniqueInput!): Match
         deleteManyMatches(where: MatchWhereInput): BatchPayload!
         createNotifier(data: NotifierCreateInput!): Notifier!
-        updateNotifier(data: NotifierUpdateInput!, where: NotifierWhereUniqueInput!): Notifier
-        updateManyNotifiers(data: NotifierUpdateManyMutationInput!, where: NotifierWhereInput): BatchPayload!
+        updateNotifier(
+          data: NotifierUpdateInput!
+          where: NotifierWhereUniqueInput!
+        ): Notifier
+        updateManyNotifiers(
+          data: NotifierUpdateManyMutationInput!
+          where: NotifierWhereInput
+        ): BatchPayload!
         upsertNotifier(
           where: NotifierWhereUniqueInput!
           create: NotifierCreateInput!
@@ -702,14 +725,30 @@ module.exports = {
         deleteNotifier(where: NotifierWhereUniqueInput!): Notifier
         deleteManyNotifiers(where: NotifierWhereInput): BatchPayload!
         createPlayer(data: PlayerCreateInput!): Player!
-        updatePlayer(data: PlayerUpdateInput!, where: PlayerWhereUniqueInput!): Player
-        updateManyPlayers(data: PlayerUpdateManyMutationInput!, where: PlayerWhereInput): BatchPayload!
-        upsertPlayer(where: PlayerWhereUniqueInput!, create: PlayerCreateInput!, update: PlayerUpdateInput!): Player!
+        updatePlayer(
+          data: PlayerUpdateInput!
+          where: PlayerWhereUniqueInput!
+        ): Player
+        updateManyPlayers(
+          data: PlayerUpdateManyMutationInput!
+          where: PlayerWhereInput
+        ): BatchPayload!
+        upsertPlayer(
+          where: PlayerWhereUniqueInput!
+          create: PlayerCreateInput!
+          update: PlayerUpdateInput!
+        ): Player!
         deletePlayer(where: PlayerWhereUniqueInput!): Player
         deleteManyPlayers(where: PlayerWhereInput): BatchPayload!
         createStadium(data: StadiumCreateInput!): Stadium!
-        updateStadium(data: StadiumUpdateInput!, where: StadiumWhereUniqueInput!): Stadium
-        updateManyStadiums(data: StadiumUpdateManyMutationInput!, where: StadiumWhereInput): BatchPayload!
+        updateStadium(
+          data: StadiumUpdateInput!
+          where: StadiumWhereUniqueInput!
+        ): Stadium
+        updateManyStadiums(
+          data: StadiumUpdateManyMutationInput!
+          where: StadiumWhereInput
+        ): BatchPayload!
         upsertStadium(
           where: StadiumWhereUniqueInput!
           create: StadiumCreateInput!
@@ -719,8 +758,15 @@ module.exports = {
         deleteManyStadiums(where: StadiumWhereInput): BatchPayload!
         createTeam(data: TeamCreateInput!): Team!
         updateTeam(data: TeamUpdateInput!, where: TeamWhereUniqueInput!): Team
-        updateManyTeams(data: TeamUpdateManyMutationInput!, where: TeamWhereInput): BatchPayload!
-        upsertTeam(where: TeamWhereUniqueInput!, create: TeamCreateInput!, update: TeamUpdateInput!): Team!
+        updateManyTeams(
+          data: TeamUpdateManyMutationInput!
+          where: TeamWhereInput
+        ): BatchPayload!
+        upsertTeam(
+          where: TeamWhereUniqueInput!
+          create: TeamCreateInput!
+          update: TeamUpdateInput!
+        ): Team!
         deleteTeam(where: TeamWhereUniqueInput!): Team
         deleteManyTeams(where: TeamWhereInput): BatchPayload!
       }
@@ -738,7 +784,7 @@ module.exports = {
       type Notifier {
         seq: Int!
         player: Player!
-        area: Area
+        area: [Area!]!
         date: String
         startTime: String
         endTime: String
@@ -750,10 +796,14 @@ module.exports = {
         aggregate: AggregateNotifier!
       }
 
+      input NotifierCreateareaInput {
+        set: [Area!]
+      }
+
       input NotifierCreateInput {
         seq: Int
         player: PlayerCreateOneWithoutNotiListInput!
-        area: Area
+        area: NotifierCreateareaInput
         date: String
         startTime: String
         endTime: String
@@ -766,7 +816,7 @@ module.exports = {
 
       input NotifierCreateWithoutPlayerInput {
         seq: Int
-        area: Area
+        area: NotifierCreateareaInput
         date: String
         startTime: String
         endTime: String
@@ -780,8 +830,6 @@ module.exports = {
       enum NotifierOrderByInput {
         seq_ASC
         seq_DESC
-        area_ASC
-        area_DESC
         date_ASC
         date_DESC
         startTime_ASC
@@ -792,7 +840,7 @@ module.exports = {
 
       type NotifierPreviousValues {
         seq: Int!
-        area: Area
+        area: [Area!]!
         date: String
         startTime: String
         endTime: String
@@ -807,10 +855,6 @@ module.exports = {
         seq_lte: Int
         seq_gt: Int
         seq_gte: Int
-        area: Area
-        area_not: Area
-        area_in: [Area!]
-        area_not_in: [Area!]
         date: String
         date_not: String
         date_in: [String!]
@@ -876,23 +920,27 @@ module.exports = {
         NOT: [NotifierSubscriptionWhereInput!]
       }
 
+      input NotifierUpdateareaInput {
+        set: [Area!]
+      }
+
       input NotifierUpdateInput {
         player: PlayerUpdateOneRequiredWithoutNotiListInput
-        area: Area
+        area: NotifierUpdateareaInput
         date: String
         startTime: String
         endTime: String
       }
 
       input NotifierUpdateManyDataInput {
-        area: Area
+        area: NotifierUpdateareaInput
         date: String
         startTime: String
         endTime: String
       }
 
       input NotifierUpdateManyMutationInput {
-        area: Area
+        area: NotifierUpdateareaInput
         date: String
         startTime: String
         endTime: String
@@ -916,7 +964,7 @@ module.exports = {
       }
 
       input NotifierUpdateWithoutPlayerDataInput {
-        area: Area
+        area: NotifierUpdateareaInput
         date: String
         startTime: String
         endTime: String
@@ -943,10 +991,6 @@ module.exports = {
         seq_gt: Int
         seq_gte: Int
         player: PlayerWhereInput
-        area: Area
-        area_not: Area
-        area_in: [Area!]
-        area_not_in: [Area!]
         date: String
         date_not: String
         date_in: [String!]
@@ -1579,9 +1623,13 @@ module.exports = {
       type Subscription {
         apply(where: ApplySubscriptionWhereInput): ApplySubscriptionPayload
         match(where: MatchSubscriptionWhereInput): MatchSubscriptionPayload
-        notifier(where: NotifierSubscriptionWhereInput): NotifierSubscriptionPayload
+        notifier(
+          where: NotifierSubscriptionWhereInput
+        ): NotifierSubscriptionPayload
         player(where: PlayerSubscriptionWhereInput): PlayerSubscriptionPayload
-        stadium(where: StadiumSubscriptionWhereInput): StadiumSubscriptionPayload
+        stadium(
+          where: StadiumSubscriptionWhereInput
+        ): StadiumSubscriptionPayload
         team(where: TeamSubscriptionWhereInput): TeamSubscriptionPayload
       }
 
