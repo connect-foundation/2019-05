@@ -5,3 +5,9 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
 
 }
+
+.grid-container{
+  width:100%;
+  max-width:1200px;
+  margin: 0 auto;
+}
