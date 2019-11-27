@@ -10,7 +10,7 @@
     justify-content: space-between;
     height: 110px;
 
-    * {
+    > * {
       display: flex;
       align-items: center;
     }
