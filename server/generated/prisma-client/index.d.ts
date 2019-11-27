@@ -323,6 +323,8 @@ export type MatchOrderByInput =
   | "seq_DESC"
   | "stadium_ASC"
   | "stadium_DESC"
+  | "address_ASC"
+  | "address_DESC"
   | "area_ASC"
   | "area_DESC"
   | "date_ASC"
@@ -575,6 +577,20 @@ export interface MatchWhereInput {
   stadium_not_starts_with?: Maybe<String>;
   stadium_ends_with?: Maybe<String>;
   stadium_not_ends_with?: Maybe<String>;
+  address?: Maybe<String>;
+  address_not?: Maybe<String>;
+  address_in?: Maybe<String[] | String>;
+  address_not_in?: Maybe<String[] | String>;
+  address_lt?: Maybe<String>;
+  address_lte?: Maybe<String>;
+  address_gt?: Maybe<String>;
+  address_gte?: Maybe<String>;
+  address_contains?: Maybe<String>;
+  address_not_contains?: Maybe<String>;
+  address_starts_with?: Maybe<String>;
+  address_not_starts_with?: Maybe<String>;
+  address_ends_with?: Maybe<String>;
+  address_not_ends_with?: Maybe<String>;
   area?: Maybe<Area>;
   area_not?: Maybe<Area>;
   area_in?: Maybe<Area[] | Area>;
@@ -852,6 +868,7 @@ export interface MatchCreateWithoutHostInput {
   seq?: Maybe<Int>;
   guest?: Maybe<TeamCreateOneWithoutMatchingDoneListInput>;
   stadium: String;
+  address?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
@@ -901,6 +918,7 @@ export interface MatchCreateWithoutAppliedListsInput {
   host?: Maybe<TeamCreateOneWithoutUploadMatchListInput>;
   guest?: Maybe<TeamCreateOneWithoutMatchingDoneListInput>;
   stadium: String;
+  address?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
@@ -938,6 +956,7 @@ export interface MatchCreateWithoutGuestInput {
   seq?: Maybe<Int>;
   host?: Maybe<TeamCreateOneWithoutUploadMatchListInput>;
   stadium: String;
+  address?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
@@ -1248,6 +1267,7 @@ export interface MatchUpdateWithWhereUniqueWithoutHostInput {
 export interface MatchUpdateWithoutHostDataInput {
   guest?: Maybe<TeamUpdateOneWithoutMatchingDoneListInput>;
   stadium?: Maybe<String>;
+  address?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
@@ -1319,6 +1339,7 @@ export interface MatchUpdateWithoutAppliedListsDataInput {
   host?: Maybe<TeamUpdateOneWithoutUploadMatchListInput>;
   guest?: Maybe<TeamUpdateOneWithoutMatchingDoneListInput>;
   stadium?: Maybe<String>;
+  address?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
@@ -1378,6 +1399,7 @@ export interface MatchUpdateWithWhereUniqueWithoutGuestInput {
 export interface MatchUpdateWithoutGuestDataInput {
   host?: Maybe<TeamUpdateOneWithoutUploadMatchListInput>;
   stadium?: Maybe<String>;
+  address?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
@@ -1462,6 +1484,20 @@ export interface MatchScalarWhereInput {
   stadium_not_starts_with?: Maybe<String>;
   stadium_ends_with?: Maybe<String>;
   stadium_not_ends_with?: Maybe<String>;
+  address?: Maybe<String>;
+  address_not?: Maybe<String>;
+  address_in?: Maybe<String[] | String>;
+  address_not_in?: Maybe<String[] | String>;
+  address_lt?: Maybe<String>;
+  address_lte?: Maybe<String>;
+  address_gt?: Maybe<String>;
+  address_gte?: Maybe<String>;
+  address_contains?: Maybe<String>;
+  address_not_contains?: Maybe<String>;
+  address_starts_with?: Maybe<String>;
+  address_not_starts_with?: Maybe<String>;
+  address_ends_with?: Maybe<String>;
+  address_not_ends_with?: Maybe<String>;
   area?: Maybe<Area>;
   area_not?: Maybe<Area>;
   area_in?: Maybe<Area[] | Area>;
@@ -1538,6 +1574,7 @@ export interface MatchUpdateManyWithWhereNestedInput {
 
 export interface MatchUpdateManyDataInput {
   stadium?: Maybe<String>;
+  address?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
@@ -1583,6 +1620,7 @@ export interface MatchCreateInput {
   host?: Maybe<TeamCreateOneWithoutUploadMatchListInput>;
   guest?: Maybe<TeamCreateOneWithoutMatchingDoneListInput>;
   stadium: String;
+  address?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
@@ -1596,6 +1634,7 @@ export interface MatchUpdateInput {
   host?: Maybe<TeamUpdateOneWithoutUploadMatchListInput>;
   guest?: Maybe<TeamUpdateOneWithoutMatchingDoneListInput>;
   stadium?: Maybe<String>;
+  address?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
@@ -1607,6 +1646,7 @@ export interface MatchUpdateInput {
 
 export interface MatchUpdateManyMutationInput {
   stadium?: Maybe<String>;
+  address?: Maybe<String>;
   area?: Maybe<Area>;
   date?: Maybe<String>;
   startTime?: Maybe<String>;
@@ -2173,6 +2213,7 @@ export interface NotifierNullablePromise
 export interface Match {
   seq: Int;
   stadium: String;
+  address?: String;
   area?: Area;
   date?: String;
   startTime?: String;
@@ -2186,6 +2227,7 @@ export interface MatchPromise extends Promise<Match>, Fragmentable {
   host: <T = TeamPromise>() => T;
   guest: <T = TeamPromise>() => T;
   stadium: () => Promise<String>;
+  address: () => Promise<String>;
   area: () => Promise<Area>;
   date: () => Promise<String>;
   startTime: () => Promise<String>;
@@ -2210,6 +2252,7 @@ export interface MatchSubscription
   host: <T = TeamSubscription>() => T;
   guest: <T = TeamSubscription>() => T;
   stadium: () => Promise<AsyncIterator<String>>;
+  address: () => Promise<AsyncIterator<String>>;
   area: () => Promise<AsyncIterator<Area>>;
   date: () => Promise<AsyncIterator<String>>;
   startTime: () => Promise<AsyncIterator<String>>;
@@ -2234,6 +2277,7 @@ export interface MatchNullablePromise
   host: <T = TeamPromise>() => T;
   guest: <T = TeamPromise>() => T;
   stadium: () => Promise<String>;
+  address: () => Promise<String>;
   area: () => Promise<Area>;
   date: () => Promise<String>;
   startTime: () => Promise<String>;
@@ -2713,6 +2757,7 @@ export interface MatchSubscriptionPayloadSubscription
 export interface MatchPreviousValues {
   seq: Int;
   stadium: String;
+  address?: String;
   area?: Area;
   date?: String;
   startTime?: String;
@@ -2726,6 +2771,7 @@ export interface MatchPreviousValuesPromise
     Fragmentable {
   seq: () => Promise<Int>;
   stadium: () => Promise<String>;
+  address: () => Promise<String>;
   area: () => Promise<Area>;
   date: () => Promise<String>;
   startTime: () => Promise<String>;
@@ -2739,6 +2785,7 @@ export interface MatchPreviousValuesSubscription
     Fragmentable {
   seq: () => Promise<AsyncIterator<Int>>;
   stadium: () => Promise<AsyncIterator<String>>;
+  address: () => Promise<AsyncIterator<String>>;
   area: () => Promise<AsyncIterator<Area>>;
   date: () => Promise<AsyncIterator<String>>;
   startTime: () => Promise<AsyncIterator<String>>;
