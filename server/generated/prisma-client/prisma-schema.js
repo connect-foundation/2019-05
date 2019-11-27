@@ -208,6 +208,7 @@ module.exports = {
         host: Team
         guest: Team
         stadium: String!
+        address: String
         area: Area
         date: String
         startTime: String
@@ -236,6 +237,7 @@ module.exports = {
         host: TeamCreateOneWithoutUploadMatchListInput
         guest: TeamCreateOneWithoutMatchingDoneListInput
         stadium: String!
+        address: String
         area: Area
         date: String
         startTime: String
@@ -265,6 +267,7 @@ module.exports = {
         host: TeamCreateOneWithoutUploadMatchListInput
         guest: TeamCreateOneWithoutMatchingDoneListInput
         stadium: String!
+        address: String
         area: Area
         date: String
         startTime: String
@@ -277,6 +280,7 @@ module.exports = {
         seq: Int
         host: TeamCreateOneWithoutUploadMatchListInput
         stadium: String!
+        address: String
         area: Area
         date: String
         startTime: String
@@ -290,6 +294,7 @@ module.exports = {
         seq: Int
         guest: TeamCreateOneWithoutMatchingDoneListInput
         stadium: String!
+        address: String
         area: Area
         date: String
         startTime: String
@@ -309,6 +314,8 @@ module.exports = {
         seq_DESC
         stadium_ASC
         stadium_DESC
+        address_ASC
+        address_DESC
         area_ASC
         area_DESC
         date_ASC
@@ -326,6 +333,7 @@ module.exports = {
       type MatchPreviousValues {
         seq: Int!
         stadium: String!
+        address: String
         area: Area
         date: String
         startTime: String
@@ -357,6 +365,20 @@ module.exports = {
         stadium_not_starts_with: String
         stadium_ends_with: String
         stadium_not_ends_with: String
+        address: String
+        address_not: String
+        address_in: [String!]
+        address_not_in: [String!]
+        address_lt: String
+        address_lte: String
+        address_gt: String
+        address_gte: String
+        address_contains: String
+        address_not_contains: String
+        address_starts_with: String
+        address_not_starts_with: String
+        address_ends_with: String
+        address_not_ends_with: String
         area: Area
         area_not: Area
         area_in: [Area!]
@@ -448,6 +470,7 @@ module.exports = {
         host: TeamUpdateOneWithoutUploadMatchListInput
         guest: TeamUpdateOneWithoutMatchingDoneListInput
         stadium: String
+        address: String
         area: Area
         date: String
         startTime: String
@@ -459,6 +482,7 @@ module.exports = {
 
       input MatchUpdateManyDataInput {
         stadium: String
+        address: String
         area: Area
         date: String
         startTime: String
@@ -469,6 +493,7 @@ module.exports = {
 
       input MatchUpdateManyMutationInput {
         stadium: String
+        address: String
         area: Area
         date: String
         startTime: String
@@ -519,6 +544,7 @@ module.exports = {
         host: TeamUpdateOneWithoutUploadMatchListInput
         guest: TeamUpdateOneWithoutMatchingDoneListInput
         stadium: String
+        address: String
         area: Area
         date: String
         startTime: String
@@ -530,6 +556,7 @@ module.exports = {
       input MatchUpdateWithoutGuestDataInput {
         host: TeamUpdateOneWithoutUploadMatchListInput
         stadium: String
+        address: String
         area: Area
         date: String
         startTime: String
@@ -542,6 +569,7 @@ module.exports = {
       input MatchUpdateWithoutHostDataInput {
         guest: TeamUpdateOneWithoutMatchingDoneListInput
         stadium: String
+        address: String
         area: Area
         date: String
         startTime: String
@@ -603,6 +631,20 @@ module.exports = {
         stadium_not_starts_with: String
         stadium_ends_with: String
         stadium_not_ends_with: String
+        address: String
+        address_not: String
+        address_in: [String!]
+        address_not_in: [String!]
+        address_lt: String
+        address_lte: String
+        address_gt: String
+        address_gte: String
+        address_contains: String
+        address_not_contains: String
+        address_starts_with: String
+        address_not_starts_with: String
+        address_ends_with: String
+        address_not_ends_with: String
         area: Area
         area_not: Area
         area_in: [Area!]
