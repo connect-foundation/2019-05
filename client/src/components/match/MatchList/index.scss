@@ -1,7 +1,17 @@
 .match-list {
   border: 1px solid red;
+  padding: 20px;
   .match-card {
+    padding: 2px;
+    border: 1px solid purple;
+    margin: 1px 0;
     display: flex;
+    justify-content: space-between;
+    .team-info {
+      &__item {
+        margin: 0;
+      }
+    }
     .button-box {
       display: flex;
       flex-direction: column;
