@@ -20,6 +20,6 @@ describe('<App /> component', () => {
 
     // when Quick Team button is clicked
     fireEvent.click(getByText(/Team/));
-    expect(container.innerHTML).toMatch(/팀팀/);
+    expect(container.innerHTML).toMatch(/랭킹/);
   });
 });
