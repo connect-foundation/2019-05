@@ -85,7 +85,7 @@ const resolvers = {
     },
     CreateMatch: (
       _,
-      { host, stadium, area, date, startTime, endTime, description },
+      { host, stadium, address, area, date, startTime, endTime, description },
       { prisma }
     ) => {
       return prisma.createMatch({
@@ -95,6 +95,7 @@ const resolvers = {
           },
         },
         stadium,
+        address,
         area,
         date,
         startTime,
