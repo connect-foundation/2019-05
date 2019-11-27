@@ -7,7 +7,7 @@ import { BrowserRouter, Router } from 'react-router-dom';
 describe('<App /> component', () => {
   it('renders and navigates', () => {
     const history = createMemoryHistory();
-    const { container, getByText } = render(
+    const { container, getByText, getByRole } = render(
       <Router history={history}>
         <App />
       </Router>
@@ -17,7 +17,7 @@ describe('<App /> component', () => {
 
     // when Quick Match button is clicked
     fireEvent.click(getByText(/Match/));
-    expect(container.innerHTML).toMatch(/매치매치/);
+    expect(getByRole('heading')).toHaveTextContent('match');
 
     // when Quick Team button is clicked
     fireEvent.click(getByText(/Team/));
