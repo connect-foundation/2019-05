@@ -42,14 +42,25 @@ const loadNaverMap = () => {
 const showNaverMap = () => {
   return (async () => {
     const loadedMap = await loadNaverMap();
+    const seoulCoordinate = new loadedMap.LatLngBounds(
+      new loadedMap.LatLng(37.426999, 126.764166),
+      new loadedMap.LatLng(37.703238, 127.179192)
+    );
     const naverMap = new loadedMap.Map('naver-map', {
       useStyleMap: true,
-      zoom: 10,
-      center: new loadedMap.LatLng(37.5666103, 126.9783882),
+      zoom: 11,
+      minZoom: 11,
+      maxZoom: 16,
+      center: new loadedMap.LatLng(37.553738, 126.986409),
+      maxBounds: seoulCoordinate,
     });
     const seoulDistrictFeatures = await loadSeoulDistrict();
     seoulDistrictFeatures.forEach((features) => {
       naverMap.data.addGeoJson(features);
+    });
+
+    window.naver.maps.Event.addListener(naverMap, 'click', (e) => {
+      console.log(e);
     });
   })();
 };
