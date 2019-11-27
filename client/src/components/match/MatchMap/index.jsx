@@ -16,23 +16,27 @@ const loadSeoulDistrict = async () => {
     const seoulDistrictsFeatures =
       response.data.response.result.featureCollection.features;
     return seoulDistrictsFeatures;
-  } catch (error) {
-    return new Error(error);
+  } catch (err) {
+    return new Error(err);
   }
 };
 
 const loadNaverMap = () => {
-  return loadJs(NAVER_MAP_API_REQUEST_URL).then(() => {
-    const naverMap = window.naver.maps;
-    if (naverMap.jsContentLoaded) {
-      return naverMap;
-    }
-    return new Promise((resolve) => {
-      naverMap.onJSContentLoaded = () => {
-        resolve(naverMap);
-      };
+  return loadJs(NAVER_MAP_API_REQUEST_URL)
+    .then(() => {
+      const naverMap = window.naver.maps;
+      if (naverMap.jsContentLoaded) {
+        return naverMap;
+      }
+      return new Promise((resolve) => {
+        naverMap.onJSContentLoaded = () => {
+          resolve(naverMap);
+        };
+      });
+    })
+    .catch((err) => {
+      return new Error(err);
     });
-  });
 };
 
 const showNaverMap = () => {
@@ -42,6 +46,10 @@ const showNaverMap = () => {
       useStyleMap: true,
       zoom: 10,
       center: new loadedMap.LatLng(37.5666103, 126.9783882),
+    });
+    const seoulDistrictFeatures = await loadSeoulDistrict();
+    seoulDistrictFeatures.forEach((features) => {
+      naverMap.data.addGeoJson(features);
     });
   })();
 };
