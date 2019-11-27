@@ -22,7 +22,6 @@ const MatchList = () => {
   const [fetchQuery, setFetchQuery] = useState({
     query: INIT_MATCH_LIST_FETCH_QUERY,
   });
-
   useEffect(() => {
     const fetchSetting = {
       method: 'POST',
@@ -44,7 +43,6 @@ const MatchList = () => {
       setMatchList([]);
     };
   }, [fetchQuery]);
-
   return (
     <div className="match-list">
       {matchList ? (
@@ -63,16 +61,16 @@ const MatchCard = (props) => {
   return (
     <div className="match-card">
       <div className="team-info">
-        <p>팀명:{matchInfo.host.name}</p>
-        <p>구장:{matchInfo.stadium}</p>
-        <p>날짜:{matchInfo.date}</p>
-        <p>
+        <p className="team-info__item">팀명:{matchInfo.host.name}</p>
+        <p className="team-info__item">구장:{matchInfo.stadium}</p>
+        <p className="team-info__item">날짜:{matchInfo.date}</p>
+        <p className="team-info__item">
           시간:{matchInfo.startTime}-{matchInfo.endTime}
         </p>
       </div>
       <div className="button-box">
-        <Button> 전적 분석</Button>
-        <Button> 매치 신청</Button>
+        <Button className="button button--team"> 전적 분석</Button>
+        <Button className="button button--team"> 매치 신청</Button>
       </div>
     </div>
   );
