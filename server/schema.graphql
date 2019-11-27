@@ -41,6 +41,7 @@ type Match {
     host: Team
     guest: Team
     stadium: String!
+    address: String
     area: Area
     date: String
     startTime: String
