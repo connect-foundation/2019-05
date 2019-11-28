@@ -23,12 +23,18 @@ const setFilterContext = {
       isCheckedDN: !prev.isCheckedDN,
     }));
   },
-  // choiceMatchDay: (setFilterState, payload) => {
-  //   setFilterState((prev) => ({
-  //     ...prev,
-  //     ...payload,
-  //   }));
-  // },
+  setMatchDay: (setFilterState, payload) => {
+    setFilterState((prev) => ({
+      ...prev,
+      ...payload,
+    }));
+  },
+  setSimilerRank: (setFilterState) => {
+    setFilterState((prev) => ({
+      ...prev,
+      isSimilerRank: !prev.isSimilerRank,
+    }));
+  },
 };
 
 export default setFilterContext;
