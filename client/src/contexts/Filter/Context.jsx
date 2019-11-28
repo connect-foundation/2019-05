@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import moment from 'moment';
 
 const FilterContext = createContext({});
 
@@ -8,9 +9,10 @@ const FilterProvider = ({ children }) => {
     isCheckedSB: true,
     isCheckedDB: true,
     isCheckedDN: true,
-    // matchDay: null,
-    // startTime: null,
-    // endTime: null,
+    matchDay: moment(),
+    startTime: null,
+    endTime: null,
+    isSimilerRank: false,
   };
   const [state, setState] = useState(initialState);
 
