@@ -1,34 +1,40 @@
 const setFilterContext = {
-  changeCheckedSN: (setFilterState) => {
+  setCheckedSN: (setFilterState) => {
     setFilterState((prev) => ({
       ...prev,
       isCheckedSN: !prev.isCheckedSN,
     }));
   },
-  changeCheckedSB: (setFilterState) => {
+  setCheckedSB: (setFilterState) => {
     setFilterState((prev) => ({
       ...prev,
       isCheckedSB: !prev.isCheckedSB,
     }));
   },
-  changeCheckedDB: (setFilterState) => {
+  setCheckedDB: (setFilterState) => {
     setFilterState((prev) => ({
       ...prev,
       isCheckedDB: !prev.isCheckedDB,
     }));
   },
-  changeCheckedDN: (setFilterState) => {
+  setCheckedDN: (setFilterState) => {
     setFilterState((prev) => ({
       ...prev,
       isCheckedDN: !prev.isCheckedDN,
     }));
   },
-  // choiceMatchDay: (setFilterState, payload) => {
-  //   setFilterState((prev) => ({
-  //     ...prev,
-  //     ...payload,
-  //   }));
-  // },
+  setMatchDay: (setFilterState, payload) => {
+    setFilterState((prev) => ({
+      ...prev,
+      ...payload,
+    }));
+  },
+  setSimilerRank: (setFilterState) => {
+    setFilterState((prev) => ({
+      ...prev,
+      isSimilerRank: !prev.isSimilerRank,
+    }));
+  },
 };
 
 export default setFilterContext;

@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import 'react-dates/initialize';
-import { DayPickerRangeController } from 'react-dates';
+import { SingleDatePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import Switch from 'react-switch';
-import { FilterContext } from '../../../contexts/FilterContext';
-import setFilterContext from '../../../setContexts/setFilterContext';
+import { FilterContext } from '../../../contexts/Filter/Context';
+import setFilterContext from '../../../contexts/Filter/setContext';
 import './index.scss';
 
 const MatchFilter = () => {
@@ -27,28 +27,28 @@ const CheckBox = ({ title, value, onChange }) => (
 
 // 지역 필터
 const RegionPicker = () => {
-  const [state, setState] = useContext(FilterContext);
+  const [filterState, setFilterState] = useContext(FilterContext);
 
   const regions = [
     {
       title: '서남',
-      isChecked: state.isCheckedSN,
-      handleOnChange: setFilterContext.changeCheckedSN.bind(null, setState),
+      isChecked: filterState.isCheckedSN,
+      handleOnChange: setFilterContext.setCheckedSN.bind(null, setFilterState),
     },
     {
       title: '서북',
-      isChecked: state.isCheckedSB,
-      handleOnChange: setFilterContext.changeCheckedSB.bind(null, setState),
+      isChecked: filterState.isCheckedSB,
+      handleOnChange: setFilterContext.setCheckedSB.bind(null, setFilterState),
     },
     {
       title: '동북',
-      isChecked: state.isCheckedDB,
-      handleOnChange: setFilterContext.changeCheckedDB.bind(null, setState),
+      isChecked: filterState.isCheckedDB,
+      handleOnChange: setFilterContext.setCheckedDB.bind(null, setFilterState),
     },
     {
       title: '동남',
-      isChecked: state.isCheckedDN,
-      handleOnChange: setFilterContext.changeCheckedDN.bind(null, setState),
+      isChecked: filterState.isCheckedDN,
+      handleOnChange: setFilterContext.setCheckedDN.bind(null, setFilterState),
     },
   ];
   return (
@@ -67,24 +67,36 @@ const RegionPicker = () => {
 
 // 일시
 const TimePicker = () => {
-  // const [state, setState] = useContext(FilterContext);
+  const [focused, setFocused] = useState(false);
+  const [filterState, setFilterState] = useContext(FilterContext);
   // const handle = setFilterContext.choiceMatchDay.bind(null, setState, {
   //   matchDay: 1,
   // });
+  const handleChange = setFilterContext.setMatchDay.bind(null, setFilterState);
   return (
     <div className="time-picker">
-      <DayPickerRangeController />
-      {/*<button onClick={handle}>z</button>*/}
-      {/*{console.log(state)}*/}
+      <SingleDatePicker
+        numberOfMonths={1}
+        onDateChange={(date) => handleChange({ matchDay: date })}
+        onFocusChange={() => setFocused(!focused)}
+        focused={focused}
+        date={filterState.matchDay}
+      />
     </div>
   );
 };
 
 // 랭킹 토글
 const RankSwitch = () => {
+  const [filterState, setFilterState] = useContext(FilterContext);
+  const handleChange = setFilterContext.setSimilerRank.bind(
+    null,
+    setFilterState
+  );
+
   return (
     <div className="rank-switch">
-      <Switch />
+      <Switch onChange={handleChange} checked={filterState.isSimilerRank} />
     </div>
   );
 };
