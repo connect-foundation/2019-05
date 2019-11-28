@@ -77,6 +77,9 @@ jobs:
     - name: 'DEV SERVER BACK BUILD'
       if: branch = develop AND type = push
       before_script:
+        - cd server
+        - ls -a
+        - openssl aes-256-cbc -K $encrypted_ce75c7671f22_key -iv $encrypted_ce75c7671f22_iv -in .env.enc -out .env -d
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
