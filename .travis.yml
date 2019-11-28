@@ -34,7 +34,7 @@ jobs:
           fi
         - cd client
       install:
-        - yarn
+        - yarn install
       script:
         - echo 'Front test start!'
         - yarn test
@@ -44,7 +44,7 @@ jobs:
       if: type = pull_request
       before_install:
         - cd server
-        - openssl aes-256-cbc -K $encrypted_ce75c7671f22_key -iv $encrypted_ce75c7671f22_iv -in .env.enc -out .env -d
+        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in .env.enc -out .env -d
         - cd ../
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
@@ -54,7 +54,7 @@ jobs:
             travis_terminate 0
           fi
       install:
-        - npm
+        - yarn install
       script:
         - echo 'Server test start!'
         - npm test
@@ -78,7 +78,7 @@ jobs:
       if: branch = develop AND type = push
       before_script:
         - cd server
-        - openssl aes-256-cbc -K $encrypted_ce75c7671f22_key -iv $encrypted_ce75c7671f22_iv -in .env.enc -out .env -d
+        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in .env.enc -out .env -d
         - cat .env
         - cd ../
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
@@ -108,7 +108,7 @@ jobs:
       if: branch = master AND type = push
       before_script:
         - cd server
-        - openssl aes-256-cbc -K $encrypted_ce75c7671f22_key -iv $encrypted_ce75c7671f22_iv -in .env.enc -out .env -d
+        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in .env.enc -out .env -d
         - cd ../
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
