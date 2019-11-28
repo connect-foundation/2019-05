@@ -28,7 +28,7 @@ jobs:
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
         - |
-          if [ $IS_CHANGED_FRONT != true ]; then 
+          if [ $IS_CHANGED_FRONT != true ]; then
             echo 'Front directory not change'
             travis_terminate 0
           fi
@@ -68,7 +68,7 @@ jobs:
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
         - |
-          if [ $IS_CHANGED_FRONT != true ]; then 
+          if [ $IS_CHANGED_FRONT != true ]; then
             echo 'Front directory not change'
             travis_terminate 0
           fi
@@ -79,12 +79,11 @@ jobs:
       before_script:
         - cd server
         - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in .env.enc -out .env -d
-        - cat .env
         - cd ../
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
-          if [ $IS_CHANGED_BACK != true ]; then 
+          if [ $IS_CHANGED_BACK != true ]; then
             echo 'Back directory not change'
             travis_terminate 0
           fi
@@ -98,7 +97,7 @@ jobs:
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
         - |
-          if [ $IS_CHANGED_FRONT != true ]; then 
+          if [ $IS_CHANGED_FRONT != true ]; then
             echo 'Front directory not change'
             travis_terminate 0
           fi
@@ -117,4 +116,10 @@ jobs:
             echo 'Back directory not change'
             travis_terminate 0
           fi
-      script: skip
+        - sudo apt-get install sshpass
+        - docker build -t "$DOCKER_USERNAME/quickkick-api:latest" ./server
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      after_script:
+        - docker push "${DOCKER_USERNAME}/quickkick-api:latest
+        - sshpass -p "$PROD_SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no root@"$PROD_SERVER_IP" "/home/quickick/api/prod.api.build.sh"
