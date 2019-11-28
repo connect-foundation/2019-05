@@ -43,7 +43,9 @@ jobs:
     - name: 'BACK TEST'
       if: type = pull_request
       before_install:
-        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in ./server/.env.enc -out ./server/.env -d
+        - cd server
+        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in .env.enc -out .env -d
+        - cd ../
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
@@ -75,7 +77,9 @@ jobs:
     - name: 'DEV SERVER BACK BUILD'
       if: branch = develop AND type = push
       before_script:
-        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in ./server/.env.enc -out ./server/.env -d
+        - cd server
+        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in .env.enc -out .env -d
+        - cd ../
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
@@ -102,7 +106,9 @@ jobs:
     - name: 'PROD SERVER BACK BUILD'
       if: branch = master AND type = push
       before_script:
-        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in ./server/.env.enc -out ./server/.env -d
+        - cd server
+        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in .env.enc -out .env -d
+        - cd ../
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
