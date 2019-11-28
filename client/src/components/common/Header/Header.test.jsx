@@ -10,7 +10,7 @@ describe('Header component', () => {
         <Header />
       </BrowserRouter>
     );
-    const quickMatch = getByText('Quick Match');
+    const quickMatch = getByText('매치 검색');
     expect(quickMatch).toBeInTheDocument();
   });
 });
