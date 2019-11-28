@@ -51,19 +51,68 @@ const showNaverMap = () => {
       zoom: 11,
       minZoom: 11,
       maxZoom: 16,
+      zoomControl: true,
+      zoomControlOptions: {
+        style: loadedMap.ZoomControlStyle.SMALL,
+      },
       center: new loadedMap.LatLng(37.553738, 126.986409),
       maxBounds: seoulCoordinate,
+      mapTypes: new loadedMap.MapTypeRegistry({
+        normal: loadedMap.NaverStyleMapTypeOption.getVectorMap(),
+        label: loadedMap.NaverStyleMapTypeOption.getNormalMap(),
+      }),
     });
-    const seoulDistrictFeatures = await loadSeoulDistrict();
-    seoulDistrictFeatures.forEach((features) => {
-      naverMap.data.addGeoJson(features);
+    const naverMapStyleConfigObj = {
+      fillColor: '#000000',
+      fillOpacity: 0,
+      strokeColor: '#000000',
+      strokeWeight: 2,
+      strokeOpacity: 1,
+      clickable: true,
+    };
+
+    window.naver.maps.Event.addListener(naverMap, 'zoom_changed', (zoom) => {
+      const label = new loadedMap.Layer('label', naverMap.mapTypes.label);
+      const normal = new loadedMap.Layer('normal', naverMap.mapTypes.normal);
+      if (zoom >= 13) {
+        label.setMap(naverMap);
+        naverMapStyleConfigObj.clickable = false;
+        naverMap.data.setStyle(naverMapStyleConfigObj);
+        return;
+      }
+      normal.setMap(naverMap);
+      naverMapStyleConfigObj.clickable = true;
+      naverMap.data.setStyle(naverMapStyleConfigObj);
     });
 
-    window.naver.maps.Event.addListener(naverMap, 'click', (e) => {
-      console.log(e);
+    const seoulDistricts = await loadSeoulDistrict();
+    seoulDistricts.forEach((district) => {
+      naverMap.data.addGeoJson(district);
+      naverMap.data.setStyle(naverMapStyleConfigObj);
+    });
+
+    naverMap.data.addListener('mouseover', (e) => {
+      console.log(e.feature.property_sig_kor_nm);
+      naverMap.data.overrideStyle(e.feature, {
+        fillOpacity: 1,
+        strokeWeight: 20,
+        strokeOpacity: 1,
+      });
+    });
+
+    naverMap.data.addListener('mouseout', () => {
+      naverMap.data.revertStyle();
+    });
+
+    naverMap.data.addListener('click', (e) => {
+      const selectedDistrict = e.feature.getBounds();
+      if (selectedDistrict) {
+        naverMap.panToBounds(selectedDistrict);
+      }
     });
   })();
 };
+
 showNaverMap();
 
 const MatchMap = () => {
