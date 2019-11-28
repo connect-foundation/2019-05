@@ -43,6 +43,8 @@ jobs:
     - name: 'BACK TEST'
       if: type = pull_request
       before_install:
+        - openssl aes-256-cbc -K $encrypted_ce75c7671f22_key -iv $encrypted_ce75c7671f22_iv -in ./server/.env.enc -out ./server/.env -d
+        - cat .env
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
@@ -101,6 +103,8 @@ jobs:
     - name: 'PROD SERVER BACK BUILD'
       if: branch = master AND type = push
       before_script:
+        - openssl aes-256-cbc -K $encrypted_ce75c7671f22_key -iv $encrypted_ce75c7671f22_iv -in ./server/.env.enc -out ./server/.env -d
+        - cat .env
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
