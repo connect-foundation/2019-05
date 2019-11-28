@@ -34,7 +34,7 @@ jobs:
           fi
         - cd client
       install:
-        - yarn
+        - yarn install
       script:
         - echo 'Front test start!'
         - yarn test
@@ -54,7 +54,7 @@ jobs:
             travis_terminate 0
           fi
       install:
-        - npm
+        - yarn install
       script:
         - echo 'Server test start!'
         - npm test
