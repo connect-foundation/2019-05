@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import 'react-dates/initialize';
-import { DayPickerRangeController } from 'react-dates';
+import { SingleDatePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import Switch from 'react-switch';
 import { FilterContext } from '../../../contexts/Filter/Context';
@@ -67,24 +67,36 @@ const RegionPicker = () => {
 
 // 일시
 const TimePicker = () => {
-  // const [state, setState] = useContext(FilterContext);
+  const [focused, setFocused] = useState(false);
+  const [filterState, setFilterState] = useContext(FilterContext);
   // const handle = setFilterContext.choiceMatchDay.bind(null, setState, {
   //   matchDay: 1,
   // });
+  const handleChange = setFilterContext.setMatchDay.bind(null, setFilterState);
   return (
     <div className="time-picker">
-      <DayPickerRangeController />
-      {/*<button onClick={handle}>z</button>*/}
-      {/*{console.log(state)}*/}
+      <SingleDatePicker
+        numberOfMonths={1}
+        onDateChange={(date) => handleChange({ matchDay: date })}
+        onFocusChange={() => setFocused(!focused)}
+        focused={focused}
+        date={filterState.matchDay}
+      />
     </div>
   );
 };
 
 // 랭킹 토글
 const RankSwitch = () => {
+  const [filterState, setFilterState] = useContext(FilterContext);
+  const handleChange = setFilterContext.setSimilerRank.bind(
+    null,
+    setFilterState
+  );
+
   return (
     <div className="rank-switch">
-      <Switch />
+      <Switch onChange={handleChange} checked={filterState.isSimilerRank} />
     </div>
   );
 };
