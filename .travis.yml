@@ -43,9 +43,6 @@ jobs:
     - name: 'BACK TEST'
       if: type = pull_request
       before_install:
-        - cd server
-        - openssl aes-256-cbc -K $encrypted_ce75c7671f22_key -iv $encrypted_ce75c7671f22_iv -in .env.enc -out .env -d
-        - cd ../
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
@@ -53,6 +50,7 @@ jobs:
             echo 'Back directory not change'
             travis_terminate 0
           fi
+        - cd server
       install:
         - npm
       script:
@@ -77,10 +75,6 @@ jobs:
     - name: 'DEV SERVER BACK BUILD'
       if: branch = develop AND type = push
       before_script:
-        - cd server
-        - openssl aes-256-cbc -K $encrypted_ce75c7671f22_key -iv $encrypted_ce75c7671f22_iv -in .env.enc -out .env -d
-        - cat .env
-        - cd ../
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
@@ -107,9 +101,6 @@ jobs:
     - name: 'PROD SERVER BACK BUILD'
       if: branch = master AND type = push
       before_script:
-        - cd server
-        - openssl aes-256-cbc -K $encrypted_ce75c7671f22_key -iv $encrypted_ce75c7671f22_iv -in .env.enc -out .env -d
-        - cd ../
         - GIT_DIFF_RESULT=$(eval $(echo bash diff_checking.sh $TRAVIS_COMMIT_RANGE))
         - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
         - |
