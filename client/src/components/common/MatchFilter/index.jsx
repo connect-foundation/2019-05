@@ -3,8 +3,8 @@ import 'react-dates/initialize';
 import { DayPickerRangeController } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import Switch from 'react-switch';
-import { FilterContext } from '../../../contexts/FilterContext';
-import setFilterContext from '../../../setContexts/setFilterContext';
+import { FilterContext } from '../../../contexts/Filter/Context';
+import setFilterContext from '../../../contexts/Filter/setContext';
 import './index.scss';
 
 const MatchFilter = () => {
@@ -27,28 +27,28 @@ const CheckBox = ({ title, value, onChange }) => (
 
 // 지역 필터
 const RegionPicker = () => {
-  const [state, setState] = useContext(FilterContext);
+  const [filterState, setFilterState] = useContext(FilterContext);
 
   const regions = [
     {
       title: '서남',
-      isChecked: state.isCheckedSN,
-      handleOnChange: setFilterContext.changeCheckedSN.bind(null, setState),
+      isChecked: filterState.isCheckedSN,
+      handleOnChange: setFilterContext.setCheckedSN.bind(null, setFilterState),
     },
     {
       title: '서북',
-      isChecked: state.isCheckedSB,
-      handleOnChange: setFilterContext.changeCheckedSB.bind(null, setState),
+      isChecked: filterState.isCheckedSB,
+      handleOnChange: setFilterContext.setCheckedSB.bind(null, setFilterState),
     },
     {
       title: '동북',
-      isChecked: state.isCheckedDB,
-      handleOnChange: setFilterContext.changeCheckedDB.bind(null, setState),
+      isChecked: filterState.isCheckedDB,
+      handleOnChange: setFilterContext.setCheckedDB.bind(null, setFilterState),
     },
     {
       title: '동남',
-      isChecked: state.isCheckedDN,
-      handleOnChange: setFilterContext.changeCheckedDN.bind(null, setState),
+      isChecked: filterState.isCheckedDN,
+      handleOnChange: setFilterContext.setCheckedDN.bind(null, setFilterState),
     },
   ];
   return (
