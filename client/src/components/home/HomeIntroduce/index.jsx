@@ -4,7 +4,7 @@ import './index.scss';
 const HomeIntroduce = () => (
   <div className="home-introduce">
     <div className="grid-container">
-      <div>QuickKick은..</div>
+      <h3 className="home__section-title">QuickKick은..</h3>
     </div>
   </div>
 );

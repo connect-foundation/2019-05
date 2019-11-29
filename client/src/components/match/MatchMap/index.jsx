@@ -59,7 +59,6 @@ const SEOUL = {
 const NaverMap = (props) => {
   /* eslint react/prop-types: 0 */
   const { naverMap, districtData } = props;
-
   const [seoulCoord, setSeoulCoord] = useState(
     new naverMap.LatLngBounds(
       new naverMap.LatLng(SEOUL.SOUTH_WEST.LAT, SEOUL.SOUTH_WEST.LNG),
@@ -149,6 +148,5 @@ const NaverMap = (props) => {
       <div id="map" />
     </div>
   );
-};
-
+}
 export default MatchMap;

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import './Header.scss';
-import logo from '../../../assets/images/quickkick-logo.png';
 import { faSignInAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import logo from '../../../assets/images/quickkick-logo.png';
 
 const Header = () => (
   <div className="header">
@@ -35,10 +35,10 @@ const NavBar = () => {
   return (
     <nav className="nav-bar">
       <div className="nav-bar__button">
-        <Link to="/match">Quick Match</Link>
+        <Link to="/match">매치 검색</Link>
       </div>
       <div className="nav-bar__button">
-        <Link to="/ranking">Quick Team</Link>
+        <Link to="/ranking">팀 목록 보기</Link>
       </div>
       {isLogin ? <UserIcon /> : <LoginBtn />}
     </nav>
@@ -46,16 +46,24 @@ const NavBar = () => {
 };
 
 const LoginBtn = () => (
-  <div className="nav-bar__userInfo">
-    <a href="http://127.0.0.1:4000/auth/naver">
-      <FontAwesomeIcon icon={faSignInAlt} size="2x" />
-    </a>
+  <div className="nav-bar__login">
+    <a href="http://127.0.0.1:4000/auth/naver">로그인</a>
   </div>
 );
 
 const UserIcon = () => (
-  <div className="nav-bar__userInfo">
+  <div className="nav-bar__user-info">
     <FontAwesomeIcon icon={faUserCircle} size="2x" />
+    <div className="nav-bar__user-detail">
+      <ul>
+        <li>
+          <Link to="/team/1">내 팀 보기</Link>
+        </li>
+        <li>
+          <a href="http://127.0.0.1:4000/auth/logout">로그아웃</a>
+        </li>
+      </ul>
+    </div>
   </div>
 );
 
