@@ -1,3 +1,8 @@
 .match-map {
-  border: 1px dotted green;
+  .naver-map-container {
+    #map {
+      width: 100%;
+      height: 400px;
+    }
+  }
 }

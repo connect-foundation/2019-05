@@ -1,15 +1,13 @@
 {
-  "extends": ["react-app", "airbnb"],
+  "extends": [
+    "react-app",
+    "airbnb",
+    "plugin:prettier/recommended",
+    "prettier/react"
+  ],
   "rules": {
     "quotes": ["error", "single", { "avoidEscape": true }],
     "indent": ["error", 2],
     "semi": "warn"
-  },
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
-  "plugins": ["react"],
-  "parser": "babel-eslint"
+  }
 }
