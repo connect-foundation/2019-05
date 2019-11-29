@@ -148,5 +148,5 @@ const NaverMap = (props) => {
       <div id="map" />
     </div>
   );
-}
+};
 export default MatchMap;
