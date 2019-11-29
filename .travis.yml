@@ -53,6 +53,7 @@ jobs:
             echo 'Back directory not change'
             travis_terminate 0
           fi
+        - cd server
       install:
         - yarn install
       script:
