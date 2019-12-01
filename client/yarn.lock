@@ -6445,6 +6445,11 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+load-js@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/load-js/-/load-js-3.0.3.tgz#9a5dd937de72fa789a0e696f7e917ecfe970de8a"
+  integrity sha512-y1Iqt5vikLPrI9xJHV3gK6TKDvGdJQPHjejJgP4BmS7wx4oo45+IMvnAT9jY8quL9NGtt0WlTuLq1pw7WuODYA==
+
 load-json-file@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-1.1.0.tgz#956905708d58b4bab4c2261b04f59f31c99374c0"
