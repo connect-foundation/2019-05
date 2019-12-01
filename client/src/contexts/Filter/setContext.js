@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const setFilterContext = {
   setCheckedSN: (setFilterState) => {
     setFilterState((prev) => ({
@@ -34,6 +36,18 @@ const setFilterContext = {
       ...prev,
       isSimilerRank: !prev.isSimilerRank,
     }));
+  },
+  initializeState: (setFilterState) => {
+    setFilterState({
+      isCheckedSN: true,
+      isCheckedSB: true,
+      isCheckedDB: true,
+      isCheckedDN: true,
+      matchDay: moment(),
+      startTime: null,
+      endTime: null,
+      isSimilerRank: false,
+    });
   },
 };
 
