@@ -83,6 +83,27 @@ const NaverMap = (props) => {
     zIndex: 1,
   };
 
+  let districtMarker;
+
+  const createDistrictNameMarker = (district) => {
+    districtMarker = new mapData.Marker({
+      position: district.getBounds().getCenter(),
+      icon: {
+        content: `
+        <div style="
+        display:inline-block;
+        padding:5px;
+        text-align:center;
+        background-color:#fff;
+        border:1px solid #000;
+        font-size:5px;">
+          <span>${district.property_sig_kor_nm}</span>
+        </div>`,
+      },
+      map: naverMap,
+    });
+  };
+
   const handleMouseoverEvent = (e) => {
     const overrideStyleOption = { ...naverMapStyleConfigObj };
     overrideStyleOption.fillColor = '#71ACAD';
@@ -93,10 +114,12 @@ const NaverMap = (props) => {
     overrideStyleOption.strokeWeight = 10;
     overrideStyleOption.zIndex = 4;
     e.feature.setStyle(overrideStyleOption);
+    createDistrictNameMarker(e.feature);
   };
 
   const handleMouseoutEvent = (e) => {
     e.feature.setStyle(naverMapStyleConfigObj);
+    districtMarker.setMap(null);
   };
 
   const handleClickEvent = (e) => {
@@ -133,6 +156,31 @@ const NaverMap = (props) => {
     addEventInMap('mouseout', handleMouseoutEvent);
   };
 
+  const createFogEffect = () => {
+    return new mapData.Polygon({
+      strokeOpacity: 1,
+      strokeWeight: 2,
+      strokeColor: '#f00',
+      fillOpacity: 0.8,
+      fillColor: '#fff',
+      zIndex: 3,
+      map: naverMap,
+      paths: [
+        [
+          new mapData.LatLng(37, 126),
+          new mapData.LatLng(37, 128),
+          new mapData.LatLng(38, 128),
+          new mapData.LatLng(38, 126),
+        ],
+        [
+          ...cityData[0].geometry.coordinates[0][0].map((latlng) => {
+            return mapData.LatLng(latlng[1], latlng[0]);
+          }),
+        ],
+      ],
+    });
+  };
+
   useEffect(() => {
     if (naverMap === undefined) {
       const mapOptions = {
@@ -156,34 +204,13 @@ const NaverMap = (props) => {
       };
       setNaverMap(new mapData.Map('map', mapOptions));
     } else {
-      /* eslint no-unused-vars: 0 */
-      const fogEffect = new mapData.Polygon({
-        strokeOpacity: 1,
-        strokeWeight: 2,
-        strokeColor: '#f00',
-        fillOpacity: 0.8,
-        fillColor: '#fff',
-        zIndex: 3,
-        map: naverMap,
-        paths: [
-          [
-            new mapData.LatLng(37, 126),
-            new mapData.LatLng(37, 128),
-            new mapData.LatLng(38, 128),
-            new mapData.LatLng(38, 126),
-          ],
-          [
-            ...cityData[0].geometry.coordinates[0][0].map((latlng) => {
-              return mapData.LatLng(latlng[1], latlng[0]);
-            }),
-          ],
-        ],
-      });
+      createFogEffect();
 
       districtData.forEach((district) => {
         naverMap.data.addGeoJson(district);
       });
       naverMap.data.setStyle(naverMapStyleConfigObj);
+
       mapData.Event.addListener(naverMap, 'zoom_changed', handleZoomEvent);
       addEventInMap('mouseover', handleMouseoverEvent);
       addEventInMap('mouseout', handleMouseoutEvent);
