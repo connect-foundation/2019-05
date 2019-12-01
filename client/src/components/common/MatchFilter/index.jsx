@@ -33,22 +33,22 @@ const RegionPicker = () => {
     {
       title: '서남',
       isChecked: filterState.isCheckedSN,
-      handleOnChange: setFilterContext.setCheckedSN.bind(null, setFilterState),
+      handleOnChange: () => setFilterContext.setCheckedSN(setFilterState),
     },
     {
       title: '서북',
       isChecked: filterState.isCheckedSB,
-      handleOnChange: setFilterContext.setCheckedSB.bind(null, setFilterState),
+      handleOnChange: () => setFilterContext.setCheckedSB(setFilterState),
     },
     {
       title: '동북',
       isChecked: filterState.isCheckedDB,
-      handleOnChange: setFilterContext.setCheckedDB.bind(null, setFilterState),
+      handleOnChange: () => setFilterContext.setCheckedDB(setFilterState),
     },
     {
       title: '동남',
       isChecked: filterState.isCheckedDN,
-      handleOnChange: setFilterContext.setCheckedDN.bind(null, setFilterState),
+      handleOnChange: () => setFilterContext.setCheckedDN(setFilterState),
     },
   ];
   return (
@@ -69,10 +69,8 @@ const RegionPicker = () => {
 const TimePicker = () => {
   const [focused, setFocused] = useState(false);
   const [filterState, setFilterState] = useContext(FilterContext);
-  // const handle = setFilterContext.choiceMatchDay.bind(null, setState, {
-  //   matchDay: 1,
-  // });
   const handleChange = setFilterContext.setMatchDay.bind(null, setFilterState);
+
   return (
     <div className="time-picker">
       <SingleDatePicker
@@ -89,10 +87,7 @@ const TimePicker = () => {
 // 랭킹 토글
 const RankSwitch = () => {
   const [filterState, setFilterState] = useContext(FilterContext);
-  const handleChange = setFilterContext.setSimilerRank.bind(
-    null,
-    setFilterState
-  );
+  const handleChange = () => setFilterContext.setSimilerRank(setFilterState);
 
   return (
     <div className="rank-switch">
