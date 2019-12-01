@@ -4,7 +4,7 @@ const smtpPool = require('nodemailer-smtp-pool');
 const TRANSPORT_CONFIG = {
   service: 'Gmail',
   host: 'localhost',
-  port: process.env.PORT,
+  port: process.env.EMAIL_PORT,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PW,
