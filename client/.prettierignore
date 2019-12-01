@@ -1,0 +1,5 @@
+.prettierignore
+public/*
+yarn.lock
+package.json
+README.md
