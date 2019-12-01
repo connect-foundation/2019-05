@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { FilterContext } from '../../../contexts/Filter/Context';
+import setFilterContext from '../../../contexts/Filter/setContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import './Header.scss';
@@ -26,6 +28,9 @@ const ServiceLogo = () => (
 
 const NavBar = () => {
   const [isLogin, setIsLogin] = useState(false);
+  const [filterState, setFilterState] = useContext(FilterContext);
+
+  const handleOnClick = () => setFilterContext.initializeState(setFilterState);
 
   useEffect(() => {
     const cookie = document.cookie.split('=')[1];
@@ -34,12 +39,14 @@ const NavBar = () => {
 
   return (
     <nav className="nav-bar">
-      <div className="nav-bar__button">
-        <Link to="/match">매치 검색</Link>
-      </div>
-      <div className="nav-bar__button">
-        <Link to="/ranking">팀 목록 보기</Link>
-      </div>
+      <Link to="/match">
+        <div className="nav-bar__button" onClick={handleOnClick}>
+          매치 검색
+        </div>
+      </Link>
+      <Link to="/ranking">
+        <div className="nav-bar__button">팀 목록 보기</div>
+      </Link>
       {isLogin ? <UserIcon /> : <LoginBtn />}
     </nav>
   );
