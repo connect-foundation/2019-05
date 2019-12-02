@@ -91,7 +91,11 @@ const RankSwitch = () => {
 
   return (
     <div className="rank-switch">
-      <Switch onChange={handleChange} checked={filterState.isSimilerRank} />
+      <Switch
+        onChange={handleChange}
+        checked={filterState.isSimilerRank}
+        onColor="#5CAEAE"
+      />
     </div>
   );
 };
