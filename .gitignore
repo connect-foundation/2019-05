@@ -30,3 +30,6 @@ yarn-error.log*
 
 #prisma setup
 prisma/
+
+#personal files
+personal/

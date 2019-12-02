@@ -30,22 +30,43 @@ enum Result {
     DRAW
 }
 enum Area{
-    SB
-    SN
-    DN
-    DB
+    CNO
+    CGS
+    YSN
+    SDG
+    KJI
+    TDM
+    CNG
+    SBK
+    KBK
+    TBG
+    NWN
+    UPG
+    SDM
+    MPO
+    YGC
+    KSS
+    KRO
+    KCN
+    YDP
+    TJK
+    KNK
+    SCO
+    KNM
+    SPA
+    KDG
 }
 
 type Match {
     seq: Int!
-    host: Team
+    host: Team!
     guest: Team
     stadium: String!
     address: String
-    area: Area
-    date: String
-    startTime: String
-    endTime: String
+    area: Area!
+    date: String!
+    startTime: String!
+    endTime: String!
     description: String
     result: Result
     appliedLists: [Apply!]
@@ -82,7 +103,6 @@ type Query {
     Player(seq: Int, playerId: String): Player
     Notifiers(seq:Int, player:Int): [Notifier]
     Notifier(seq:Int): Notifier
-
 }
 
 type Mutation {
