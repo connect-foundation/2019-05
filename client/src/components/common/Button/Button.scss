@@ -1,8 +1,4 @@
-$quick_navy: #272a51;
-$quick_mint: #71acad;
-$quick_black: #1a252a;
-$quick_white: white;
-$quick_light_navy: #373d75;
+@import '../../../commonStyle';
 .button {
   border-radius: 4px;
   &--big {
