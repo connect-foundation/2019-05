@@ -69,7 +69,7 @@ const RegionPicker = () => {
 const TimePicker = () => {
   const [focused, setFocused] = useState(false);
   const [filterState, setFilterState] = useContext(FilterContext);
-  const handleChange = setFilterContext.setMatchDay.bind(null, setFilterState);
+  const handleChange = () => setFilterContext.setMatchDay(setFilterState);
 
   return (
     <div className="time-picker">
@@ -91,7 +91,11 @@ const RankSwitch = () => {
 
   return (
     <div className="rank-switch">
-      <Switch onChange={handleChange} checked={filterState.isSimilerRank} />
+      <Switch
+        onChange={handleChange}
+        checked={filterState.isSimilerRank}
+        onColor="#5CAEAE"
+      />
     </div>
   );
 };
