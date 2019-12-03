@@ -191,10 +191,31 @@ module.exports = {
       }
 
       enum Area {
-        SB
-        SN
-        DN
-        DB
+        CNO
+        CGS
+        YSN
+        SDG
+        KJI
+        TDM
+        CNG
+        SBK
+        KBK
+        TBG
+        NWN
+        UPG
+        SDM
+        MPO
+        YGC
+        KSS
+        KRO
+        KCN
+        YDP
+        TJK
+        KNK
+        SCO
+        KNM
+        SPA
+        KDG
       }
 
       type BatchPayload {
@@ -205,14 +226,14 @@ module.exports = {
 
       type Match {
         seq: Int!
-        host: Team
+        host: Team!
         guest: Team
         stadium: String!
         address: String
-        area: Area
-        date: String
-        startTime: String
-        endTime: String
+        area: Area!
+        date: String!
+        startTime: String!
+        endTime: String!
         description: String
         result: Result
         appliedLists(
@@ -234,14 +255,14 @@ module.exports = {
 
       input MatchCreateInput {
         seq: Int
-        host: TeamCreateOneWithoutUploadMatchListInput
+        host: TeamCreateOneWithoutUploadMatchListInput!
         guest: TeamCreateOneWithoutMatchingDoneListInput
         stadium: String!
         address: String
-        area: Area
-        date: String
-        startTime: String
-        endTime: String
+        area: Area!
+        date: String!
+        startTime: String!
+        endTime: String!
         description: String
         result: Result
         appliedLists: ApplyCreateManyWithoutMatchInput
@@ -264,27 +285,27 @@ module.exports = {
 
       input MatchCreateWithoutAppliedListsInput {
         seq: Int
-        host: TeamCreateOneWithoutUploadMatchListInput
+        host: TeamCreateOneWithoutUploadMatchListInput!
         guest: TeamCreateOneWithoutMatchingDoneListInput
         stadium: String!
         address: String
-        area: Area
-        date: String
-        startTime: String
-        endTime: String
+        area: Area!
+        date: String!
+        startTime: String!
+        endTime: String!
         description: String
         result: Result
       }
 
       input MatchCreateWithoutGuestInput {
         seq: Int
-        host: TeamCreateOneWithoutUploadMatchListInput
+        host: TeamCreateOneWithoutUploadMatchListInput!
         stadium: String!
         address: String
-        area: Area
-        date: String
-        startTime: String
-        endTime: String
+        area: Area!
+        date: String!
+        startTime: String!
+        endTime: String!
         description: String
         result: Result
         appliedLists: ApplyCreateManyWithoutMatchInput
@@ -295,10 +316,10 @@ module.exports = {
         guest: TeamCreateOneWithoutMatchingDoneListInput
         stadium: String!
         address: String
-        area: Area
-        date: String
-        startTime: String
-        endTime: String
+        area: Area!
+        date: String!
+        startTime: String!
+        endTime: String!
         description: String
         result: Result
         appliedLists: ApplyCreateManyWithoutMatchInput
@@ -334,10 +355,10 @@ module.exports = {
         seq: Int!
         stadium: String!
         address: String
-        area: Area
-        date: String
-        startTime: String
-        endTime: String
+        area: Area!
+        date: String!
+        startTime: String!
+        endTime: String!
         description: String
         result: Result
       }
@@ -467,7 +488,7 @@ module.exports = {
       }
 
       input MatchUpdateInput {
-        host: TeamUpdateOneWithoutUploadMatchListInput
+        host: TeamUpdateOneRequiredWithoutUploadMatchListInput
         guest: TeamUpdateOneWithoutMatchingDoneListInput
         stadium: String
         address: String
@@ -541,7 +562,7 @@ module.exports = {
       }
 
       input MatchUpdateWithoutAppliedListsDataInput {
-        host: TeamUpdateOneWithoutUploadMatchListInput
+        host: TeamUpdateOneRequiredWithoutUploadMatchListInput
         guest: TeamUpdateOneWithoutMatchingDoneListInput
         stadium: String
         address: String
@@ -554,7 +575,7 @@ module.exports = {
       }
 
       input MatchUpdateWithoutGuestDataInput {
-        host: TeamUpdateOneWithoutUploadMatchListInput
+        host: TeamUpdateOneRequiredWithoutUploadMatchListInput
         stadium: String
         address: String
         area: Area
@@ -1907,6 +1928,13 @@ module.exports = {
         rating: Int
       }
 
+      input TeamUpdateOneRequiredWithoutUploadMatchListInput {
+        create: TeamCreateWithoutUploadMatchListInput
+        update: TeamUpdateWithoutUploadMatchListDataInput
+        upsert: TeamUpsertWithoutUploadMatchListInput
+        connect: TeamWhereUniqueInput
+      }
+
       input TeamUpdateOneWithoutMatchingDoneListInput {
         create: TeamCreateWithoutMatchingDoneListInput
         update: TeamUpdateWithoutMatchingDoneListDataInput
@@ -1929,15 +1957,6 @@ module.exports = {
         create: TeamCreateWithoutOnApplyingListInput
         update: TeamUpdateWithoutOnApplyingListDataInput
         upsert: TeamUpsertWithoutOnApplyingListInput
-        delete: Boolean
-        disconnect: Boolean
-        connect: TeamWhereUniqueInput
-      }
-
-      input TeamUpdateOneWithoutUploadMatchListInput {
-        create: TeamCreateWithoutUploadMatchListInput
-        update: TeamUpdateWithoutUploadMatchListDataInput
-        upsert: TeamUpsertWithoutUploadMatchListInput
         delete: Boolean
         disconnect: Boolean
         connect: TeamWhereUniqueInput

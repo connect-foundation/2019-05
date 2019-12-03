@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap');
+
+/* reset */
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+textarea,
+p,
+blockquote,
+th,
+td,
+input,
+select,
+textarea,
+button {
+  margin: 0;
+  padding: 0;
+}
+dl,
+ul,
+ol,
+menu,
+li {
+  list-style: none;
+}
+img,
+fieldset {
+  border: 0;
+}
+a {
+  text-decoration: none;
+  color: #17252a;
+}
+a:active,
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+a:visited {
+  color: #17252a;
+}
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+var {
+  font-style: normal;
+  font-weight: normal;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+body {
+  font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+}
+
+.grid-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
