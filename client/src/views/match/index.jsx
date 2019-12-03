@@ -3,16 +3,19 @@ import {
   Header,
   Footer,
   ViewTitle,
-  MatchFilter,
+  DateTimeFilter,
+  AreaFilter,
 } from '../../components/common';
 import { MatchList, MatchMap } from '../../components/match';
 import './index.scss';
+
 const match = () => (
   <div className="match">
     <Header />
     <div className="grid-container">
       <ViewTitle title="match" />
-      <MatchFilter />
+      <AreaFilter />
+      <DateTimeFilter />
       <div className="match-container">
         <MatchList />
         <MatchMap />
