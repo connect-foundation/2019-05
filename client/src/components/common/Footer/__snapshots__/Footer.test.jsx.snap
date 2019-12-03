@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer component matches with the snapshot 1`] = `
+<footer
+  class="footer"
+>
+  Copyright 2019. team Underdoggs. All rights reserved.
+</footer>
+`;
