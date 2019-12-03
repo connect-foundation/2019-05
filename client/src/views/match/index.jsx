@@ -11,25 +11,29 @@ import {
   MatchRegist,
   MatchRegistModal,
 } from '../../components/match';
+import { MatchProvider } from '../../contexts/Match/Context';
+
 import './index.scss';
 
 const match = () => (
-  <div className="match">
-    <Header />
-    <div className="grid-container">
-      <ViewTitle title="match" />
-      <MatchFilter />
-      <div className="match-container">
-        <div className="match-board">
-          <MatchRegist />
-          <MatchList />
+  <MatchProvider>
+    <div className="match">
+      <Header />
+      <div className="grid-container">
+        <ViewTitle title="match" />
+        <MatchFilter />
+        <div className="match-container">
+          <div className="match-board">
+            <MatchRegist />
+            <MatchList />
+          </div>
+          <MatchMap />
         </div>
-        <MatchMap />
       </div>
+      <Footer />
+      <MatchRegistModal />
     </div>
-    <Footer />
-    <MatchRegistModal />
-  </div>
+  </MatchProvider>
 );
 
 export default match;

@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
+import { MatchContext } from '../../../contexts/Match/Context';
 
 const MatchRegist = () => {
+  const { matchState, dispatch } = useContext(MatchContext);
   const handleMatchRegistBtn = () => {
-    console.log('매치를 등록하고 싶니!?');
+    dispatch({
+      type: 'TOGGLE_VIEW_MATCH_REGIST_MODAL',
+      isViewRegistModal: matchState.isViewRegistModal,
+    });
   };
 
   return (

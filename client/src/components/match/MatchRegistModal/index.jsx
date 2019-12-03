@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import React, { useContext } from 'react';
+import { MatchContext } from '../../../contexts/Match/Context';
 import './index.scss';
 
 const seoulDistrict = [
@@ -31,12 +31,10 @@ const seoulDistrict = [
 ];
 
 const MatchRegistModal = () => {
-  const [isVisible, setIsVisible] = useState(true);
-  const handleCloseBtn = () => {
-    setIsVisible(false);
-  };
+  const { matchState } = useContext(MatchContext);
+
   const toggleModalVisible = () => {
-    return isVisible ? 'visible' : '';
+    return matchState.isViewRegistModal ? 'visible' : '';
   };
 
   return (
@@ -51,13 +49,23 @@ const MatchRegistModal = () => {
 };
 
 const ModalHeader = () => {
+  const { matchState, dispatch } = useContext(MatchContext);
+  const handleCloseBtn = () => {
+    dispatch({
+      type: 'TOGGLE_VIEW_MATCH_REGIST_MODAL',
+      isViewRegistModal: matchState.isViewRegistModal,
+    });
+  };
+
   return (
     <div className="modal-header">
       <div className="title">
         <p>매치 등록</p>
       </div>
       <div className="close-btn">
-        <button type="button">X</button>
+        <button type="button" onClick={handleCloseBtn}>
+          X
+        </button>
       </div>
     </div>
   );
