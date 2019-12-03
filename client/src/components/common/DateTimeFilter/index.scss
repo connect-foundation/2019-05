@@ -3,13 +3,14 @@
   border: 10px;
   > * {
     border: 10px solid black;
+    flex: 1;
   }
 
   .region-picker {
-    display: flex;
   }
 
-  .time-picker {
+  .time-range-picker {
+
   }
 
   .rank-switch {

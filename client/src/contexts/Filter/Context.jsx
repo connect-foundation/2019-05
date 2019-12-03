@@ -5,13 +5,9 @@ const FilterContext = createContext({});
 
 const FilterProvider = ({ children }) => {
   const initialState = {
-    isCheckedSN: true,
-    isCheckedSB: true,
-    isCheckedDB: true,
-    isCheckedDN: true,
     matchDay: moment(),
-    startTime: null,
-    endTime: null,
+    startTime: '10:00',
+    endTime: '12:00',
     isSimilerRank: false,
   };
   const [state, setState] = useState(initialState);
