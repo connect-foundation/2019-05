@@ -47,7 +47,7 @@ MatchCard.propTypes = {
     host: PropTypes.shape({
       seq: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      logo: PropTypes.string.isRequired,
+      logo: PropTypes.string,
     }).isRequired,
     area: PropTypes.string.isRequired,
     stadium: PropTypes.string.isRequired,
@@ -57,4 +57,5 @@ MatchCard.propTypes = {
   }).isRequired,
 };
 
+MatchCard.defaultProps = {};
 export default MatchCard;
