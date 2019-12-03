@@ -4,7 +4,7 @@ import { Button } from '../../common';
 import './index.scss';
 
 const INIT_MATCH_LIST_FETCH_QUERY = `{
-  PendingMatches{
+  PendingMatches(first:30){
     seq
     host{
       seq

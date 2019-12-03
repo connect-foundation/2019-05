@@ -230,11 +230,11 @@ const Team = [
       '거칠게 플레이 하지 않습니다. 구두 공장 운영하는 사람들로 이루어져 있습니다.',
   },
   {
-    name: '건국대 아마축구부',
+    name: '팀 언더독스',
     logo: null,
     homeArea: 'KJI',
     introduction:
-      '건국대학교 중앙축구 동아리 아마축구부 입니다. 주로 6:6 풋살을 즐기며 선출 없습니다.',
+      '패배가 예상되는 플레이어들의 모임인 언더독스 축구부 입니다. 주로 6:6 풋살을 즐기며 선출 없습니다.',
   },
   {
     name: 'FS 동대문',
@@ -436,19 +436,24 @@ const Team = [
   },
 ];
 
-const inputUnderDoggsPlayerId = (playerInfo) => {
+const inputUnderDoggsPlayerId = (playerInfo, idx) => {
   if (playerInfo.teamNum !== UNDER_DOGGS_TEAM_NUM) {
-    return DEFAULT_PLAYER_ID;
+    return idx + '';
   }
   return UNDER_DOGGS_PLAYER_ID[playerInfo.name];
 };
 
-const Player = boostCamperInfo.map((playerInfo) => {
+const Player = boostCamperInfo.map((playerInfo, idx) => {
   return {
-    ...playerInfo,
-    playerId: inputUnderDoggsPlayerId(playerInfo),
+    playerId: inputUnderDoggsPlayerId(playerInfo, idx),
+    team: {
+      connect: {
+        seq: playerInfo.teamNum,
+      },
+    },
+    name: playerInfo.name,
     phone: DEFAULT_PHONE_NUMBER,
-    email: DEFAULT_EMAIL,
+    email: DEFAULT_EMAIL + idx,
   };
 });
 
@@ -496,7 +501,7 @@ const checkingOverTime = (hour, min) => {
 const Match = [];
 
 const createMatchData = () => {
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 1000; i++) {
     const randomHost = createRandomNumber(25, 1);
     const randomStadium = stardiumSet[createRandomNumber(14, 0)];
     const date = `2020-${createValidDate()}`;
@@ -504,7 +509,11 @@ const createMatchData = () => {
     const randomMinute = createRandomNumber(2, 0) * 30;
     const description = 'this match is...';
     Match.push({
-      host: randomHost,
+      host: {
+        connect: {
+          seq: randomHost,
+        },
+      },
       guest: null,
       stadium: randomStadium.name,
       address: randomStadium.address,
@@ -518,3 +527,5 @@ const createMatchData = () => {
   }
 };
 createMatchData();
+
+module.exports = { Player, Team, Match };
