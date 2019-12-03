@@ -95,7 +95,7 @@ type Stadium {
 
 type Query {
     Matches(seq:Int, area:Area, host:Int): [Match!]
-    PendingMatches(host:Int): [Match!]
+    PendingMatches(host:Int, first: Int, area: [Area]): [Match!]
     Match(seq:Int): Match
     Teams(seq: Int): [Team]
     Team(seq:Int): Team

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import loadJs from 'load-js';
 import axios from 'axios';
+import MDSpinner from 'react-md-spinner';
 import './index.scss';
 
 const SEOUL = {
@@ -16,7 +17,7 @@ const SEOUL = {
   },
   CENTER: {
     LAT: 37.553738,
-    LNG: 126.986409,
+    LNG: 127.98656,
   },
 };
 
@@ -61,12 +62,11 @@ const MatchMap = () => {
           districtData={seoulDistrictData}
         />
       ) : (
-        <span>지도 로딩중!!!!</span>
+        <MDSpinner size="80px" borderSize="7px" />
       )}
     </div>
   );
 };
-
 const NaverMap = (props) => {
   /* eslint react/prop-types: 0 */
   const { mapData, cityData, districtData } = props;
@@ -185,7 +185,7 @@ const NaverMap = (props) => {
     if (naverMap === undefined) {
       const mapOptions = {
         useStyleMap: true,
-        zoom: 10,
+        zoom: 11,
         minZoom: 10,
         maxZoom: 16,
         zoomControl: true,

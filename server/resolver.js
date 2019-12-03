@@ -11,12 +11,14 @@ const resolvers = {
         },
       });
     },
-    PendingMatches: (_, { host }, { prisma }) => {
+    PendingMatches: (_, { host, first, area }, { prisma }) => {
       return prisma.matches({
         where: {
           host,
           guest: null,
+          area_in: area,
         },
+        first,
       });
     },
     Match: (_, { seq }, { prisma }) => {

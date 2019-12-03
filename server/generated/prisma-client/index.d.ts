@@ -292,7 +292,32 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type Area = "SB" | "SN" | "DN" | "DB";
+export type Area =
+  | "CNO"
+  | "CGS"
+  | "YSN"
+  | "SDG"
+  | "KJI"
+  | "TDM"
+  | "CNG"
+  | "SBK"
+  | "KBK"
+  | "TBG"
+  | "NWN"
+  | "UPG"
+  | "SDM"
+  | "MPO"
+  | "YGC"
+  | "KSS"
+  | "KRO"
+  | "KCN"
+  | "YDP"
+  | "TJK"
+  | "KNK"
+  | "SCO"
+  | "KNM"
+  | "SPA"
+  | "KDG";
 
 export type Result = "HOST" | "GUEST" | "DRAW";
 
@@ -869,10 +894,10 @@ export interface MatchCreateWithoutHostInput {
   guest?: Maybe<TeamCreateOneWithoutMatchingDoneListInput>;
   stadium: String;
   address?: Maybe<String>;
-  area?: Maybe<Area>;
-  date?: Maybe<String>;
-  startTime?: Maybe<String>;
-  endTime?: Maybe<String>;
+  area: Area;
+  date: String;
+  startTime: String;
+  endTime: String;
   description?: Maybe<String>;
   result?: Maybe<Result>;
   appliedLists?: Maybe<ApplyCreateManyWithoutMatchInput>;
@@ -915,14 +940,14 @@ export interface MatchCreateOneWithoutAppliedListsInput {
 
 export interface MatchCreateWithoutAppliedListsInput {
   seq?: Maybe<Int>;
-  host?: Maybe<TeamCreateOneWithoutUploadMatchListInput>;
+  host: TeamCreateOneWithoutUploadMatchListInput;
   guest?: Maybe<TeamCreateOneWithoutMatchingDoneListInput>;
   stadium: String;
   address?: Maybe<String>;
-  area?: Maybe<Area>;
-  date?: Maybe<String>;
-  startTime?: Maybe<String>;
-  endTime?: Maybe<String>;
+  area: Area;
+  date: String;
+  startTime: String;
+  endTime: String;
   description?: Maybe<String>;
   result?: Maybe<Result>;
 }
@@ -954,13 +979,13 @@ export interface MatchCreateManyWithoutGuestInput {
 
 export interface MatchCreateWithoutGuestInput {
   seq?: Maybe<Int>;
-  host?: Maybe<TeamCreateOneWithoutUploadMatchListInput>;
+  host: TeamCreateOneWithoutUploadMatchListInput;
   stadium: String;
   address?: Maybe<String>;
-  area?: Maybe<Area>;
-  date?: Maybe<String>;
-  startTime?: Maybe<String>;
-  endTime?: Maybe<String>;
+  area: Area;
+  date: String;
+  startTime: String;
+  endTime: String;
   description?: Maybe<String>;
   result?: Maybe<Result>;
   appliedLists?: Maybe<ApplyCreateManyWithoutMatchInput>;
@@ -1336,7 +1361,7 @@ export interface MatchUpdateOneWithoutAppliedListsInput {
 }
 
 export interface MatchUpdateWithoutAppliedListsDataInput {
-  host?: Maybe<TeamUpdateOneWithoutUploadMatchListInput>;
+  host?: Maybe<TeamUpdateOneRequiredWithoutUploadMatchListInput>;
   guest?: Maybe<TeamUpdateOneWithoutMatchingDoneListInput>;
   stadium?: Maybe<String>;
   address?: Maybe<String>;
@@ -1348,12 +1373,10 @@ export interface MatchUpdateWithoutAppliedListsDataInput {
   result?: Maybe<Result>;
 }
 
-export interface TeamUpdateOneWithoutUploadMatchListInput {
+export interface TeamUpdateOneRequiredWithoutUploadMatchListInput {
   create?: Maybe<TeamCreateWithoutUploadMatchListInput>;
   update?: Maybe<TeamUpdateWithoutUploadMatchListDataInput>;
   upsert?: Maybe<TeamUpsertWithoutUploadMatchListInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
   connect?: Maybe<TeamWhereUniqueInput>;
 }
 
@@ -1397,7 +1420,7 @@ export interface MatchUpdateWithWhereUniqueWithoutGuestInput {
 }
 
 export interface MatchUpdateWithoutGuestDataInput {
-  host?: Maybe<TeamUpdateOneWithoutUploadMatchListInput>;
+  host?: Maybe<TeamUpdateOneRequiredWithoutUploadMatchListInput>;
   stadium?: Maybe<String>;
   address?: Maybe<String>;
   area?: Maybe<Area>;
@@ -1617,21 +1640,21 @@ export interface TeamUpsertWithoutOnApplyingListInput {
 
 export interface MatchCreateInput {
   seq?: Maybe<Int>;
-  host?: Maybe<TeamCreateOneWithoutUploadMatchListInput>;
+  host: TeamCreateOneWithoutUploadMatchListInput;
   guest?: Maybe<TeamCreateOneWithoutMatchingDoneListInput>;
   stadium: String;
   address?: Maybe<String>;
-  area?: Maybe<Area>;
-  date?: Maybe<String>;
-  startTime?: Maybe<String>;
-  endTime?: Maybe<String>;
+  area: Area;
+  date: String;
+  startTime: String;
+  endTime: String;
   description?: Maybe<String>;
   result?: Maybe<Result>;
   appliedLists?: Maybe<ApplyCreateManyWithoutMatchInput>;
 }
 
 export interface MatchUpdateInput {
-  host?: Maybe<TeamUpdateOneWithoutUploadMatchListInput>;
+  host?: Maybe<TeamUpdateOneRequiredWithoutUploadMatchListInput>;
   guest?: Maybe<TeamUpdateOneWithoutMatchingDoneListInput>;
   stadium?: Maybe<String>;
   address?: Maybe<String>;
@@ -2214,10 +2237,10 @@ export interface Match {
   seq: Int;
   stadium: String;
   address?: String;
-  area?: Area;
-  date?: String;
-  startTime?: String;
-  endTime?: String;
+  area: Area;
+  date: String;
+  startTime: String;
+  endTime: String;
   description?: String;
   result?: Result;
 }
@@ -2758,10 +2781,10 @@ export interface MatchPreviousValues {
   seq: Int;
   stadium: String;
   address?: String;
-  area?: Area;
-  date?: String;
-  startTime?: String;
-  endTime?: String;
+  area: Area;
+  date: String;
+  startTime: String;
+  endTime: String;
   description?: String;
   result?: Result;
 }
