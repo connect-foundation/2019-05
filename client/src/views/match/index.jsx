@@ -5,8 +5,14 @@ import {
   ViewTitle,
   MatchFilter,
 } from '../../components/common';
-import { MatchList, MatchMap } from '../../components/match';
+import {
+  MatchList,
+  MatchMap,
+  MatchRegist,
+  MatchRegistModal,
+} from '../../components/match';
 import './index.scss';
+
 const match = () => (
   <div className="match">
     <Header />
@@ -14,11 +20,15 @@ const match = () => (
       <ViewTitle title="match" />
       <MatchFilter />
       <div className="match-container">
-        <MatchList />
+        <div className="match-board">
+          <MatchRegist />
+          <MatchList />
+        </div>
         <MatchMap />
       </div>
     </div>
     <Footer />
+    <MatchRegistModal />
   </div>
 );
 
