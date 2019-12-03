@@ -1,31 +1,19 @@
 import moment from 'moment';
 
 const setFilterContext = {
-  setCheckedSN: (setFilterState) => {
-    setFilterState((prev) => ({
-      ...prev,
-      isCheckedSN: !prev.isCheckedSN,
-    }));
-  },
-  setCheckedSB: (setFilterState) => {
-    setFilterState((prev) => ({
-      ...prev,
-      isCheckedSB: !prev.isCheckedSB,
-    }));
-  },
-  setCheckedDB: (setFilterState) => {
-    setFilterState((prev) => ({
-      ...prev,
-      isCheckedDB: !prev.isCheckedDB,
-    }));
-  },
-  setCheckedDN: (setFilterState) => {
-    setFilterState((prev) => ({
-      ...prev,
-      isCheckedDN: !prev.isCheckedDN,
-    }));
-  },
   setMatchDay: (setFilterState, payload) => {
+    setFilterState((prev) => ({
+      ...prev,
+      ...payload,
+    }));
+  },
+  setStartTime: (setFilterState, payload) => {
+    setFilterState((prev) => ({
+      ...prev,
+      ...payload,
+    }));
+  },
+  setEndTime: (setFilterState, payload) => {
     setFilterState((prev) => ({
       ...prev,
       ...payload,
@@ -39,13 +27,9 @@ const setFilterContext = {
   },
   initializeState: (setFilterState) => {
     setFilterState({
-      isCheckedSN: true,
-      isCheckedSB: true,
-      isCheckedDB: true,
-      isCheckedDN: true,
       matchDay: moment(),
-      startTime: null,
-      endTime: null,
+      startTime: '10:00',
+      endTime: '12:00',
       isSimilerRank: false,
     });
   },
