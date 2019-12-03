@@ -19,13 +19,13 @@
     border: 2px solid black;
     box-sizing: content-box;
     background-color: white;
-    .match-regist-header {
+    .modal-header {
       display: flex;
       justify-content: space-between;
       padding: 5px;
       border-bottom: 2px solid black;
     }
-    .match-regist-form {
+    .modal-form {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -36,10 +36,8 @@
         margin-bottom: 20px;
         margin-left: 30px;
       }
-      > *:last-child {
-        margin: 0 20px 0 auto;
-      }
       > .submit-btn {
+        margin: 0 20px 0 auto;
         justify-content: center;
         width: 70px;
         height: 30px;
