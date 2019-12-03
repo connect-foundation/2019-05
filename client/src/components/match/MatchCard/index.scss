@@ -1,20 +1,19 @@
 @import '../../../commonStyle';
-$card-height: 130px;
-$card-width: 530px;
+
 .match-card {
   position: relative;
   display: flex;
-  width: $card-width;
-  height: $card-height;
+  width: $match-card-width;
+  height: $match-card-height;
   box-sizing: border-box;
-  border: 1px solid purple;
-  margin: 5px 0;
+  border: 1px solid #cecece;
+  margin: 0 0 10px;
 
   &:before {
     position: absolute;
     content: '';
     width: 5px;
-    height: $card-height;
+    height: $match-card-height;
     left: -1px;
     top: -1px;
     background-color: $quick-mint;
@@ -96,7 +95,7 @@ $card-width: 530px;
   right: -1px;
   top: -1px;
   width: 110px;
-  height: $card-height;
+  height: $match-card-height;
   background-color: $quick_mint;
   .match-apply__btn {
     width: 100%;
@@ -108,5 +107,6 @@ $card-width: 530px;
     font-weight: bold;
     text-align: center;
     outline: none;
+    cursor: pointer;
   }
 }
