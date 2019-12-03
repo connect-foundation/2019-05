@@ -1,0 +1,91 @@
+.match-card {
+  // padding: 5px;
+  height: 90px;
+  border: 1px solid purple;
+  margin: 5px 0;
+  display: flex;
+  position: relative;
+  align-items: flex-end;
+  .team-info {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    &__month {
+      color: #333333;
+      font-weight: bold;
+      font-size: 13px;
+    }
+    &__day {
+      color: #333333;
+      font-weight: bold;
+      font-size: 30px;
+    }
+    &__year {
+      color: #7a7a7a;
+      font-size: 13px;
+    }
+    &__hostname {
+      color: black;
+      font-size: 18px;
+      &:hover {
+        color: #d91e00;
+      }
+    }
+    &__area {
+      color: #777777;
+      font-size: 13px;
+    }
+    &__stadium {
+      color: #777777;
+      font-size: 13px;
+    }
+    &__item {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      padding: 10px 10px 0;
+      &--date {
+        font-size: 20px;
+        align-items: center;
+        height: -webkit-fill-available;
+        background-color: #eeeeee;
+      }
+    }
+    .test {
+      justify-content: flex-start;
+      height: 90%;
+    }
+    flex: 0.9;
+  }
+  .button-box {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    margin-right: 20px;
+    flex: 0.1;
+  }
+}
+
+.sash {
+  position: absolute;
+  left: -9px;
+  top: -2px;
+  font-weight: 700;
+  font-size: 12px;
+  background-color: #b71c1c !important;
+  color: #fff !important;
+  display: inline-block;
+  padding-left: 9px !important;
+  padding-right: 9px !important;
+  margin-bottom: 3px !important;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: 0;
+    bottom: -7px;
+    border-right: 8px solid #660606;
+    border-bottom: 7px solid transparent;
+  }
+}
