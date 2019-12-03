@@ -31,7 +31,10 @@ const MatchList = () => {
     };
     (async () => {
       try {
-        const data = await fetch('http://localhost:4000/graphql', fetchSetting);
+        const data = await fetch(
+          process.env.REACT_APP_GRAPHQL_ENDPOINT,
+          fetchSetting
+        );
         const result = await data.json();
         setMatchList(result.data.PendingMatches);
       } catch (error) {
