@@ -8,7 +8,9 @@ const INIT_MATCH_LIST_FETCH_QUERY = `{
     host{
       seq
       name
+      logo
     }
+    area
     stadium
     date
     startTime
