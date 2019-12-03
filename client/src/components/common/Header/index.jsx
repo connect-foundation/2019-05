@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FilterContext } from '../../../contexts/Filter/Context';
-import setFilterContext from '../../../contexts/Filter/setContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+
+import { FilterContext } from '../../../contexts/Filter/Context';
+import setFilterContext from '../../../contexts/Filter/setContext';
 import './Header.scss';
-import { faSignInAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+
 import logo from '../../../assets/images/quickkick-logo.png';
 
 const Header = () => (

@@ -7,6 +7,7 @@ import {
 } from '../../components/common';
 import { MatchList, MatchMap } from '../../components/match';
 import './index.scss';
+
 const match = () => (
   <div className="match">
     <Header />
