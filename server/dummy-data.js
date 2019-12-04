@@ -102,7 +102,7 @@ const boostCamperInfo = [
 ];
 const DEFAULT_PLAYER_ID = '이거슨...naver OAuth로 받은 key입니다...';
 const DEFAULT_PHONE_NUMBER = '01012341234';
-const DEFAULT_EMAIL = 'boostcamp@naver.com';
+//const DEFAULT_EMAIL = 'boostcamp@naver.com';
 const UNDER_DOGGS_TEAM_NUM = 5;
 const UNDER_DOGGS_PLAYER_ID = {
   김웅기: '34192204',
@@ -110,6 +110,12 @@ const UNDER_DOGGS_PLAYER_ID = {
   김종윤: '53576149',
   노승남: '18209540',
 };
+const TEST_EMAIL = [
+  'seungnam2@gmail.com',
+  'dhorlawhddbs@naver.com',
+  'eastgerm_8@naver.com',
+  'raf_1@daum.net',
+];
 const stardiumSet = [
   {
     name: '송파 천마풋살파크',
@@ -453,7 +459,7 @@ const Player = boostCamperInfo.map((playerInfo, idx) => {
     },
     name: playerInfo.name,
     phone: DEFAULT_PHONE_NUMBER,
-    email: DEFAULT_EMAIL + idx,
+    email: TEST_EMAIL[idx % 4],
   };
 });
 
@@ -498,6 +504,12 @@ const checkingOverTime = (hour, min) => {
   return `${changeDigitOneToTwo(hourStr)}:${changeDigitOneToTwo(minStr)}`;
 };
 
+const makeMatchAuthor = (teamSeq) => {
+  return Player.findIndex((val) => {
+    return val.team.connect.seq === teamSeq;
+  });
+};
+
 const Match = [];
 
 const createMatchData = () => {
@@ -508,7 +520,13 @@ const createMatchData = () => {
     const randomStartTime = createRandomNumber(24, 0);
     const randomMinute = createRandomNumber(2, 0) * 30;
     const description = 'this match is...';
+    const manager = makeMatchAuthor(randomHost) + 1;
     Match.push({
+      author: {
+        connect: {
+          seq: manager,
+        },
+      },
       host: {
         connect: {
           seq: randomHost,
