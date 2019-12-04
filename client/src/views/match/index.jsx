@@ -6,23 +6,36 @@ import {
   DateTimeFilter,
   AreaFilter,
 } from '../../components/common';
-import { MatchList, MatchMap } from '../../components/match';
+import {
+  MatchList,
+  MatchMap,
+  MatchRegist,
+  MatchRegistModal,
+} from '../../components/match';
+import { MatchProvider } from '../../contexts/Match/Context';
+
 import './index.scss';
 
 const match = () => (
-  <div className="match">
-    <Header />
-    <div className="grid-container">
-      <ViewTitle title="match" />
-      <AreaFilter />
-      <DateTimeFilter />
-      <div className="match-container">
-        <MatchList />
-        <MatchMap />
+  <MatchProvider>
+    <div className="match">
+      <Header />
+      <div className="grid-container">
+        <ViewTitle title="match" />
+        <AreaFilter />
+        <DateTimeFilter />
+        <div className="match-container">
+          <div className="match-board">
+            <MatchRegist />
+            <MatchList />
+          </div>
+          <MatchMap />
+        </div>
       </div>
+      <Footer />
+      <MatchRegistModal />
     </div>
-    <Footer />
-  </div>
+  </MatchProvider>
 );
 
 export default match;
