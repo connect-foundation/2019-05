@@ -9,16 +9,10 @@ const MatchCard = (props) => {
   const { matchInfo } = props;
   const { date, startTime, endTime, host, stadium, area } = matchInfo;
   const onClickHandler = async () => {
-    axios
-      .post('http://localhost:4000/mail', {
-        matchInfo,
-      })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((e) => {
-        console.error(e.stack);
-      });
+    const result = await axios.post('http://localhost:4000/mail', {
+      matchInfo,
+    });
+    alert('매치 신청 이메일이 발송되었습니다.');
   };
   if (host.logo === null) host.logo = '/default_logo.png';
   return (
@@ -37,13 +31,9 @@ const MatchCard = (props) => {
       </div>
       <div className="team-info">
         <div className="team-info__logo">
-          <Link to={`/team/${host.seq}`}>
-            <img src={host.logo} alt={host.name} />
-          </Link>
+          <img src={host.logo} alt={host.name} />
         </div>
-        <div className="team-info__name">
-          <Link to={`/team/${host.seq}`}>{host.name}</Link>
-        </div>
+        <div className="team-info__name">{host.name}</div>
       </div>
       <div className="button-box">
         <button

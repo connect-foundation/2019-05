@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './index.scss';
 
 const areas = [
@@ -30,10 +30,21 @@ const areas = [
 ];
 
 const AreaFilter = () => {
+  // 임시
+  const [checked, setChecked] = useState(false);
+  const handleOnChange = () => {
+    setChecked(!checked);
+  };
+
   return (
     <div className="area-filter">
-      {areas.map((area, idx) => (
-        <CheckBox key={area} title={area} value={!!(idx % 2)} />
+      {areas.map((area) => (
+        <CheckBox
+          key={area}
+          title={area}
+          value={checked}
+          onChange={handleOnChange}
+        />
       ))}
     </div>
   );
@@ -41,8 +52,8 @@ const AreaFilter = () => {
 
 const CheckBox = ({ title, value, onChange }) => (
   <div className="checkbox">
-    <input type="checkbox" checked={value} onChange={onChange} />
-    <span>{title}</span>
+    <input type="checkbox" checked={value} onChange={onChange} id={title} />
+    <label htmlFor={title}>{title}</label>
   </div>
 );
 
