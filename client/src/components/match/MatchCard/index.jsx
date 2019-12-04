@@ -9,16 +9,10 @@ const MatchCard = (props) => {
   const { matchInfo } = props;
   const { date, startTime, endTime, host, stadium, area } = matchInfo;
   const onClickHandler = async () => {
-    axios
-      .post('http://localhost:4000/mail', {
-        matchInfo,
-      })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((e) => {
-        console.error(e.stack);
-      });
+    const result = await axios.post('http://localhost:4000/mail', {
+      matchInfo,
+    });
+    alert('매치 신청 이메일이 발송되었습니다.');
   };
   if (host.logo === null) host.logo = '/default_logo.png';
   return (
