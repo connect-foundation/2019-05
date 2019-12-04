@@ -45,9 +45,6 @@ const NavBar = () => {
           매치 검색
         </div>
       </Link>
-      <Link to="/ranking">
-        <div className="nav-bar__button">팀 목록 보기</div>
-      </Link>
       {isLogin ? <UserIcon /> : <LoginBtn />}
     </nav>
   );
@@ -64,9 +61,6 @@ const UserIcon = () => (
     <FontAwesomeIcon icon={faUserCircle} size="2x" />
     <div className="nav-bar__user-detail">
       <ul>
-        <li>
-          <Link to="/team/1">내 팀 보기</Link>
-        </li>
         <li>
           <a href="http://127.0.0.1:4000/auth/logout">로그아웃</a>
         </li>

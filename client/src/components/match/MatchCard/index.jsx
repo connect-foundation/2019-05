@@ -25,13 +25,9 @@ const MatchCard = (props) => {
       </div>
       <div className="team-info">
         <div className="team-info__logo">
-          <Link to={`/team/${host.seq}`}>
-            <img src={host.logo} alt={host.name} />
-          </Link>
+          <img src={host.logo} alt={host.name} />
         </div>
-        <div className="team-info__name">
-          <Link to={`/team/${host.seq}`}>{host.name}</Link>
-        </div>
+        <div className="team-info__name">{host.name}</div>
       </div>
       <div className="button-box">
         <button type="button" className="match-apply__btn">
