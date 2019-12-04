@@ -3,11 +3,23 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { convertDistrictCode } from '../../../util';
 import './index.scss';
+import axios from 'axios';
 
 const MatchCard = (props) => {
   const { matchInfo } = props;
   const { date, startTime, endTime, host, stadium, area } = matchInfo;
-
+  const onClickHandler = async () => {
+    axios
+      .post('http://localhost:4000/mail', {
+        matchInfo,
+      })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((e) => {
+        console.error(e.stack);
+      });
+  };
   if (host.logo === null) host.logo = '/default_logo.png';
   return (
     <div className="match-card">
@@ -34,7 +46,11 @@ const MatchCard = (props) => {
         </div>
       </div>
       <div className="button-box">
-        <button type="button" className="match-apply__btn">
+        <button
+          type="button"
+          className="match-apply__btn"
+          onClick={onClickHandler}
+        >
           매치 신청
         </button>
       </div>
@@ -58,4 +74,5 @@ MatchCard.propTypes = {
 };
 
 MatchCard.defaultProps = {};
+
 export default MatchCard;
