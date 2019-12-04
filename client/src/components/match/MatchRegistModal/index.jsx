@@ -1,4 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import moment from 'moment';
+import 'react-dates/initialize';
+import { SingleDatePicker } from 'react-dates';
+import TimePicker from 'react-times';
+import 'react-times/css/classic/default.css';
+import 'react-dates/lib/css/_datepicker.css';
 import { MatchContext } from '../../../contexts/Match/Context';
 import './index.scss';
 
@@ -75,9 +81,11 @@ const ModalForm = () => {
   return (
     <form className="modal-form">
       <DistrictSection />
+      <DateSection />
       <TimeSection />
-      <AddressSection />
-      <EtcSection />
+      <TextInputSection title="구장" idText="matchStadium" />
+      <TextInputSection title="주소" idText="matchAddress" />
+      <TextInputSection title="비고" idText="matchEtc" maxlen="50" />
       <button type="submit" className="submit-btn">
         <p>등록하기</p>
       </button>
@@ -87,9 +95,12 @@ const ModalForm = () => {
 
 const DistrictSection = () => {
   return (
-    <div className="district-section">
-      <p className="district-title">지역 :</p>
-      <select name="district">
+    <div className="district-section input-box">
+      <select
+        id="matchRegistDistrict"
+        name="matchRegistDistrict"
+        className="match-register__select"
+      >
         {seoulDistrict.map((district) => {
           return (
             <option key={district.engName} value={district.engName}>
@@ -98,38 +109,91 @@ const DistrictSection = () => {
           );
         })}
       </select>
+      <label htmlFor="matchRegistDistrict" className="match-register__label">
+        지역
+      </label>
+    </div>
+  );
+};
+
+const DateSection = () => {
+  const [focused, setFocused] = useState(false);
+  const [matchDay, setMatchDay] = useState(moment());
+  const handleDateChange = (date) => setMatchDay(date);
+
+  return (
+    <div className="date-section">
+      <SingleDatePicker
+        numberOfMonths={1}
+        onDateChange={(date) => handleDateChange(date)}
+        onFocusChange={() => setFocused(!focused)}
+        focused={focused}
+        date={matchDay}
+        id="matchRegistDate"
+      />
+      <label htmlFor="matchRegistDate" className="match-register__label">
+        날짜
+      </label>
     </div>
   );
 };
 
 const TimeSection = () => {
+  const [startTime, setStartTime] = useState('10:00');
+  const [endTime, setEndTime] = useState('12:00');
+  const handleTimeChange = (time, fn) => {
+    const { hour, minute } = time;
+    fn(`${hour}:${minute}`);
+  };
   return (
-    <div className="time-section">
-      <p className="time-title">시간 :</p>
-      <input type="date" />
-      <input type="time" />
-    </div>
+    <>
+      <div className="time-section start-time">
+        <p className="match-register__label">시작시간</p>
+        <TimePicker
+          time={startTime}
+          onTimeChange={(time) => handleTimeChange(time, setStartTime)}
+          theme="classic"
+        />
+        <input type="hidden" id="matchRegistStartTime" value={startTime} />
+      </div>
+      <div className="time-section end-time">
+        <p className="match-register__label">종료시간</p>
+        <TimePicker
+          time={endTime}
+          onTimeChange={(time) => handleTimeChange(time, setEndTime)}
+          theme="classic"
+        />
+        <input
+          type="hidden"
+          id="matchRegistEndTime"
+          name="matchRegistEndTime"
+          value={endTime}
+        />
+      </div>
+    </>
   );
 };
-
-const AddressSection = () => {
+const TextInputSection = ({ title, idText, maxlen }) => {
+  const [label, setLabel] = useState('');
+  const [value, setValue] = useState('');
+  const handleBlurEvent = () => {
+    return value !== '' ? setLabel('active') : setLabel('');
+  };
   return (
-    <div className="address-section">
-      <p className="address-title">주소 :</p>
-      <input type="text" />
-    </div>
-  );
-};
-
-const EtcSection = () => {
-  return (
-    <div className="etc-section">
-      <p className="etc-title">비고 :</p>
+    <div className="input-box">
       <input
         type="text"
-        maxLength="50"
-        placeholder="간단히 추가할 내용(50자)"
+        id={idText}
+        name={idText}
+        maxLength={maxlen === undefined ? 255 : maxlen}
+        className="match-register__input"
+        onInput={(e) => setValue(e.target.value)}
+        onFocus={() => setLabel('active')}
+        onBlur={() => handleBlurEvent()}
       />
+      <label htmlFor={idText} className={`match-register__label ${label}`}>
+        {title}
+      </label>
     </div>
   );
 };

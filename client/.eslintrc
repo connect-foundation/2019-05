@@ -8,6 +8,16 @@
   "rules": {
     "quotes": ["error", "single", { "avoidEscape": true }],
     "indent": ["error", 2],
-    "semi": "warn"
+    "semi": "warn",
+    "jsx-a11y/label-has-associated-control": [ "error", {
+      "required": {
+        "some": [ "nesting", "id"  ]
+      }
+    }],
+    "jsx-a11y/label-has-for": [ "error", {
+      "required": {
+        "some": [ "nesting", "id"  ]
+      }
+    }]
   }
 }
