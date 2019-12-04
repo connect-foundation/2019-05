@@ -3,7 +3,8 @@ import {
   Header,
   Footer,
   ViewTitle,
-  MatchFilter,
+  DateTimeFilter,
+  AreaFilter,
 } from '../../components/common';
 import {
   MatchList,
@@ -21,7 +22,8 @@ const match = () => (
       <Header />
       <div className="grid-container">
         <ViewTitle title="match" />
-        <MatchFilter />
+        <AreaFilter />
+        <DateTimeFilter />
         <div className="match-container">
           <div className="match-board">
             <MatchRegist />
