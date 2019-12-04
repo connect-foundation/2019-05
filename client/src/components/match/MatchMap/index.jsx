@@ -17,7 +17,7 @@ const SEOUL = {
   },
   CENTER: {
     LAT: 37.553738,
-    LNG: 126.986409,
+    LNG: 127.98656,
   },
 };
 
@@ -185,7 +185,7 @@ const NaverMap = (props) => {
     if (naverMap === undefined) {
       const mapOptions = {
         useStyleMap: true,
-        zoom: 10,
+        zoom: 11,
         minZoom: 10,
         maxZoom: 16,
         zoomControl: true,
