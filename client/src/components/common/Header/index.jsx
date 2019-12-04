@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { FilterContext } from '../../../contexts/Filter/Context';
-import setFilterContext from '../../../contexts/Filter/setContext';
 import './Header.scss';
 
 import logo from '../../../assets/images/quickkick-logo.png';
@@ -30,9 +29,9 @@ const ServiceLogo = () => (
 
 const NavBar = () => {
   const [isLogin, setIsLogin] = useState(false);
-  const [filterState, setFilterState] = useContext(FilterContext);
+  const { dispatch } = useContext(FilterContext);
 
-  const handleOnClick = () => setFilterContext.initializeState(setFilterState);
+  const handleOnClick = () => dispatch({ type: 'INITIALIZE_STATE' });
 
   useEffect(() => {
     const cookie = document.cookie.split('=')[1];

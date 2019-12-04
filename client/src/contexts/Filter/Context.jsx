@@ -1,22 +1,24 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useReducer } from 'react';
 import moment from 'moment';
+import filterReducer from './Reducer';
 
-const FilterContext = createContext({});
+const filterInitialState = {
+  matchDay: moment(),
+  startTime: '10:00',
+  endTime: '12:00',
+  isSimilerRank: false,
+};
+
+const FilterContext = createContext(filterInitialState);
 
 const FilterProvider = ({ children }) => {
-  const initialState = {
-    matchDay: moment(),
-    startTime: '10:00',
-    endTime: '12:00',
-    isSimilerRank: false,
-  };
-  const [state, setState] = useState(initialState);
+  const [filterState, dispatch] = useReducer(filterReducer, filterInitialState);
 
   return (
-    <FilterContext.Provider value={[state, setState]}>
+    <FilterContext.Provider value={{ filterState, dispatch }}>
       {children}
     </FilterContext.Provider>
   );
 };
 
-export { FilterContext, FilterProvider };
+export { filterInitialState, FilterContext, FilterProvider };
