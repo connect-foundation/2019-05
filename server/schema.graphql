@@ -22,6 +22,7 @@ type Player {
     phone: String
     email: String
     notiList: [Notifier!]
+    uploadMatchList: [Match!]
 }
 
 enum Result {
@@ -59,6 +60,7 @@ enum Area{
 
 type Match {
     seq: Int!
+    author: Player!
     host: Team!
     guest: Team
     stadium: String!
