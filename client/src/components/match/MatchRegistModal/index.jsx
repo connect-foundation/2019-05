@@ -1,10 +1,14 @@
 import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'react-dates/initialize';
 import { SingleDatePicker } from 'react-dates';
 import TimePicker from 'react-times';
 import 'react-times/css/classic/default.css';
 import 'react-dates/lib/css/_datepicker.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+
 import { MatchContext } from '../../../contexts/Match/Context';
 import './index.scss';
 
@@ -70,7 +74,7 @@ const ModalHeader = () => {
       </div>
       <div className="close-btn">
         <button type="button" onClick={handleCloseBtn}>
-          X
+          <FontAwesomeIcon icon={faTimesCircle} size="2x" />
         </button>
       </div>
     </div>
@@ -80,14 +84,29 @@ const ModalHeader = () => {
 const ModalForm = () => {
   return (
     <form className="modal-form">
-      <DistrictSection />
-      <DateSection />
+      <div className="input-container">
+        <DistrictSection />
+        <DateSection />
+      </div>
       <TimeSection />
-      <TextInputSection title="구장" idText="matchStadium" />
-      <TextInputSection title="주소" idText="matchAddress" />
-      <TextInputSection title="비고" idText="matchEtc" maxlen="50" />
+      <TextInputSection
+        title="구장"
+        idText="matchStadium"
+        required={Boolean(true)}
+      />
+      <TextInputSection
+        title="주소"
+        idText="matchAddress"
+        required={Boolean(false)}
+      />
+      <TextInputSection
+        title="비고"
+        idText="matchEtc"
+        required={Boolean(false)}
+        maxlen="50"
+      />
       <button type="submit" className="submit-btn">
-        <p>등록하기</p>
+        등록하기
       </button>
     </form>
   );
@@ -99,7 +118,7 @@ const DistrictSection = () => {
       <select
         id="matchRegistDistrict"
         name="matchRegistDistrict"
-        className="match-register__select"
+        className="match-register__select match-register__input"
       >
         {seoulDistrict.map((district) => {
           return (
@@ -109,7 +128,10 @@ const DistrictSection = () => {
           );
         })}
       </select>
-      <label htmlFor="matchRegistDistrict" className="match-register__label">
+      <label
+        htmlFor="matchRegistDistrict"
+        className="match-register__label has-default-value"
+      >
         지역
       </label>
     </div>
@@ -122,7 +144,7 @@ const DateSection = () => {
   const handleDateChange = (date) => setMatchDay(date);
 
   return (
-    <div className="date-section">
+    <div className="date-section input-box">
       <SingleDatePicker
         numberOfMonths={1}
         onDateChange={(date) => handleDateChange(date)}
@@ -130,8 +152,13 @@ const DateSection = () => {
         focused={focused}
         date={matchDay}
         id="matchRegistDate"
+        displayFormat="YYYY-MM-DD"
+        required
       />
-      <label htmlFor="matchRegistDate" className="match-register__label">
+      <label
+        htmlFor="matchRegistDate"
+        className="match-register__label has-default-value"
+      >
         날짜
       </label>
     </div>
@@ -146,7 +173,7 @@ const TimeSection = () => {
     fn(`${hour}:${minute}`);
   };
   return (
-    <>
+    <div className="time-container">
       <div className="time-section start-time">
         <p className="match-register__label">시작시간</p>
         <TimePicker
@@ -170,10 +197,10 @@ const TimeSection = () => {
           value={endTime}
         />
       </div>
-    </>
+    </div>
   );
 };
-const TextInputSection = ({ title, idText, maxlen }) => {
+const TextInputSection = ({ title, idText, maxlen, required }) => {
   const [label, setLabel] = useState('');
   const [value, setValue] = useState('');
   const handleBlurEvent = () => {
@@ -190,6 +217,8 @@ const TextInputSection = ({ title, idText, maxlen }) => {
         onInput={(e) => setValue(e.target.value)}
         onFocus={() => setLabel('active')}
         onBlur={() => handleBlurEvent()}
+        autoComplete="off"
+        required={required}
       />
       <label htmlFor={idText} className={`match-register__label ${label}`}>
         {title}
@@ -198,4 +227,14 @@ const TextInputSection = ({ title, idText, maxlen }) => {
   );
 };
 
+TextInputSection.propTypes = {
+  title: PropTypes.string.isRequired,
+  idText: PropTypes.string.isRequired,
+  maxlen: PropTypes.string,
+  required: PropTypes.bool,
+};
+TextInputSection.defaultProps = {
+  maxlen: undefined,
+  required: false,
+};
 export default MatchRegistModal;
