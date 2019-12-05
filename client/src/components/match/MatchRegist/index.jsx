@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import { MatchContext } from '../../../contexts/Match/Context';
+import './index.scss';
 
 const MatchRegist = () => {
   const { matchState, dispatch } = useContext(MatchContext);
-  const handleMatchRegistBtn = () => {
+  const handleMatchRegisterBtn = () => {
     dispatch({
       type: 'TOGGLE_VIEW_MATCH_REGIST_MODAL',
       isViewRegistModal: matchState.isViewRegistModal,
@@ -11,11 +12,11 @@ const MatchRegist = () => {
   };
 
   return (
-    <div className="match-regist-btn-wraper">
+    <div className="match-register__btn--wrapper">
       <button
         type="button"
-        className="match-regist-btn"
-        onClick={handleMatchRegistBtn}
+        className="match-register__btn"
+        onClick={handleMatchRegisterBtn}
       >
         매치 등록
       </button>
