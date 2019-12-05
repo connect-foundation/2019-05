@@ -1,17 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const mailSender = require('../utils/nodemailer');
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   mailSender
-//     .setOptions({
-//       to: ['seungnam2@gmail.com', 'dhorlawhddbs@naver.com'],
-//       subject: 'correction',
-//       html: '<h1>thanks for the invitation</h1>',
-//     })
-//     .fireMail();
-//   res.send('done!');
-// });
 
 router.post('/', function(req, res, next) {
   const { date, startTime, endTime, host, stadium, area } = req.body.matchInfo;
@@ -28,10 +17,11 @@ router.post('/', function(req, res, next) {
   mailSender
     .setOptions({
       to: [
-        'we.underdoggs@gmail.com',
-        'eastgerm_8@naver.com',
-        'dhorlawhddbs@naver.com',
-        'bigrsnboy@naver.com',
+        // 'we.underdoggs@gmail.com',
+        // 'eastgerm_8@naver.com',
+        // 'dhorlawhddbs@naver.com',
+        // 'bigrsnboy@naver.com',
+        'seungnam2@gmail.com',
       ],
       subject: host.name,
       html: template,
