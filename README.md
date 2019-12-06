@@ -29,9 +29,9 @@
 
 > 간편한 풋살 매칭 웹 애플리케이션
 
-|    Homepage    |      Demo(incomplete)      |       Issues       |
-| :------------: | :------------------------: | :----------------: |
-| 🏠[wiki][wiki] | ✨[quickkick.site][domain] | 🙋🏽‍♂️[issues][issues] |
+## Demo
+
+✨[quickkick.site][domain]
 
 ## Introduction
 
@@ -115,7 +115,7 @@ yarn start
 
 ## 사용 기술
 
-![skill stack](https://ifh.cc/g/bCoDU.jpg)
+![skill stack](https://ifh.cc/g/axgHK.jpg)
 
 ## 프로젝트 구조
 
@@ -127,6 +127,13 @@ yarn start
 │   │       ├──📁css
 │   │       ├──📁js
 │   │       └──📁media
+│   ├──📁cypress
+│   │   ├──📁fixtures
+│   │   ├──📁integration
+│   │   ├──📁plugins
+│   │   ├──📁screenshots
+│   │   ├──📁support
+│   │   └──📁videos
 │   ├──📁conf
 │   │   └──📁conf.d
 │   ├──📁public
