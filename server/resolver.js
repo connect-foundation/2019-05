@@ -11,12 +11,18 @@ const resolvers = {
         },
       });
     },
-    PendingMatches: (_, { host, first, area }, { prisma }) => {
+    PendingMatches: (
+      _,
+      { first, area, startTime, endTime, date },
+      { prisma }
+    ) => {
       return prisma.matches({
         where: {
-          host,
           guest: null,
           area_in: area,
+          startTime_gte: startTime,
+          endTime_lte: endTime,
+          date,
         },
         first,
         orderBy: 'date_ASC',
