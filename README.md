@@ -104,7 +104,7 @@ yarn start
 **🔥Team UnderDoggs**
 <br />
 
-![title](https://ifh.cc/g/axgHK.jpg)
+![title](https://ifh.cc/g/kzsOF.png)
 
 -   Github:
 
@@ -115,7 +115,7 @@ yarn start
 
 ## 사용 기술
 
-![skill stack](https://ifh.cc/g/bCoDU.jpg)
+![skill stack](https://ifh.cc/g/axgHK.jpg)
 
 ## 프로젝트 구조
 
