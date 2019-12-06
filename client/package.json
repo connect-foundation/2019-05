@@ -52,11 +52,8 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/react-hooks": "^3.2.1",
     "@types/jest": "^24.0.23",
-<<<<<<< HEAD
-=======
     "axios-mock-adapter": "^1.17.0",
     "cypress": "^3.7.0",
->>>>>>> 23b27e0946f15d5e1bad5b6bcab927032b3ae301
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-prettier": "^3.1.1",
