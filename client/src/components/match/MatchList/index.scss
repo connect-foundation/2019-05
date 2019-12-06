@@ -2,6 +2,6 @@
 
 .match-list {
   width: $match-card-width + 16px;
-  height: calc(100vh - 186px);
-  overflow-y: scroll;
+  //height: calc(100vh - #{$header-height});
+  //overflow-y: scroll;
 }
