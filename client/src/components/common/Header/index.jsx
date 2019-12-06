@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
-
+import { faUserCircle, faBars } from '@fortawesome/free-solid-svg-icons';
 import { FilterContext } from '../../../contexts/Filter/Context';
 import './Header.scss';
-
-import logo from '../../../assets/images/quickkick-logo.png';
+import './hamburger.css';
 
 const Header = () => (
   <div className="header">
@@ -15,7 +13,7 @@ const Header = () => (
         <ServiceLogo />
       </div>
       <div className="header__right">
-        <NavBar />
+        <HamburgerBtn />
       </div>
     </div>
   </div>
@@ -23,7 +21,8 @@ const Header = () => (
 
 const ServiceLogo = () => (
   <Link to="/">
-    <img className="logo" src={logo} alt="퀵킥 로고" />
+    <span className="pointChar">Q</span>uick<span className="pointChar">K</span>
+    ick
   </Link>
 );
 
@@ -47,6 +46,25 @@ const NavBar = () => {
       </Link>
       {isLogin ? <UserIcon /> : <LoginBtn />}
     </nav>
+  );
+};
+
+const HamburgerBtn = () => {
+  const [openState, setOpenState] = useState('');
+  const hamClickHandler = () => {
+    const newValue = openState === 'is-active' ? '' : 'is-active';
+    setOpenState(newValue);
+  };
+  return (
+    <button
+      onClick={() => hamClickHandler()}
+      className={`hamburger hamburger--spin ${openState}`}
+      type="button"
+    >
+      <span className="hamburger-box">
+        <span className="hamburger-inner" />
+      </span>
+    </button>
   );
 };
 

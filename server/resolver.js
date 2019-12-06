@@ -19,6 +19,7 @@ const resolvers = {
           area_in: area,
         },
         first,
+        orderBy: 'date_ASC',
       });
     },
     Match: (_, { seq }, { prisma }) => {
@@ -140,6 +141,9 @@ const resolvers = {
     },
   }, // mutation
   Match: {
+    author: ({ seq }, _, { prisma }) => {
+      return prisma.match({ seq }).author();
+    },
     host: ({ seq }, _, { prisma }) => {
       return prisma.match({ seq }).host();
     },
