@@ -69,7 +69,7 @@ yarn start
 
 ## 사용 기술
 
-![skill stack](https://ifh.cc/g/bCoDU.jpg)
+![skill stack](https://ifh.cc/g/ivdNx.jpg)
 
 ## 프로젝트 구조
 
