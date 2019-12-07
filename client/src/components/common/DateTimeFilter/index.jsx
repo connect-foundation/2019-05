@@ -37,6 +37,7 @@ const DatePicker = () => {
         onFocusChange={() => setFocused(!focused)}
         focused={focused}
         date={filterState.matchDay}
+        displayFormat="YYYY-MM-DD"
       />
     </div>
   );

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import MatchCard from '../MatchCard';
+import { FilterContext } from '../../../contexts/Filter/Context';
 import './index.scss';
 
-const INIT_MATCH_LIST_FETCH_QUERY = `{
-  PendingMatches(first:10){
+const INIT_MATCH_LIST_FETCH_QUERY = `
+query ($startTime: String, $endTime: String, $date: String){
+  PendingMatches(first:20, startTime: $startTime, endTime: $endTime, date: $date){
     seq
     host{
       seq
@@ -19,10 +21,26 @@ const INIT_MATCH_LIST_FETCH_QUERY = `{
 }`;
 
 const MatchList = () => {
+  const { filterState, dispatch } = useContext(FilterContext);
   const [matchList, setMatchList] = useState([]);
   const [fetchQuery, setFetchQuery] = useState({
     query: INIT_MATCH_LIST_FETCH_QUERY,
+    variables: {
+      startTime: filterState.startTime,
+      endTime: filterState.endTime,
+      date: filterState.matchDay.format('YYYY[-]MM[-]DD'),
+    },
   });
+  useEffect(() => {
+    setFetchQuery({
+      query: INIT_MATCH_LIST_FETCH_QUERY,
+      variables: {
+        startTime: filterState.startTime,
+        endTime: filterState.endTime,
+        date: filterState.matchDay.format('YYYY[-]MM[-]DD'),
+      },
+    });
+  }, [filterState]);
   useEffect(() => {
     const fetchSetting = {
       method: 'POST',
@@ -49,12 +67,12 @@ const MatchList = () => {
   }, [fetchQuery]);
   return (
     <div className="match-list">
-      {matchList ? (
+      {matchList && matchList.length > 0 ? (
         matchList.map((match) => (
           <MatchCard key={match.seq} matchInfo={match} />
         ))
       ) : (
-        <span>리스트가 존재하지 않습니다.</span>
+        <span>원하시는 조건에 맞는 경기가 없어요! </span>
       )}
     </div>
   );
