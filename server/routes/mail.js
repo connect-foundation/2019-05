@@ -27,8 +27,7 @@ router.post('/', function(req, res, next) {
       html: template,
     })
     .fireMail();
-  res.status(200).json({
-    id: 1,
-  });
+  res.send('done!');
 });
+
 module.exports = router;
