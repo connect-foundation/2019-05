@@ -7,29 +7,25 @@ import './index.scss';
 const SEOUL = {
   KOREAN: '서울',
   DISTRICT_CNT: '25',
-  SOUTH_WEST: {
-    LAT: 37.426999,
-    LNG: 126.764166,
-  },
-  NORTH_EAST: {
-    LAT: 37.703238,
-    LNG: 127.179192,
-  },
-  CENTER: {
-    LAT: 37.553738,
-    LNG: 127.98656,
-  },
 };
 
 const NAVER_MAP_API_REQUEST_URL = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.REACT_APP_NCP_CLIENT_ID}`;
-
 const SEOUL_DISTRICT_REQUEST_URL = `/req/data?request=GetFeature&key=${process.env.REACT_APP_MAP_DISTRICT_KEY}&size=${SEOUL.DISTRICT_CNT}&data=LT_C_ADSIGG_INFO&attrfilter=full_nm:like:${SEOUL.KOREAN}&domain=${process.env.REACT_APP_DOMAIN}`;
-const SEOUL_CITY_REQUEST_URL = `/req/data?&request=GetFeature&key=${process.env.REACT_APP_MAP_DISTRICT_KEY}&data=LT_C_ADSIDO_INFO&attrfilter=ctp_kor_nm:like:${SEOUL.KOREAN}&domain={process.env.REACT_APP_DOMAIN}`;
+
+const markerElement = {
+  mapTitle:
+    '<div style="display:inline-block; text-align:center; font-size:20px; margin-top: 50px; width: 265px; heigth: 25px;"> <span>서울 지역구 풋살 매칭 현황 지도</span> </div>',
+  districtName: (name) => {
+    return `
+        <div style=" position:relative; display:block; width: 60px; height: 24px; left: -30px; top: -12px; text-align:center; font-size:15px;">
+          <span>${name}</span>
+        </div>`;
+  },
+};
 
 const MatchMap = () => {
   const [naverMapData, setNaverMapData] = useState();
   const [seoulDistrictData, setSeoulDistrictData] = useState();
-  const [seoulCityData, setSeoulCityData] = useState();
 
   // data 요청
   useEffect(() => {
@@ -40,181 +36,145 @@ const MatchMap = () => {
       setSeoulDistrictData(
         seoulDistrictResponse.data.response.result.featureCollection.features
       );
-      const seoulCityResponse = await axios(SEOUL_CITY_REQUEST_URL);
-      setSeoulCityData(
-        seoulCityResponse.data.response.result.featureCollection.features
-      );
     };
     fetchDatas();
     return () => {
       setSeoulDistrictData(undefined);
       setNaverMapData(undefined);
-      setSeoulCityData(undefined);
     };
   }, []);
 
   return (
     <div className="match-map">
-      {naverMapData && seoulDistrictData && seoulCityData ? (
-        <NaverMap
-          mapData={naverMapData}
-          cityData={seoulCityData}
-          districtData={seoulDistrictData}
-        />
+      {naverMapData && seoulDistrictData ? (
+        <NaverMap mapData={naverMapData} districtData={seoulDistrictData} />
       ) : (
         <MDSpinner size="80px" borderSize="7px" />
       )}
     </div>
   );
 };
+
 const NaverMap = (props) => {
   /* eslint react/prop-types: 0 */
-  const { mapData, cityData, districtData } = props;
+  const { mapData, districtData } = props;
   const [naverMap, setNaverMap] = useState(undefined);
 
-  const naverMapStyleConfigObj = {
-    fillColor: '#000000',
-    fillOpacity: 0,
-    strokeColor: '#272A51',
+  const mapInitOptions = {
+    zoom: 11,
+    draggable: false,
+    scrollWheel: false,
+    background: '#ffffff',
+    disableDoubleClickZoom: true,
+    mapDataControl: false,
+    scaleControl: false,
+    mapTypes: new mapData.MapTypeRegistry({
+      normal: mapData.NaverStyleMapTypeOption.getBlankMap(),
+    }),
+  };
+  const naverMapStyleConfig = {
+    fillColor: '#71ACAD',
+    fillOpacity: 0.6,
+    strokeColor: '#71ACAD',
     strokeOpacity: 1,
     strokeWeight: 2,
-    strokeStyle: 'shortdash',
+    strokeStyle: 'solid',
     clickable: true,
-    zIndex: 1,
+    zIndex: 4,
+  };
+  const selectedDistrictOption = () => {
+    const styleOption = { ...naverMapStyleConfig };
+    styleOption.fillColor = '#71ACAD';
+    styleOption.fillOpacity = 1;
+    styleOption.strokeColor = '#71ACAD';
+    styleOption.strokeOpacity = 1;
+    styleOption.strokeStyle = 'solid';
+    styleOption.strokeWeight = 1;
+    styleOption.zIndex = 5;
+    return styleOption;
+  };
+
+  const addEvent = (isGlobal, target, action, handler) => {
+    if (isGlobal) {
+      if (!window.naver.maps.Event.hasListener(target, action)) {
+        window.naver.maps.Event.addListener(target, action, handler);
+      }
+      return;
+    }
+    if (!target.hasListener(action)) {
+      target.addListener(action, handler);
+    }
   };
 
   let districtMarker;
-
   const createDistrictNameMarker = (district) => {
     districtMarker = new mapData.Marker({
       position: district.getBounds().getCenter(),
+      clickable: true,
       icon: {
-        content: `
-        <div style="
-        display:inline-block;
-        padding:5px;
-        text-align:center;
-        background-color:#fff;
-        border:1px solid #000;
-        font-size:5px;">
-          <span>${district.property_sig_kor_nm}</span>
-        </div>`,
+        content: markerElement.districtName(district.property_sig_kor_nm),
+      },
+      map: naverMap,
+    });
+    const handleMarkerEvent = (option) => {
+      district.setStyle(option);
+    };
+    addEvent(
+      true,
+      districtMarker,
+      'mouseover',
+      handleMarkerEvent.bind(null, selectedDistrictOption())
+    );
+    addEvent(
+      true,
+      districtMarker,
+      'mouseout',
+      handleMarkerEvent.bind(null, naverMapStyleConfig)
+    );
+  };
+
+  const handleDistrictMouseoverEvent = (e) => {
+    if (districtMarker) {
+      districtMarker.setMap(null);
+    }
+    const selecteDistrictOption = selectedDistrictOption();
+    e.feature.setStyle(selecteDistrictOption);
+    createDistrictNameMarker(e.feature, selecteDistrictOption);
+  };
+
+  const handleDistrictMouseoutEvent = (e) => {
+    e.feature.setStyle(naverMapStyleConfig);
+  };
+
+  const handleDistrictMousemoveEvent = () => {
+    if (districtMarker) {
+      districtMarker.setMap(null);
+    }
+  };
+
+  const createMapTitleMarker = () => {
+    return new mapData.Marker({
+      position: mapData.Position.TOP_LEFT,
+      clickable: false,
+      icon: {
+        content: markerElement.mapTitle,
       },
       map: naverMap,
     });
   };
 
-  const handleMouseoverEvent = (e) => {
-    const overrideStyleOption = { ...naverMapStyleConfigObj };
-    overrideStyleOption.fillColor = '#71ACAD';
-    overrideStyleOption.fillOpacity = 0.6;
-    overrideStyleOption.strokeColor = '#71ACAD';
-    overrideStyleOption.strokeOpacity = 0.6;
-    overrideStyleOption.strokeStyle = 'solid';
-    overrideStyleOption.strokeWeight = 10;
-    overrideStyleOption.zIndex = 4;
-    e.feature.setStyle(overrideStyleOption);
-    createDistrictNameMarker(e.feature);
-  };
-
-  const handleMouseoutEvent = (e) => {
-    e.feature.setStyle(naverMapStyleConfigObj);
-    districtMarker.setMap(null);
-  };
-
-  const handleClickEvent = (e) => {
-    const selectedDistrict = e.feature.getBounds();
-    if (selectedDistrict) {
-      naverMap.panToBounds(selectedDistrict);
-    }
-  };
-
-  const clearEventInMap = (eventName) => {
-    if (naverMap.data.hasListener(eventName)) {
-      naverMap.data.clearListeners(eventName);
-    }
-  };
-
-  const addEventInMap = (eventName, handler) => {
-    if (!naverMap.data.hasListener(eventName)) {
-      naverMap.data.addListener(eventName, handler);
-    }
-  };
-
-  const handleZoomEvent = (zoom) => {
-    const labelLayer = new mapData.Layer('label', naverMap.mapTypes.label);
-    const normalLayer = new mapData.Layer('normal', naverMap.mapTypes.normal);
-    if (zoom >= 13) {
-      labelLayer.setMap(naverMap);
-      clearEventInMap('mouseover');
-      clearEventInMap('mouseout');
-      return;
-    }
-    normalLayer.setMap(naverMap);
-    naverMapStyleConfigObj.clickable = true;
-    addEventInMap('mouseover', handleMouseoverEvent);
-    addEventInMap('mouseout', handleMouseoutEvent);
-  };
-
-  const createFogEffect = () => {
-    return new mapData.Polygon({
-      strokeOpacity: 1,
-      strokeWeight: 2,
-      strokeColor: '#f00',
-      fillOpacity: 0.8,
-      fillColor: '#fff',
-      zIndex: 3,
-      map: naverMap,
-      paths: [
-        [
-          new mapData.LatLng(37, 126),
-          new mapData.LatLng(37, 128),
-          new mapData.LatLng(38, 128),
-          new mapData.LatLng(38, 126),
-        ],
-        [
-          ...cityData[0].geometry.coordinates[0][0].map((latlng) => {
-            return mapData.LatLng(latlng[1], latlng[0]);
-          }),
-        ],
-      ],
-    });
-  };
-
   useEffect(() => {
     if (naverMap === undefined) {
-      const mapOptions = {
-        useStyleMap: true,
-        zoom: 11,
-        minZoom: 10,
-        maxZoom: 16,
-        zoomControl: true,
-        zoomControlOptions: {
-          style: mapData.ZoomControlStyle.SMALL,
-        },
-        center: new mapData.LatLng(SEOUL.CENTER.LAT, SEOUL.CENTER.LNG),
-        maxBounds: new mapData.LatLngBounds(
-          new mapData.LatLng(SEOUL.SOUTH_WEST.LAT, SEOUL.SOUTH_WEST.LNG),
-          new mapData.LatLng(SEOUL.NORTH_EAST.LAT, SEOUL.NORTH_EAST.LNG)
-        ),
-        mapTypes: new mapData.MapTypeRegistry({
-          normal: mapData.NaverStyleMapTypeOption.getVectorMap(),
-          label: mapData.NaverStyleMapTypeOption.getNormalMap(),
-        }),
-      };
-      setNaverMap(new mapData.Map('map', mapOptions));
+      setNaverMap(new mapData.Map('map', mapInitOptions));
     } else {
-      createFogEffect();
-
+      createMapTitleMarker();
       districtData.forEach((district) => {
         naverMap.data.addGeoJson(district);
       });
-      naverMap.data.setStyle(naverMapStyleConfigObj);
-
-      mapData.Event.addListener(naverMap, 'zoom_changed', handleZoomEvent);
-      addEventInMap('mouseover', handleMouseoverEvent);
-      addEventInMap('mouseout', handleMouseoutEvent);
-      addEventInMap('click', handleClickEvent);
+      naverMap.data.setStyle(naverMapStyleConfig);
+      addEvent(false, naverMap.data, 'mouseover', handleDistrictMouseoverEvent);
+      addEvent(false, naverMap.data, 'mouseout', handleDistrictMouseoutEvent);
+      addEvent(true, naverMap, 'mousemove', handleDistrictMousemoveEvent);
     }
     /* eslint react-hooks/exhaustive-deps: 0 */
   }, [naverMap]);
