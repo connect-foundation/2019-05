@@ -5,7 +5,7 @@ const initialState = {
   isViewRegistModal: false,
 };
 
-const MatchContext = createContext(initialState);
+const MatchContext = createContext(null);
 
 const MatchProvider = ({ children }) => {
   const [matchState, dispatch] = useReducer(matchReducer, initialState);
