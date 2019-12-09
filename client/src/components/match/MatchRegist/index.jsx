@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { MatchContext } from '../../../contexts/Match/Context';
+import matchActions from '../../../contexts/Match/Actions';
 import './index.scss';
 
 const MatchRegist = () => {
-  const { matchState, dispatch } = useContext(MatchContext);
+  const { dispatch } = useContext(MatchContext);
   const handleMatchRegisterBtn = () => {
     dispatch({
-      type: 'TOGGLE_VIEW_MATCH_REGIST_MODAL',
-      isViewRegistModal: matchState.isViewRegistModal,
+      type: matchActions.TOGGLE_VIEW_MATCH_REGIST_MODAL,
     });
   };
 

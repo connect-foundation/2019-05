@@ -3,6 +3,7 @@ import matchReducer from './Reducer';
 
 const initialState = {
   isViewRegistModal: false,
+  selectedDistricts: {},
 };
 
 const MatchContext = createContext(null);
