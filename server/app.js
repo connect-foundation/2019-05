@@ -13,6 +13,7 @@ const authRouter = require('./routes/auth');
 const errorRouter = require('./routes/error');
 const createError = require('./middlewares/createError');
 const mailRouter = require('./routes/mail');
+const userRouter = require('./routes/user');
 const server = new GraphQLServer({
   typeDefs: './schema.graphql',
   resolvers,
@@ -34,6 +35,7 @@ app.use(passport.initialize());
 
 app.use('/auth', authRouter);
 app.use('/mail', mailRouter);
+app.use('/user', userRouter);
 server.start(
   {
     port: 4000,
