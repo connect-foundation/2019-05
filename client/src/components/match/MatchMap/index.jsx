@@ -2,104 +2,8 @@ import React, { useState, useEffect } from 'react';
 import loadJs from 'load-js';
 import axios from 'axios';
 import MDSpinner from 'react-md-spinner';
+import { changeDistrictInfo, findDistrictToName } from '../../../util';
 import './index.scss';
-
-let districtInfo = {
-  종로구: {
-    namePosition: { x: 126.9672221, y: 37.5883778 },
-    isSelected: false,
-  },
-  중구: { namePosition: { x: 126.9805817, y: 37.5666103 }, isSelected: false },
-  용산구: {
-    namePosition: { x: 126.9605354, y: 37.5383031 },
-    isSelected: false,
-  },
-  성동구: {
-    namePosition: { x: 127.0216469, y: 37.5562685 },
-    isSelected: false,
-  },
-  광진구: {
-    namePosition: { x: 127.0690254, y: 37.5508249 },
-    isSelected: false,
-  },
-  동대문구: {
-    namePosition: { x: 127.0320798, y: 37.5889219 },
-    isSelected: false,
-  },
-  중랑구: {
-    namePosition: { x: 127.0758919, y: 37.5992591 },
-    isSelected: false,
-  },
-  성북구: {
-    namePosition: { x: 126.9983009, y: 37.608507 },
-    isSelected: false,
-  },
-  강북구: {
-    namePosition: { x: 126.9948677, y: 37.6427686 },
-    isSelected: false,
-  },
-  도봉구: {
-    namePosition: { x: 127.0161403, y: 37.6683185 },
-    isSelected: false,
-  },
-  노원구: {
-    namePosition: { x: 127.0587257, y: 37.6509238 },
-    isSelected: false,
-  },
-  은평구: {
-    namePosition: { x: 126.909037, y: 37.6231925 },
-    isSelected: false,
-  },
-  서대문구: {
-    namePosition: { x: 126.9122767, y: 37.5807599 },
-    isSelected: false,
-  },
-  마포구: {
-    namePosition: { x: 126.8843178, y: 37.5638889 },
-    isSelected: false,
-  },
-  양천구: {
-    namePosition: { x: 126.8348793, y: 37.5281454 },
-    isSelected: false,
-  },
-  강서구: {
-    namePosition: { x: 126.8061737, y: 37.5687873 },
-    isSelected: false,
-  },
-  구로구: {
-    namePosition: { x: 126.8259529, y: 37.4990907 },
-    isSelected: false,
-  },
-  금천구: { namePosition: { x: 126.8816311, y: 37.466943 }, isSelected: false },
-  영등포구: {
-    namePosition: { x: 126.8911842, y: 37.5290465 },
-    isSelected: false,
-  },
-  동작구: {
-    namePosition: { x: 126.9296364, y: 37.5099851 },
-    isSelected: false,
-  },
-  관악구: {
-    namePosition: { x: 126.9268898, y: 37.4723928 },
-    isSelected: false,
-  },
-  서초구: {
-    namePosition: { x: 126.9886879, y: 37.4887396 },
-    isSelected: false,
-  },
-  강남구: {
-    namePosition: { x: 127.0456795, y: 37.4969117 },
-    isSelected: false,
-  },
-  송파구: {
-    namePosition: { x: 127.0985512, y: 37.5088957 },
-    isSelected: false,
-  },
-  강동구: {
-    namePosition: { x: 127.1280769, y: 37.5589902 },
-    isSelected: false,
-  },
-};
 
 const NAVER_MAP_API_REQUEST_URL = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.REACT_APP_NCP_CLIENT_ID}`;
 const SEOUL_DISTRICT_REQUEST_URL = `/req/data?request=GetFeature&key=${process.env.REACT_APP_MAP_DISTRICT_KEY}&size=25&data=LT_C_ADSIGG_INFO&attrfilter=full_nm:like:서울&domain=${process.env.REACT_APP_DOMAIN}`;
@@ -243,7 +147,7 @@ const NaverMap = (props) => {
   // 마커와 지역구에 등록할 공통 이벤트
   const mouseoverEvent = (target) => {
     const curDistrictName = target.property_sig_kor_nm;
-    if (districtInfo[curDistrictName].isSelected) {
+    if (findDistrictToName(curDistrictName).isSelected) {
       return;
     }
     target.setStyle(setDistrictOption('mouseover'));
@@ -252,47 +156,59 @@ const NaverMap = (props) => {
   const mouseoutEvent = (target) => {
     const curDistrictName = target.property_sig_kor_nm;
     showSelectedDistrictMarker();
-    if (districtInfo[curDistrictName].isSelected) {
+    if (findDistrictToName(curDistrictName).isSelected) {
       return;
     }
     target.setStyle(setDistrictOption());
   };
 
-  const clickEvent = (target) => {
-    const curDistrictName = target.property_sig_kor_nm;
-    hideAllDistrictMarker();
-    const preDistrictInfo = { ...districtInfo };
-    const isSelected = !preDistrictInfo[curDistrictName].isSelected;
-    preDistrictInfo[curDistrictName].isSelected = isSelected;
-    districtInfo = preDistrictInfo;
-    const curAction = isSelected ? 'click' : '';
-    target.setStyle(setDistrictOption(curAction));
-    if (isSelected) {
-      if (!selectedDistrictMarker[curDistrictName]) {
-        selectedDistrictMarker[curDistrictName] = districtMarker;
-      }
-      showSelectedDistrictMarker();
+  const deleteMarkerInSelectedMarkers = (curDistrictName) => {
+    if (!selectedDistrictMarker[curDistrictName]) {
       return;
     }
+    const newMarkers = {};
+    Object.entries(selectedDistrictMarker).forEach(([name, marker]) => {
+      if (name !== curDistrictName) {
+        newMarkers[name] = marker;
+      }
+    });
+    selectedDistrictMarker = { ...newMarkers };
+  };
+
+  const insertMarkerInSelectedMarkers = (curDistrictName) => {
     if (selectedDistrictMarker[curDistrictName]) {
-      const newMarkers = {};
-      Object.entries(selectedDistrictMarker).forEach(([markerName, marker]) => {
-        if (markerName !== curDistrictName) {
-          newMarkers[markerName] = marker;
-        }
-      });
-      selectedDistrictMarker = { ...newMarkers };
+      return;
     }
+    const newMarkers = { ...selectedDistrictMarker };
+    newMarkers[curDistrictName] = districtMarker;
+    selectedDistrictMarker = { ...newMarkers };
+  };
+
+  const clickEvent = (target) => {
+    hideAllDistrictMarker();
+    const curDistrictName = target.property_sig_kor_nm;
+    const preTargetInfo = { ...findDistrictToName(curDistrictName) };
+    preTargetInfo.isSelected = !preTargetInfo.isSelected;
+    changeDistrictInfo(preTargetInfo);
+
+    const curAction = preTargetInfo.isSelected ? 'click' : '';
+    target.setStyle(setDistrictOption(curAction));
+
+    const processMarkerAction = preTargetInfo.isSelected
+      ? insertMarkerInSelectedMarkers
+      : deleteMarkerInSelectedMarkers;
+    processMarkerAction(curDistrictName);
     showSelectedDistrictMarker();
   };
 
   // 지역구 이름 마커 생성 함수
   const createDistrictNameMarker = (district) => {
     const curDistrictName = district.property_sig_kor_nm;
+    const districtInfo = findDistrictToName(curDistrictName);
     districtMarker = new mapData.Marker({
       position: new mapData.LatLng(
-        districtInfo[curDistrictName].namePosition.y,
-        districtInfo[curDistrictName].namePosition.x
+        districtInfo.namePosition.y,
+        districtInfo.namePosition.x
       ),
       clickable: true,
       icon: {
