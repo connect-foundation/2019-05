@@ -463,13 +463,24 @@ const Player = boostCamperInfo.map((playerInfo, idx) => {
   };
 });
 
-const createRandomNumber = (limitNum, startNum) => {
-  const limitNumLen = (limitNum + '').length;
-  return (Math.floor(Math.random() * (10 * limitNumLen)) % limitNum) + startNum;
+const createRandomNumber = (min, max) => {
+  //const limitNumLen = (limitNum + '').length;
+  //const limitNumLen = (limitNum + '').length === 1 ? 10 : 100;
+  //return (Math.floor(Math.random() * (10 * limitNumLen)) % limitNum) + startNum;
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; //최댓값도 포함, 최솟값도 포함
 };
 
 const isValidDate = (month, day) => {
   const createdDate = new Date(2020, month, day);
+  if (createdDate.getMonth() == month && createdDate.getDate() == day) {
+    return true;
+  }
+  return false;
+};
+const isValidDate2019 = (month, day) => {
+  const createdDate = new Date(2019, month, day);
   if (createdDate.getMonth() == month && createdDate.getDate() == day) {
     return true;
   }
@@ -485,12 +496,25 @@ const changeDigitOneToTwo = (numStr) => {
 
 const createValidDate = () => {
   while (true) {
-    const randomMonth = createRandomNumber(12, 1);
+    const randomMonth = Math.random() > 0.5 ? 2 : 1;
     const randomDay = createRandomNumber(31, 1);
     if (isValidDate(randomMonth, randomDay)) {
       return `${changeDigitOneToTwo(randomMonth + '')}-${changeDigitOneToTwo(
         randomDay + ''
       )}`;
+    }
+  }
+};
+
+const createValidDateDecember = () => {
+  while (true) {
+    const randomMonth = 11;
+    const randomDay = createRandomNumber(31, 9);
+
+    if (isValidDate2019(randomMonth, randomDay)) {
+      return `${changeDigitOneToTwo(
+        randomMonth + 1 + ''
+      )}-${changeDigitOneToTwo(randomDay + '')}`;
     }
   }
 };
@@ -513,11 +537,41 @@ const makeMatchAuthor = (teamSeq) => {
 const Match = [];
 
 const createMatchData = () => {
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 300; i++) {
+    const randomHost = createRandomNumber(25, 1);
+    const randomStadium = stardiumSet[createRandomNumber(14, 0)];
+    const date = `2019-${createValidDateDecember()}`;
+    const randomStartTime = createRandomNumber(22, 6);
+    const randomMinute = createRandomNumber(2, 0) * 30;
+    const description = 'this match is...';
+    const manager = makeMatchAuthor(randomHost) + 1;
+    Match.push({
+      author: {
+        connect: {
+          seq: manager,
+        },
+      },
+      host: {
+        connect: {
+          seq: randomHost,
+        },
+      },
+      guest: null,
+      stadium: randomStadium.name,
+      address: randomStadium.address,
+      area: randomStadium.district,
+      date: date,
+      startTime: `${checkingOverTime(randomStartTime, randomMinute)}`,
+      endTime: `${checkingOverTime(randomStartTime + 1, randomMinute)}`,
+      description: description,
+      result: null,
+    });
+  }
+  for (let j = 0; j < 700; j++) {
     const randomHost = createRandomNumber(25, 1);
     const randomStadium = stardiumSet[createRandomNumber(14, 0)];
     const date = `2020-${createValidDate()}`;
-    const randomStartTime = createRandomNumber(24, 0);
+    const randomStartTime = createRandomNumber(22, 6);
     const randomMinute = createRandomNumber(2, 0) * 30;
     const description = 'this match is...';
     const manager = makeMatchAuthor(randomHost) + 1;

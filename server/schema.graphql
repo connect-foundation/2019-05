@@ -8,6 +8,7 @@ type Team {
     draw: Int!
     lose: Int!
     rating: Int!
+    teamUniqueId: String!
     members: [Player!]
     uploadMatchList: [Match!]
     matchingDoneList: [Match!]

@@ -1646,6 +1646,7 @@ type Team {
   draw: Int!
   lose: Int!
   rating: Int!
+  teamUniqueId: String!
   members(where: PlayerWhereInput, orderBy: PlayerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Player!]
   uploadMatchList(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
   matchingDoneList(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
@@ -1668,6 +1669,7 @@ input TeamCreateInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String!
   members: PlayerCreateManyWithoutTeamInput
   uploadMatchList: MatchCreateManyWithoutHostInput
   matchingDoneList: MatchCreateManyWithoutGuestInput
@@ -1704,6 +1706,7 @@ input TeamCreateWithoutMatchingDoneListInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String!
   members: PlayerCreateManyWithoutTeamInput
   uploadMatchList: MatchCreateManyWithoutHostInput
   onApplyingList: ApplyCreateManyWithoutTeamInput
@@ -1719,6 +1722,7 @@ input TeamCreateWithoutMembersInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String!
   uploadMatchList: MatchCreateManyWithoutHostInput
   matchingDoneList: MatchCreateManyWithoutGuestInput
   onApplyingList: ApplyCreateManyWithoutTeamInput
@@ -1734,6 +1738,7 @@ input TeamCreateWithoutOnApplyingListInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String!
   members: PlayerCreateManyWithoutTeamInput
   uploadMatchList: MatchCreateManyWithoutHostInput
   matchingDoneList: MatchCreateManyWithoutGuestInput
@@ -1749,6 +1754,7 @@ input TeamCreateWithoutUploadMatchListInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String!
   members: PlayerCreateManyWithoutTeamInput
   matchingDoneList: MatchCreateManyWithoutGuestInput
   onApplyingList: ApplyCreateManyWithoutTeamInput
@@ -1778,6 +1784,8 @@ enum TeamOrderByInput {
   lose_DESC
   rating_ASC
   rating_DESC
+  teamUniqueId_ASC
+  teamUniqueId_DESC
 }
 
 type TeamPreviousValues {
@@ -1790,6 +1798,7 @@ type TeamPreviousValues {
   draw: Int!
   lose: Int!
   rating: Int!
+  teamUniqueId: String!
 }
 
 type TeamSubscriptionPayload {
@@ -1819,6 +1828,7 @@ input TeamUpdateInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String
   members: PlayerUpdateManyWithoutTeamInput
   uploadMatchList: MatchUpdateManyWithoutHostInput
   matchingDoneList: MatchUpdateManyWithoutGuestInput
@@ -1834,6 +1844,7 @@ input TeamUpdateManyMutationInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String
 }
 
 input TeamUpdateOneRequiredWithoutUploadMatchListInput {
@@ -1879,6 +1890,7 @@ input TeamUpdateWithoutMatchingDoneListDataInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String
   members: PlayerUpdateManyWithoutTeamInput
   uploadMatchList: MatchUpdateManyWithoutHostInput
   onApplyingList: ApplyUpdateManyWithoutTeamInput
@@ -1893,6 +1905,7 @@ input TeamUpdateWithoutMembersDataInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String
   uploadMatchList: MatchUpdateManyWithoutHostInput
   matchingDoneList: MatchUpdateManyWithoutGuestInput
   onApplyingList: ApplyUpdateManyWithoutTeamInput
@@ -1907,6 +1920,7 @@ input TeamUpdateWithoutOnApplyingListDataInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String
   members: PlayerUpdateManyWithoutTeamInput
   uploadMatchList: MatchUpdateManyWithoutHostInput
   matchingDoneList: MatchUpdateManyWithoutGuestInput
@@ -1921,6 +1935,7 @@ input TeamUpdateWithoutUploadMatchListDataInput {
   draw: Int
   lose: Int
   rating: Int
+  teamUniqueId: String
   members: PlayerUpdateManyWithoutTeamInput
   matchingDoneList: MatchUpdateManyWithoutGuestInput
   onApplyingList: ApplyUpdateManyWithoutTeamInput
@@ -2033,6 +2048,20 @@ input TeamWhereInput {
   rating_lte: Int
   rating_gt: Int
   rating_gte: Int
+  teamUniqueId: String
+  teamUniqueId_not: String
+  teamUniqueId_in: [String!]
+  teamUniqueId_not_in: [String!]
+  teamUniqueId_lt: String
+  teamUniqueId_lte: String
+  teamUniqueId_gt: String
+  teamUniqueId_gte: String
+  teamUniqueId_contains: String
+  teamUniqueId_not_contains: String
+  teamUniqueId_starts_with: String
+  teamUniqueId_not_starts_with: String
+  teamUniqueId_ends_with: String
+  teamUniqueId_not_ends_with: String
   members_every: PlayerWhereInput
   members_some: PlayerWhereInput
   members_none: PlayerWhereInput
@@ -2052,6 +2081,7 @@ input TeamWhereInput {
 
 input TeamWhereUniqueInput {
   seq: Int
+  teamUniqueId: String
 }
 `
       }

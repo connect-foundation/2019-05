@@ -391,7 +391,9 @@ export type TeamOrderByInput =
   | "lose_ASC"
   | "lose_DESC"
   | "rating_ASC"
-  | "rating_DESC";
+  | "rating_DESC"
+  | "teamUniqueId_ASC"
+  | "teamUniqueId_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
@@ -563,6 +565,20 @@ export interface TeamWhereInput {
   rating_lte?: Maybe<Int>;
   rating_gt?: Maybe<Int>;
   rating_gte?: Maybe<Int>;
+  teamUniqueId?: Maybe<String>;
+  teamUniqueId_not?: Maybe<String>;
+  teamUniqueId_in?: Maybe<String[] | String>;
+  teamUniqueId_not_in?: Maybe<String[] | String>;
+  teamUniqueId_lt?: Maybe<String>;
+  teamUniqueId_lte?: Maybe<String>;
+  teamUniqueId_gt?: Maybe<String>;
+  teamUniqueId_gte?: Maybe<String>;
+  teamUniqueId_contains?: Maybe<String>;
+  teamUniqueId_not_contains?: Maybe<String>;
+  teamUniqueId_starts_with?: Maybe<String>;
+  teamUniqueId_not_starts_with?: Maybe<String>;
+  teamUniqueId_ends_with?: Maybe<String>;
+  teamUniqueId_not_ends_with?: Maybe<String>;
   members_every?: Maybe<PlayerWhereInput>;
   members_some?: Maybe<PlayerWhereInput>;
   members_none?: Maybe<PlayerWhereInput>;
@@ -826,6 +842,7 @@ export interface StadiumWhereInput {
 
 export type TeamWhereUniqueInput = AtLeastOne<{
   seq: Maybe<Int>;
+  teamUniqueId?: Maybe<String>;
 }>;
 
 export interface ApplyCreateInput {
@@ -849,6 +866,7 @@ export interface TeamCreateWithoutOnApplyingListInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId: String;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
@@ -925,6 +943,7 @@ export interface TeamCreateWithoutUploadMatchListInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId: String;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
@@ -980,6 +999,7 @@ export interface TeamCreateWithoutMembersInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId: String;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
@@ -1020,6 +1040,7 @@ export interface TeamCreateWithoutMatchingDoneListInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId: String;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
@@ -1088,6 +1109,7 @@ export interface TeamUpdateWithoutOnApplyingListDataInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId?: Maybe<String>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
@@ -1298,6 +1320,7 @@ export interface TeamUpdateWithoutUploadMatchListDataInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId?: Maybe<String>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
@@ -1376,6 +1399,7 @@ export interface TeamUpdateWithoutMembersDataInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId?: Maybe<String>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
@@ -1438,6 +1462,7 @@ export interface TeamUpdateWithoutMatchingDoneListDataInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId?: Maybe<String>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
@@ -1958,6 +1983,7 @@ export interface TeamCreateInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId: String;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
@@ -1973,6 +1999,7 @@ export interface TeamUpdateInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId?: Maybe<String>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
@@ -1988,6 +2015,7 @@ export interface TeamUpdateManyMutationInput {
   draw?: Maybe<Int>;
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
+  teamUniqueId?: Maybe<String>;
 }
 
 export interface ApplySubscriptionWhereInput {
@@ -2100,6 +2128,7 @@ export interface Team {
   draw: Int;
   lose: Int;
   rating: Int;
+  teamUniqueId: String;
 }
 
 export interface TeamPromise extends Promise<Team>, Fragmentable {
@@ -2112,6 +2141,7 @@ export interface TeamPromise extends Promise<Team>, Fragmentable {
   draw: () => Promise<Int>;
   lose: () => Promise<Int>;
   rating: () => Promise<Int>;
+  teamUniqueId: () => Promise<String>;
   members: <T = FragmentableArray<Player>>(args?: {
     where?: PlayerWhereInput;
     orderBy?: PlayerOrderByInput;
@@ -2162,6 +2192,7 @@ export interface TeamSubscription
   draw: () => Promise<AsyncIterator<Int>>;
   lose: () => Promise<AsyncIterator<Int>>;
   rating: () => Promise<AsyncIterator<Int>>;
+  teamUniqueId: () => Promise<AsyncIterator<String>>;
   members: <T = Promise<AsyncIterator<PlayerSubscription>>>(args?: {
     where?: PlayerWhereInput;
     orderBy?: PlayerOrderByInput;
@@ -2212,6 +2243,7 @@ export interface TeamNullablePromise
   draw: () => Promise<Int>;
   lose: () => Promise<Int>;
   rating: () => Promise<Int>;
+  teamUniqueId: () => Promise<String>;
   members: <T = FragmentableArray<Player>>(args?: {
     where?: PlayerWhereInput;
     orderBy?: PlayerOrderByInput;
@@ -3157,6 +3189,7 @@ export interface TeamPreviousValues {
   draw: Int;
   lose: Int;
   rating: Int;
+  teamUniqueId: String;
 }
 
 export interface TeamPreviousValuesPromise
@@ -3171,6 +3204,7 @@ export interface TeamPreviousValuesPromise
   draw: () => Promise<Int>;
   lose: () => Promise<Int>;
   rating: () => Promise<Int>;
+  teamUniqueId: () => Promise<String>;
 }
 
 export interface TeamPreviousValuesSubscription
@@ -3185,6 +3219,7 @@ export interface TeamPreviousValuesSubscription
   draw: () => Promise<AsyncIterator<Int>>;
   lose: () => Promise<AsyncIterator<Int>>;
   rating: () => Promise<AsyncIterator<Int>>;
+  teamUniqueId: () => Promise<AsyncIterator<String>>;
 }
 
 /*
