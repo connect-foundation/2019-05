@@ -4,6 +4,12 @@ import axios from 'axios';
 import MDSpinner from 'react-md-spinner';
 import './index.scss';
 
+const Spinner = ({ size, borderSize }) => (
+  <div className="spinner-container">
+    <MDSpinner size={size} borderSize={borderSize} />
+  </div>
+);
+
 const SEOUL = {
   KOREAN: '서울',
   DISTRICT_CNT: '25',
@@ -69,7 +75,7 @@ const MatchMap = () => {
       {naverMapData && seoulDistrictData ? (
         <NaverMap mapData={naverMapData} districtData={seoulDistrictData} />
       ) : (
-        <MDSpinner size="80px" borderSize="7px" />
+        <Spinner size="80px" borderSize="7px" />
       )}
     </div>
   );
