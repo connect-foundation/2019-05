@@ -1,4 +1,6 @@
-require('dotenv').config();
+require('dotenv').config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
 const express = require('express');
 const { GraphQLServer } = require('graphql-yoga');
 const path = require('path');
@@ -11,6 +13,7 @@ const authRouter = require('./routes/auth');
 const errorRouter = require('./routes/error');
 const createError = require('./middlewares/createError');
 const mailRouter = require('./routes/mail');
+const userRouter = require('./routes/user');
 const server = new GraphQLServer({
   typeDefs: './schema.graphql',
   resolvers,
@@ -32,6 +35,7 @@ app.use(passport.initialize());
 
 app.use('/auth', authRouter);
 app.use('/mail', mailRouter);
+app.use('/user', userRouter);
 server.start(
   {
     port: 4000,
