@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import loadJs from 'load-js';
 import axios from 'axios';
 import MDSpinner from 'react-md-spinner';
+import useAsync from '../../../hooks/useAsync';
 import { changeDistrictInfo, findDistrictToName } from '../../../util';
 import './index.scss';
 
@@ -20,34 +21,59 @@ const markerElement = {
   },
 };
 
+const getNaverMap = async () => {
+  await loadJs(NAVER_MAP_API_REQUEST_URL);
+  return window.naver.maps;
+};
+
+const getDistrcitData = async () => {
+  const response = await axios(SEOUL_DISTRICT_REQUEST_URL);
+  return response.data.response.result.featureCollection.features;
+};
+
 const MatchMap = () => {
-  const [naverMapData, setNaverMapData] = useState();
-  const [seoulDistrictData, setSeoulDistrictData] = useState();
+  const [naverMapState, reFetchNaverMap] = useAsync(getNaverMap, []);
+  const [seoulDistrictState, reFetchDisrictData] = useAsync(
+    getDistrcitData,
+    []
+  );
+  const { loading: mapLoading, data: mapData, error: mapError } = naverMapState;
+  const {
+    loading: districtLoding,
+    data: districtData,
+    error: districtError,
+  } = seoulDistrictState;
 
-  // data 요청
-  useEffect(() => {
-    const fetchDatas = async () => {
-      await loadJs(NAVER_MAP_API_REQUEST_URL);
-      setNaverMapData(window.naver.maps);
-      const seoulDistrictResponse = await axios(SEOUL_DISTRICT_REQUEST_URL);
-      setSeoulDistrictData(
-        seoulDistrictResponse.data.response.result.featureCollection.features
-      );
-    };
-    fetchDatas();
-    return () => {
-      setSeoulDistrictData(undefined);
-      setNaverMapData(undefined);
-    };
-  }, []);
-
+  if (mapLoading || districtLoding) {
+    return (
+      <div className="match-map">
+        <MDSpinner size="80px" borderSize="7px" />
+      </div>
+    );
+  }
+  if (mapError) {
+    return (
+      <div className="match-map">
+        <button type="button" onClick={reFetchNaverMap}>
+          맵 다시 불러오기
+        </button>
+      </div>
+    );
+  }
+  if (districtError) {
+    return (
+      <div className="match-map">
+        <button type="button" onClick={reFetchDisrictData}>
+          지역 정보 다시 불러오기
+        </button>
+      </div>
+    );
+  }
+  if (!mapData) return null;
+  if (!districtData) return null;
   return (
     <div className="match-map">
-      {naverMapData && seoulDistrictData ? (
-        <NaverMap mapData={naverMapData} districtData={seoulDistrictData} />
-      ) : (
-        <MDSpinner size="80px" borderSize="7px" />
-      )}
+      <NaverMap mapData={mapData} districtData={districtData} />
     </div>
   );
 };
@@ -248,7 +274,7 @@ const NaverMap = (props) => {
     clickEvent(e.feature);
   };
 
-  const handleDistrictMousemoveEvent = () => {
+  const handleDistrictOutEvent = () => {
     if (districtMarker) {
       districtMarker.setMap(null);
     }
@@ -266,7 +292,8 @@ const NaverMap = (props) => {
       addEvent(false, naverMap.data, 'mouseover', handleDistrictMouseoverEvent);
       addEvent(false, naverMap.data, 'mouseout', handleDistrictMouseoutEvent);
       addEvent(false, naverMap.data, 'click', handleDistrictClickEvent);
-      addEvent(true, naverMap, 'mousemove', handleDistrictMousemoveEvent);
+      addEvent(true, naverMap, 'mousemove', handleDistrictOutEvent);
+      addEvent(true, naverMap, 'mouseout', handleDistrictOutEvent);
     }
     /* eslint react-hooks/exhaustive-deps: 0 */
   }, [naverMap]);
