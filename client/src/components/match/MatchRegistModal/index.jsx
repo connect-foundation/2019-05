@@ -268,4 +268,9 @@ TextInputSection.defaultProps = {
   maxlen: undefined,
   required: false,
 };
+DateSection.propTypes = {
+  matchDate: PropTypes.object.isRequired,
+  setMatchDate: PropTypes.func.isRequired,
+};
+
 export default MatchRegistModal;
