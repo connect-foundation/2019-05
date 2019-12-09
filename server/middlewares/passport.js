@@ -11,10 +11,7 @@ passport.use(
     {
       clientID: env.NAVER_CLIENT_ID,
       clientSecret: env.NAVER_CLIENT_SECRET,
-      callbackURL:
-        env.NODE_ENV === 'development'
-          ? env.NAVER_LOGIN_CALLBACK_URL_DEV
-          : env.NAVER_LOGIN_CALLBACK_URL_PROD,
+      callbackURL: env.NAVER_LOGIN_CALLBACK_URL,
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
