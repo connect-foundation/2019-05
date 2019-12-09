@@ -165,7 +165,9 @@ const resolvers = {
       return prisma.team({ seq }).members();
     },
     uploadMatchList: ({ seq }, _, { prisma }) => {
-      return prisma.team({ seq }).uploadMatchList();
+      return prisma.team({ seq }).uploadMatchList({
+        orderBy: 'date_DESC',
+      });
     },
     matchingDoneList: ({ seq }, _, { prisma }) => {
       return prisma.team({ seq }).matchingDoneList();
