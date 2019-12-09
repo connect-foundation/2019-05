@@ -76,6 +76,10 @@ body {
   font-family: 'Roboto', 'Noto Sans KR', sans-serif;
 }
 
+#root {
+  min-width: 1200px;
+}
+
 .grid-container {
   width: 100%;
   max-width: 1200px;

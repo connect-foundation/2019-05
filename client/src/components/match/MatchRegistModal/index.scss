@@ -54,7 +54,6 @@
       width: 100%;
       padding: 0 50px 50px;
       box-sizing: border-box;
-      //height: 264px;
 
       .input-container {
         display: flex;
@@ -148,6 +147,7 @@
   .date-section {
     position: relative;
     width: 45%;
+
     .SingleDatePicker {
       display: block;
     }
@@ -173,13 +173,16 @@
       }
     }
   }
+
   .time-container {
     display: flex;
     justify-content: space-between;
     margin-bottom: 30px;
   }
+
   .time-section {
     width: 45%;
+
     .time_picker_container {
       width: 100%;
     }

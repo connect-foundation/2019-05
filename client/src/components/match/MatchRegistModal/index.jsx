@@ -8,37 +8,12 @@ import 'react-times/css/classic/default.css';
 import 'react-dates/lib/css/_datepicker.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { getDistrict } from '../../../util';
 
 import { MatchContext } from '../../../contexts/Match/Context';
 import './index.scss';
 
-const seoulDistrict = [
-  { korName: '종로구', engName: 'CNO' },
-  { korName: '중  구', engName: 'CGS' },
-  { korName: '용산구', engName: 'YSN' },
-  { korName: '성동구', engName: 'SDG' },
-  { korName: '광진구', engName: 'KJI' },
-  { korName: '동대문구', engName: 'TDM' },
-  { korName: '중랑구', engName: 'CNG' },
-  { korName: '성북구', engName: 'SBK' },
-  { korName: '강북구', engName: 'KBK' },
-  { korName: '도봉구', engName: 'TBG' },
-  { korName: '노원구', engName: 'NWN' },
-  { korName: '은평구', engName: 'UPG' },
-  { korName: '서대문구', engName: 'SDM' },
-  { korName: '마포구', engName: 'MPO' },
-  { korName: '양천구', engName: 'YGC' },
-  { korName: '강서구', engName: 'KSS' },
-  { korName: '구로구', engName: 'KRO' },
-  { korName: '금천구', engName: 'KCN' },
-  { korName: '영등포구', engName: 'YDP' },
-  { korName: '동작구', engName: 'TJK' },
-  { korName: '관악구', engName: 'KNK' },
-  { korName: '서초구', engName: 'SCO' },
-  { korName: '강남구', engName: 'KNM' },
-  { korName: '송파구', engName: 'SPA' },
-  { korName: '강동구', engName: 'KDG' },
-];
+const SEOUL_DISTRICT = getDistrict();
 
 const MatchRegistModal = () => {
   const { matchState } = useContext(MatchContext);
@@ -142,10 +117,10 @@ const DistrictSection = forwardRef((props, ref) => {
         className="match-register__select match-register__input"
         ref={ref}
       >
-        {seoulDistrict.map((district) => {
+        {Object.entries(SEOUL_DISTRICT).map(([code, district]) => {
           return (
-            <option key={district.engName} value={district.engName}>
-              {district.korName}
+            <option key={code} value={district.KOR_NAME}>
+              {district.KOR_NAME}
             </option>
           );
         })}
@@ -227,6 +202,7 @@ const TimeSection = forwardRef((prop, ref) => {
       </div>
     </div>
   );
+
 });
 const TextInputSection = forwardRef(
   ({ title, idText, maxlen, required }, ref) => {
