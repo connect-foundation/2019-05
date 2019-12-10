@@ -202,7 +202,6 @@ const TimeSection = forwardRef((prop, ref) => {
       </div>
     </div>
   );
-
 });
 const TextInputSection = forwardRef(
   ({ title, idText, maxlen, required }, ref) => {
