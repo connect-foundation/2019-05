@@ -1,9 +1,10 @@
 import React, { createContext, useReducer } from 'react';
 import matchReducer from './Reducer';
+import { getDistrict } from '../../util';
 
 const initialState = {
   isViewRegistModal: false,
-  selectedDistricts: {},
+  districtInfo: getDistrict(),
 };
 
 const MatchContext = createContext(null);
