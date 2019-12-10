@@ -159,6 +159,7 @@ const changeDistrictInfo = (changedInfo) => {
 
 export {
   convertDistrictCode,
+  convertDistrictName,
   setDistrict,
   getDistrict,
   findDistrictToName,
