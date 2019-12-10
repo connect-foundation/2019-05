@@ -20,7 +20,12 @@ const markerElement = {
           <span>${name}</span>
         </div>`;
   },
+  overDistrictCnt:
+    '<div style="position:relative; display:inline-block; text-align:center; font-size:20px; width:400px; heigth:30px; top:-15px; left:-200px; color:red;"> <span>더 이상 지역구를 선택할 수 없습니다.</span> </div>',
 };
+
+const LIMIT_SELECT_DISTRICT_CNT = 5;
+const ONE_SECOND = 1000;
 
 const getNaverMap = async () => {
   await loadJs(NAVER_MAP_API_REQUEST_URL);
@@ -86,16 +91,58 @@ const NaverMap = (props) => {
   const [naverMap, setNaverMap] = useState(undefined);
   const [curMarker, setCurMarker] = useState([]);
   const [selectedMarkers, setSelectedMarkers] = useState([]);
+  const [selectedNum, setSelectedNum] = useState(0);
 
   const createMapTitleMarker = () => {
     return new mapData.Marker({
-      position: mapData.Position.TOP_LEFT,
       clickable: false,
       icon: {
         content: markerElement.mapTitle,
       },
       map: naverMap,
+      zIndex: 2,
     });
+  };
+
+  const createWarningMarker = () => {
+    return new mapData.Marker({
+      position: naverMap.getCenter(),
+      clickable: false,
+      icon: {
+        content: markerElement.overDistrictCnt,
+      },
+      map: naverMap,
+      zIndex: 10,
+    });
+  };
+
+  const createFogEffectMarker = () => {
+    const MAP_MAX_SIZE = 900;
+    return new mapData.Marker({
+      icon: {
+        path: [
+          new mapData.Point(0, 0),
+          new mapData.Point(0, MAP_MAX_SIZE),
+          new mapData.Point(MAP_MAX_SIZE, MAP_MAX_SIZE),
+          new mapData.Point(MAP_MAX_SIZE, 0),
+        ],
+        style: 'closedPath',
+        fillColor: '#ffffff',
+        fillOpacity: 0.8,
+        strokeColor: '#ffffff',
+      },
+      map: naverMap,
+      zIndex: 9,
+    });
+  };
+
+  const showOverDistrictCntWarning = () => {
+    const warningMarker = createWarningMarker();
+    const fogEffect = createFogEffectMarker();
+    setTimeout(() => {
+      warningMarker.setMap(null);
+      fogEffect.setMap(null);
+    }, ONE_SECOND);
   };
 
   const mapInitOptions = {
@@ -181,6 +228,16 @@ const NaverMap = (props) => {
   };
 
   const clickEvent = (target) => {
+    if (selectedNum > LIMIT_SELECT_DISTRICT_CNT) {
+      return;
+    }
+    if (selectedNum === LIMIT_SELECT_DISTRICT_CNT) {
+      if (!checkingIsClicked(target)) {
+        if (!naverMap) return;
+        showOverDistrictCntWarning();
+        return;
+      }
+    }
     const clickedDName = target.property_sig_kor_nm;
     dispatch({
       type: matchActions.CLICK_DISTRICT,
@@ -268,6 +325,7 @@ const NaverMap = (props) => {
     });
     setSelectedMarkers(newSelectedMarker);
   };
+
   useEffect(() => {
     selectedMarkers.forEach((marker) => {
       registMarkerEvent(marker);
@@ -309,11 +367,20 @@ const NaverMap = (props) => {
     window.naver.maps.Event.clearInstanceListeners(map.data);
   };
 
+  const countSelectedDistrict = (infos) => {
+    const cnt = Object.values(infos).filter((info) => info.isSelected).length;
+    setSelectedNum(cnt);
+  };
+
   useEffect(() => {
-    manageSelectedDistrict(matchState.districtInfo);
     if (!naverMap) return;
     unregistDistrictEvent(naverMap);
     registDistrictEvent(naverMap);
+  }, [selectedNum]);
+
+  useEffect(() => {
+    countSelectedDistrict(matchState.districtInfo);
+    manageSelectedDistrict(matchState.districtInfo);
   }, [matchState.districtInfo]);
 
   useEffect(() => {
