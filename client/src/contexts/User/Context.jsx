@@ -1,18 +1,20 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useReducer } from 'react';
+import { playerReducer } from './Reducer';
 
-const UserContext = createContext({});
+const playerInitialState = {
+  playerId: null,
+};
 
-const UserProvider = ({ children }) => {
-  const initialState = {
-    isLoggedIn: false,
-  };
-  const [state, setState] = useState(initialState);
+const PlayerContext = createContext(playerInitialState);
+
+const PlayerProvider = ({ children }) => {
+  const [playerState, dispatch] = useReducer(playerReducer, playerInitialState);
 
   return (
-    <UserContext.Provider value={[state, setState]}>
+    <PlayerContext.Provider value={{ playerState, dispatch }}>
       {children}
-    </UserContext.Provider>
+    </PlayerContext.Provider>
   );
 };
 
-export { UserContext, UserProvider };
+export { PlayerContext, PlayerProvider };

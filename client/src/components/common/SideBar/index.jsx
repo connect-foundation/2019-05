@@ -1,20 +1,42 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { SideBarContext } from '../../../contexts/SideBar/Context';
+import { PlayerContext } from '../../../contexts/User/Context';
+import { playerActions } from '../../../contexts/User/Reducer';
+import useAsync from '../../../hooks/useAsync';
+import naverLoginPng from '../../../assets/images/naver_login_green_mid.PNG';
+import naverLogoutPng from '../../../assets/images/naver_logout_green_mid.PNG';
 import './index.scss';
-import naver_login from '../../../../src/assets/images/naver_login_green_mid.PNG';
-import naver_logout from '../../../../src/assets/images/naver_logout_green_mid.PNG';
+
+const getUserId = async () => {
+  const response = await axios('http://127.0.0.1:4000/user', {
+    withCredentials: true,
+    mode: 'cors',
+    credentials: 'include',
+  });
+  return response.data.userInfo.playerId;
+};
 
 const SideBar = () => {
+  const [loginState] = useAsync(getUserId, []);
   const { activated, setActivated } = useContext(SideBarContext);
-  const [isLoggedIn, setLogIn] = useState(true);
+  const { playerState, dispatch } = useContext(PlayerContext);
+  const { data: playerId, error } = loginState;
+
+  useEffect(() => {
+    if (!playerId) return;
+    dispatch({ type: playerActions.LOGIN, payload: playerId });
+  }, [loginState]);
+
   return activated ? (
     <>
       <nav className="side-bar">
         <TeamInfo />
         <CloseBtn activated={activated} setActivated={setActivated} />
-        <LoginWithNaver isLoggedIn={isLoggedIn} setLogIn={setLogIn} />
+        {error ? <span>error</span> : ''}
+        <LoginWithNaver isLoggedIn={!!playerState.playerId} />
         <Notifications />
       </nav>
     </>
@@ -23,17 +45,16 @@ const SideBar = () => {
   );
 };
 
-const LoginWithNaver = ({ isLoggedIn, setLogIn }) => {
-  const handleClick = (e) => {
-    setLogIn(!isLoggedIn);
-  };
+const LoginWithNaver = ({ isLoggedIn }) => {
   return (
-    <div className="auth-button" onClick={handleClick}>
-      <img
-        className="auth-button__img"
-        src={isLoggedIn ? naver_logout : naver_login}
-        alt="login/logout btn"
-      />
+    <div className="auth-button">
+      <a href="http://127.0.0.1:4000/auth/naver">
+        <img
+          className="auth-button__img"
+          src={isLoggedIn ? naverLogoutPng : naverLoginPng}
+          alt="login/logout btn"
+        />
+      </a>
     </div>
   );
 };
