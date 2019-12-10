@@ -1,9 +1,11 @@
 import React from 'react';
+import useAsync from '../../hooks/useAsync';
 import { Header, Footer } from '../../components/common';
 import { TeamIntroduction } from '../../components/myteam';
 
-const gql = `{
-  Team(seq:5){
+const gql = `
+query ($seq: Int){
+  Team(seq:$seq){
     name
     logo
     homeArea
@@ -38,12 +40,41 @@ const gql = `{
   }
 }`;
 
-const Myteam = () => (
-  <div className="myTeam">
-    <Header />
-    <TeamIntroduction />
-    <Footer />
-  </div>
-);
+const getTeamData = async () => {
+  const fetchBody = {
+    query: gql,
+    variables: {
+      seq: 5,
+    },
+  };
+  const fetchOption = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(fetchBody),
+  };
+  const data = await fetch(process.env.REACT_APP_GRAPHQL_ENDPOINT, fetchOption);
+  const result = await data.json();
+  return result.data;
+};
+
+const Myteam = () => {
+  const [teamFetchData, reFetchTeamData] = useAsync(getTeamData, []);
+  const {
+    loading: teamDataLoading,
+    data: teamData,
+    error: teamError,
+  } = teamFetchData;
+  if (teamDataLoading || teamError) return null;
+
+  return (
+    <div className="myTeam">
+      <Header />
+      <TeamIntroduction teamData={teamData} reFetchTeamData={reFetchTeamData} />
+      <Footer />
+    </div>
+  );
+};
 
 export default Myteam;
