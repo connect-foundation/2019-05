@@ -1,14 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { SideBarContext } from '../../../contexts/SideBar/Context';
-import './index.scss';
-import naverLoginPng from '../../../../src/assets/images/naver_login_green_mid.PNG';
-import naverLogoutPng from '../../../../src/assets/images/naver_logout_green_mid.PNG';
 import { PlayerContext } from '../../../contexts/User/Context';
-import useAsync from '../../../hooks/useAsync';
-import axios from 'axios';
 import { playerActions } from '../../../contexts/User/Reducer';
+import useAsync from '../../../hooks/useAsync';
+import naverLoginPng from '../../../assets/images/naver_login_green_mid.PNG';
+import naverLogoutPng from '../../../assets/images/naver_logout_green_mid.PNG';
+import './index.scss';
 
 const getUserId = async () => {
   const response = await axios('http://127.0.0.1:4000/user', {
@@ -16,21 +16,19 @@ const getUserId = async () => {
     mode: 'cors',
     credentials: 'include',
   });
-  return response;
+  return response.data.userInfo.playerId;
 };
 
 const SideBar = () => {
-  const { activated, setActivated } = useContext(SideBarContext);
-
-  const { playerState, dispatch } = useContext(PlayerContext);
-
   const [loginState] = useAsync(getUserId, []);
-
+  const { activated, setActivated } = useContext(SideBarContext);
+  const { playerState, dispatch } = useContext(PlayerContext);
   const { data: playerId, error } = loginState;
 
   useEffect(() => {
+    if (!playerId) return;
     dispatch({ type: playerActions.LOGIN, payload: playerId });
-  }, []);
+  }, [loginState]);
 
   return activated ? (
     <>
