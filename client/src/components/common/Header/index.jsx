@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { faUserCircle, faBars } from '@fortawesome/free-solid-svg-icons';
 import { FilterContext } from '../../../contexts/Filter/Context';
+import { SideBarContext } from '../../../contexts/SideBar/Context';
 import './Header.scss';
 import './hamburger.css';
 
@@ -49,15 +50,17 @@ const NavBar = () => {
   );
 };
 
-const HamburgerBtn = () => {
+export const HamburgerBtn = ({ onClick }) => {
   const [openState, setOpenState] = useState('');
+  const { setActivated } = useContext(SideBarContext);
   const hamClickHandler = () => {
     const newValue = openState === 'is-active' ? '' : 'is-active';
     setOpenState(newValue);
+    setActivated(true);
   };
   return (
     <button
-      onClick={() => hamClickHandler()}
+      onClick={hamClickHandler}
       className={`hamburger hamburger--spin ${openState}`}
       type="button"
     >

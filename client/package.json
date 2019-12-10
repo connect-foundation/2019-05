@@ -20,6 +20,7 @@
     "node-sass": "^4.13.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
+    "react-burger-menu": "^2.6.13",
     "react-dates": "^21.5.0",
     "react-dom": "^16.12.0",
     "react-md-spinner": "^1.0.0",
@@ -33,7 +34,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --verbose --coverage",
     "test-all": "react-scripts test --verbose --coverage --watchAll",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "yarn cypress open",
+    "cypress:run": "yarn cypress run"
   },
   "browserslist": {
     "production": [

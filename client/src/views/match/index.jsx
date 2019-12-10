@@ -13,11 +13,12 @@ import {
   MatchRegistModal,
 } from '../../components/match';
 import { MatchProvider } from '../../contexts/Match/Context';
-
+import { SideBar } from '../../components/common/';
 import './index.scss';
 
 const match = () => (
   <MatchProvider>
+    <SideBar />
     <div className="match">
       <Header />
       <div className="grid-container">
