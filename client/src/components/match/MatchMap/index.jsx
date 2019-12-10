@@ -53,7 +53,9 @@ const MatchMap = () => {
   if (mapLoading || districtLoding) {
     return (
       <div className="match-map">
-        <MDSpinner size="80px" borderSize="7px" />
+        <div className="spinner-container">
+          <MDSpinner size="80px" borderSize="7px" />
+        </div>
       </div>
     );
   }
