@@ -28,7 +28,7 @@ const LIMIT_SELECT_DISTRICT_CNT = 5;
 const ONE_SECOND = 1000;
 
 const getNaverMap = async () => {
-  await loadJs(NAVER_MAP_API_REQUEST_URL);
+  await loadJs({ url: NAVER_MAP_API_REQUEST_URL, cache: false });
   return window.naver.maps;
 };
 
