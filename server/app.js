@@ -24,7 +24,7 @@ const server = new GraphQLServer({
 
 const app = server.express;
 
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'http://127.0.0.1:3000' }));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
