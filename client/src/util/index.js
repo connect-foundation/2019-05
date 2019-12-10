@@ -1,5 +1,6 @@
 import {
   convertDistrictCode,
+  convertDistrictName,
   setDistrict,
   getDistrict,
   findDistrictToName,
@@ -8,6 +9,7 @@ import {
 
 export {
   convertDistrictCode,
+  convertDistrictName,
   setDistrict,
   getDistrict,
   findDistrictToName,

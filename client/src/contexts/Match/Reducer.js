@@ -1,4 +1,9 @@
 import matchActions from './Actions';
+import {
+  findDistrictToName,
+  changeDistrictInfo,
+  getDistrict,
+} from '../../util';
 
 const matchReducer = (state, action) => {
   /* eslint indent: ["error", 2, { "SwitchCase": 1 }] */
@@ -8,26 +13,14 @@ const matchReducer = (state, action) => {
         ...state,
         isViewRegistModal: !state.isViewRegistModal,
       };
-    case matchActions.INSERT_SELECT_DISTRICT: {
-      const { districtMarker, curDistrictName } = action.payload;
-      const newMarkers = { ...state.selectedDistricts };
-      newMarkers[curDistrictName] = districtMarker;
+    case matchActions.CLICK_DISTRICT: {
+      const { clickedDName } = action.payload;
+      const selected = { ...findDistrictToName(clickedDName) };
+      selected.isSelected = !selected.isSelected;
+      changeDistrictInfo(selected);
       return {
         ...state,
-        selectedDistricts: newMarkers,
-      };
-    }
-    case matchActions.DELETE_SELECT_DISTRICT: {
-      const { curDistrictName } = action.payload;
-      const newMarkers = {};
-      Object.entries(state.selectedDistricts).forEach(([name, marker]) => {
-        if (name !== curDistrictName) {
-          newMarkers[name] = marker;
-        }
-      });
-      return {
-        ...state,
-        selectedDistricts: newMarkers,
+        districtInfo: getDistrict(),
       };
     }
     default:
