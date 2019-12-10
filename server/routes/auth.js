@@ -24,8 +24,8 @@ const successLogin = (req, res) => {
 };
 
 function publishToken(req, res, next) {
-  const { id } = req.user;
-  const payload = { id };
+  const playerId = req.user.id;
+  const payload = { playerId };
   const expiresIn = { expiresIn: '5m' };
   const token = jwt.sign(payload, env.JWT_SECRET, expiresIn);
   res.cookie('jwt', token);
