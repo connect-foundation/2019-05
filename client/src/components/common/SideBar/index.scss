@@ -1,0 +1,49 @@
+@import '../../../commonStyle.scss';
+
+.side-bar {
+  padding: 100px 20px;
+  height: 100vh;
+  z-index: 3000;
+  background: $quick_white;
+  color: $quick_navy;
+  box-shadow: 2px 0 5px rgba(163, 121, 121, 0.5);
+  position: fixed;
+
+  right: 0;
+  top: 0;
+  width: 400px;
+  z-index: 3001;
+
+  animation-duration: 0.3s;
+  animation-name: slidein;
+}
+
+.close-btn {
+  position: absolute;
+  right: 25px;
+  top: 25px;
+  button {
+    appearance: none;
+    border: 0 none;
+    background: none;
+    cursor: pointer;
+  }
+}
+
+.auth-button {
+  width: fit-content;
+  &__img {
+    width: 100px;
+  }
+  cursor: pointer;
+}
+
+@keyframes slidein {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}

@@ -4,5 +4,14 @@ import ViewTitle from './ViewTitle';
 import DateTimeFilter from './DateTimeFilter';
 import Button from './Button';
 import AreaFilter from './AreaFilter';
+import SideBar from './SideBar';
 
-export { Header, Footer, ViewTitle, DateTimeFilter, Button, AreaFilter };
+export {
+  Header,
+  Footer,
+  ViewTitle,
+  DateTimeFilter,
+  Button,
+  AreaFilter,
+  SideBar,
+};
