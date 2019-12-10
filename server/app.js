@@ -15,6 +15,7 @@ const createError = require('./middlewares/createError');
 const mailRouter = require('./routes/mail');
 const userRouter = require('./routes/user');
 const myTeamRouter = require('./routes/myTeam');
+const cors = require('cors');
 const server = new GraphQLServer({
   typeDefs: './schema.graphql',
   resolvers,
@@ -22,6 +23,8 @@ const server = new GraphQLServer({
 });
 
 const app = server.express;
+
+app.use(cors());
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
