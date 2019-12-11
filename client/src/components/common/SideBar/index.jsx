@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useContext, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
@@ -12,24 +13,23 @@ import naverLoginPng from '../../../assets/images/naver_login_green_mid.PNG';
 import naverLogoutPng from '../../../assets/images/naver_logout_green_mid.PNG';
 
 import './index.scss';
+import useAsync from '../../../hooks/useAsync';
+
+const authenticateUser = async (token) => {
+  if (!token) return null;
+  const response = await axios('http://127.0.0.1:4000/user', {
+    headers: { Authorization: token },
+  });
+  return response.data.userInfo.playerId;
+};
 
 const SideBar = () => {
   const [cookeis] = useCookies();
   const { activated, setActivated } = useContext(SideBarContext);
   const { playerState, dispatch } = useContext(PlayerContext);
-  const [playerId, setPlayerId] = useState(null);
 
-  const authenticateUser = async () => {
-    const response = await axios('http://127.0.0.1:4000/user', {
-      headers: { Authorization: cookeis.jwt },
-    });
-    setPlayerId(response.data.userInfo.playerId);
-  };
-
-  useEffect(() => {
-    if (!cookeis.jwt) return;
-    authenticateUser();
-  }, []);
+  const [loginState] = useAsync(authenticateUser.bind(null, cookeis.jwt), []);
+  const { data: playerId } = loginState;
 
   useEffect(() => {
     if (!playerId) return;
@@ -71,15 +71,19 @@ const LoginWithNaver = ({ isLoggedIn }) => {
 };
 
 const Notifications = () => {
-  const matches = ['match 1', 'match 2', 'match 3'];
+  const matches = [
+    { seq: 1, content: 'match 1' },
+    { seq: 2, content: 'match 2' },
+    { seq: 3, content: 'match 3' },
+  ];
   return (
     <>
       <hr />
       <h2>알람 신청 목록</h2>
 
       <ul>
-        {matches.map((match, idx) => (
-          <li key={idx}>{match}</li>
+        {matches.map((match) => (
+          <li key={match.seq}>{match.content}</li>
         ))}
       </ul>
     </>
@@ -99,7 +103,7 @@ const TeamInfo = () => (
     <p>팀명: 킹동</p>
 
     <p>이름: 킹동</p>
-    <button>팀 페이지로 이동</button>
+    <button type="button">팀 페이지로 이동</button>
   </div>
 );
 
