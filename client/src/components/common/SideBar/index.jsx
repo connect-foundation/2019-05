@@ -19,7 +19,7 @@ const SideBar = () => {
   const { playerState, dispatch } = useContext(PlayerContext);
   const [playerId, setPlayerId] = useState(null);
 
-  const getUserId = async () => {
+  const authenticateUser = async () => {
     const response = await axios('http://127.0.0.1:4000/user', {
       headers: { Authorization: cookeis.jwt },
     });
@@ -28,7 +28,7 @@ const SideBar = () => {
 
   useEffect(() => {
     if (!cookeis.jwt) return;
-    getUserId();
+    authenticateUser();
   }, []);
 
   useEffect(() => {
