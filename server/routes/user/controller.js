@@ -5,6 +5,7 @@ const { prisma } = require('../../generated/prisma-client');
 const getUserInfo = (req, res) => {
   const token = req.cookies.jwt;
   try {
+    console.log(token);
     const userInfo = jwt.verify(token, env.JWT_SECRET);
     res.status(200).json({status: 200, userInfo});
   } catch {
