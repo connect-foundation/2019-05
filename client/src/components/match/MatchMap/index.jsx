@@ -37,6 +37,44 @@ const getDistrcitData = async () => {
   return response.data.response.result.featureCollection.features;
 };
 
+const renderMapLoadingView = () => {
+  return (
+    <div className="match-map">
+      <div className="spinner-container">
+        <MDSpinner size="80px" borderSize="7px" />
+      </div>
+    </div>
+  );
+};
+
+const renderMapErrorView = (reFetchNaverMap) => {
+  return (
+    <div className="match-map">
+      <button type="button" onClick={reFetchNaverMap}>
+        맵 다시 불러오기
+      </button>
+    </div>
+  );
+};
+
+const renderDistrictErrorView = (reFetchDisrictData) => {
+  return (
+    <div className="match-map">
+      <button type="button" onClick={reFetchDisrictData}>
+        지역 정보 다시 불러오기
+      </button>
+    </div>
+  );
+};
+
+const renderMapView = (mapData, districtData) => {
+  return (
+    <div className="match-map">
+      <NaverMap mapData={mapData} districtData={districtData} />
+    </div>
+  );
+};
+
 const MatchMap = () => {
   const [naverMapState, reFetchNaverMap] = useAsync(getNaverMap, []);
   const [seoulDistrictState, reFetchDisrictData] = useAsync(
@@ -51,39 +89,17 @@ const MatchMap = () => {
   } = seoulDistrictState;
 
   if (mapLoading || districtLoding) {
-    return (
-      <div className="match-map">
-        <div className="spinner-container">
-          <MDSpinner size="80px" borderSize="7px" />
-        </div>
-      </div>
-    );
+    return renderMapLoadingView();
   }
   if (mapError) {
-    return (
-      <div className="match-map">
-        <button type="button" onClick={reFetchNaverMap}>
-          맵 다시 불러오기
-        </button>
-      </div>
-    );
+    return renderMapErrorView(reFetchNaverMap);
   }
   if (districtError) {
-    return (
-      <div className="match-map">
-        <button type="button" onClick={reFetchDisrictData}>
-          지역 정보 다시 불러오기
-        </button>
-      </div>
-    );
+    return renderDistrictErrorView(reFetchDisrictData);
   }
   if (!mapData) return null;
   if (!districtData) return null;
-  return (
-    <div className="match-map">
-      <NaverMap mapData={mapData} districtData={districtData} />
-    </div>
-  );
+  return renderMapView(mapData, districtData);
 };
 
 const NaverMap = (props) => {
