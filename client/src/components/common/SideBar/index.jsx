@@ -8,18 +8,17 @@ import naver_logout from '../../../../src/assets/images/naver_logout_green_mid.P
 
 const SideBar = () => {
   const { activated, setActivated } = useContext(SideBarContext);
-  const [isLoggedIn, setLogIn] = useState(true);
-  return activated ? (
+  const [isLoggedIn, setLogIn] = useState(false);
+  const openState = activated ? 'side-bar--opening' : '';
+  return (
     <>
-      <nav className="side-bar">
+      <nav className={`side-bar ${openState}`}>
         <TeamInfo />
         <CloseBtn activated={activated} setActivated={setActivated} />
         <LoginWithNaver isLoggedIn={isLoggedIn} setLogIn={setLogIn} />
         <Notifications />
       </nav>
     </>
-  ) : (
-    <></>
   );
 };
 
@@ -29,11 +28,13 @@ const LoginWithNaver = ({ isLoggedIn, setLogIn }) => {
   };
   return (
     <div className="auth-button" onClick={handleClick}>
-      <img
-        className="auth-button__img"
-        src={isLoggedIn ? naver_logout : naver_login}
-        alt="login/logout btn"
-      />
+      <a href="http://127.0.0.1:4000/auth/naver">
+        <img
+          className="auth-button__img"
+          src={isLoggedIn ? naver_logout : naver_login}
+          alt="login/logout btn"
+        />
+      </a>
     </div>
   );
 };
@@ -44,7 +45,6 @@ const Notifications = () => {
     <>
       <hr />
       <h2>알람 신청 목록</h2>
-
       <ul>
         {matches.map((match, idx) => (
           <li key={idx}>{match}</li>
@@ -67,7 +67,7 @@ const TeamInfo = () => (
     <p>팀명: 킹동</p>
 
     <p>이름: 킹동</p>
-    <button>팀 페이지로 이동</button>
+    <button className="btn">팀 페이지</button>
   </div>
 );
 
