@@ -5,7 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development node ./app.js",
     "start-prod": "cross-env NODE_ENV=production node ./app.js",
-    "test": "echo test ok"
+    "test": "jest --verbose --coverage --watch",
+    "test-all": "jest --verbose --coverage --watchAll"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -27,6 +28,9 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "prettier": "^1.19.1"
+    "@types/jest": "^24.0.23",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "supertest": "^4.0.2"
   }
 }
