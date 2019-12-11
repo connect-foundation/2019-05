@@ -145,6 +145,23 @@ const resolvers = {
         endTime,
       });
     },
+    UpdateTeamInfo: (
+      _,
+      { seq, name, logo, homeArea, introduction },
+      { prisma }
+    ) => {
+      return prisma.updateTeam({
+        data: {
+          name,
+          logo,
+          homeArea,
+          introduction,
+        },
+        where: {
+          seq,
+        },
+      });
+    },
   }, // mutation
   Match: {
     author: ({ seq }, _, { prisma }) => {

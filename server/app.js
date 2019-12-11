@@ -14,7 +14,7 @@ const errorRouter = require('./routes/error');
 const createError = require('./middlewares/createError');
 const mailRouter = require('./routes/mail');
 const userRouter = require('./routes/user');
-const myTeamRouter = require('./routes/myTeam');
+const myteamRouter = require('./routes/myteam');
 const cors = require('cors');
 const server = new GraphQLServer({
   typeDefs: './schema.graphql',
@@ -24,8 +24,8 @@ const server = new GraphQLServer({
 
 const app = server.express;
 
-app.use(cors({ credentials: true, origin: 'http://127.0.0.1:3000' }));
-
+//app.use(cors({ credentials: true, origin: 'http://127.0.0.1:3000' }));
+app.use(cors());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -40,7 +40,7 @@ app.use(passport.initialize());
 app.use('/auth', authRouter);
 app.use('/mail', mailRouter);
 app.use('/user', userRouter);
-app.use('/myTeam', myTeamRouter);
+app.use('/myteam', myteamRouter);
 
 server.start(
   {
