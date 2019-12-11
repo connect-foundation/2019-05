@@ -22,6 +22,8 @@ const getUserId = async () => {
 const SideBar = () => {
   const [loginState] = useAsync(getUserId, []);
   const { activated, setActivated } = useContext(SideBarContext);
+  const openState = activated ? 'side-bar--opening' : '';
+
   const { playerState, dispatch } = useContext(PlayerContext);
   const { data: playerId, error } = loginState;
 
@@ -30,9 +32,9 @@ const SideBar = () => {
     dispatch({ type: playerActions.LOGIN, payload: playerId });
   }, [loginState]);
 
-  return activated ? (
+  return (
     <>
-      <nav className="side-bar">
+      <nav className={`side-bar ${openState}`}>
         <TeamInfo />
         <CloseBtn activated={activated} setActivated={setActivated} />
         {error ? <span>error</span> : ''}
@@ -40,8 +42,6 @@ const SideBar = () => {
         <Notifications />
       </nav>
     </>
-  ) : (
-    <></>
   );
 };
 
@@ -65,7 +65,6 @@ const Notifications = () => {
     <>
       <hr />
       <h2>알람 신청 목록</h2>
-
       <ul>
         {matches.map((match, idx) => (
           <li key={idx}>{match}</li>
@@ -88,7 +87,7 @@ const TeamInfo = () => (
     <p>팀명: 킹동</p>
 
     <p>이름: 킹동</p>
-    <button>팀 페이지로 이동</button>
+    <button className="btn">팀 페이지</button>
   </div>
 );
 
