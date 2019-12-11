@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import useAsync from '../../hooks/useAsync';
 import { Header, Footer } from '../../components/common';
 import { TeamIntroduction } from '../../components/myteam';
@@ -66,12 +66,16 @@ const Myteam = () => {
     data: teamData,
     error: teamError,
   } = teamFetchData;
+  const [teamInfo, setTeamInfo] = useState();
+  useEffect(() => {
+    if (!teamData) return;
+    setTeamInfo(teamData.Team);
+  }, [teamData]);
   if (teamDataLoading || teamError) return null;
-
   return (
     <div className="myTeam">
       <Header />
-      <TeamIntroduction teamData={teamData} reFetchTeamData={reFetchTeamData} />
+      <TeamIntroduction teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
       <Footer />
     </div>
   );

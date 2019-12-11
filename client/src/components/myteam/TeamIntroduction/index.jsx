@@ -1,12 +1,21 @@
-import React, { useContext, useState, useRef, forwardRef } from 'react';
+import React, { useState, useRef, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { getDistrict, convertDistrictCode } from '../../../util';
 
 import './index.scss';
 
 const SEOUL_DISTRICT = getDistrict();
+const gql = `
+mutation($seq: Int, $name: String, $logo: String, $homeArea: Area, $introduction: String){
+  UpdateTeamInfo(seq: $seq, name: $name, logo: $logo, homeArea: $homeArea, introduction: $introduction){
+    name
+    logo
+    homeArea
+    introduction
+  }
+}`;
 
-const TeamIntroduction = ({ teamData, reFetchTeamData }) => {
+const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
   const [modState, setModState] = useState(false);
   const teamInfoRef = {
     emblem: useRef(),
@@ -14,18 +23,81 @@ const TeamIntroduction = ({ teamData, reFetchTeamData }) => {
     home: useRef(),
     intro: useRef(),
   };
-  const updateTeamInfo = () => {};
+  const makeFormData = () => {
+    const teamInfoForm = new FormData();
+    Object.entries(teamInfoRef).forEach((ref) => {
+      const refValue =
+        ref[0] === 'emblem' ? ref[1].current.files[0] : ref[1].current.value;
+      teamInfoForm.append(ref[1].current.name, refValue);
+    });
+    return teamInfoForm;
+  };
+  const updateEmblemImage = async (formData) => {
+    if (formData.get('emblem') === 'undefined') return false;
+    const response = await fetch(
+      process.env.REACT_APP_API_SERVER_ADDRESS + '/myteam/emblem',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+    const imgUploadResult = await response.json();
+    return imgUploadResult;
+  };
+  const updateTeamInfo = async () => {
+    const teamInfoForm = makeFormData();
+    const imgUploadResult = await updateEmblemImage(teamInfoForm);
+    if (imgUploadResult.result === 'error') {
+      const msg =
+        typeof imgUploadResult.msg === 'string'
+          ? imgUploadResult.msg
+          : '이미지 업로드에 문제가 발생했습니다. 다시 시도해주세요.';
+      alert(msg);
+      return false;
+    }
 
-  const handleModBtnClick = () => {
+    const fetchBody = {
+      query: gql,
+      variables: {
+        seq: 5,
+        name: teamInfoForm.get('teamName'),
+        logo: imgUploadResult ? imgUploadResult.name : undefined,
+        homeArea: teamInfoForm.get('homeArea'),
+        introduction: teamInfoForm.get('teamIntro'),
+      },
+    };
+    const fetchOption = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(fetchBody),
+    };
+    const data = await fetch(
+      process.env.REACT_APP_GRAPHQL_ENDPOINT,
+      fetchOption
+    );
+    const result = await data.json();
+    return result.data.UpdateTeamInfo;
+  };
+
+  const handleModBtnClick = async () => {
     if (!modState) {
       setModState(!modState);
       return;
     }
-    updateTeamInfo();
+    const uploadResult = await updateTeamInfo();
+    setTeamInfo({
+      ...teamInfo,
+      name: uploadResult.name,
+      logo: uploadResult.logo,
+      homeArea: uploadResult.homeArea,
+      introduction: uploadResult.introduction,
+    });
     setModState(!modState);
   };
 
-  if (!teamData) return null;
+  if (!teamInfo) return null;
   return (
     <div className="team-introduction">
       <div className="grid-container">
@@ -41,15 +113,15 @@ const TeamIntroduction = ({ teamData, reFetchTeamData }) => {
         </div>
         <div className="team-info__container">
           <EmblemSection
-            logo={teamData.Team.logo}
-            name={teamData.Team.name}
+            logo={teamInfo.logo}
+            name={teamInfo.name}
             mod={modState}
             ref={teamInfoRef.emblem}
           />
           <TeamNameSection
-            name={teamData.Team.name}
-            home={teamData.Team.homeArea}
-            intro={teamData.Team.introduction}
+            name={teamInfo.name}
+            home={teamInfo.homeArea}
+            intro={teamInfo.introduction}
             mod={modState}
             ref={teamInfoRef}
           />
