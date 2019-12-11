@@ -10,7 +10,7 @@ router.get('/', (req, res, next) => {
       html: template,
     })
     .fireMail();
-  res.send('done!');
+  res.json({ result: 'ok', msg: 'The email has successfully sent.' });
 });
 
 router.post('/', function(req, res, next) {
@@ -32,7 +32,7 @@ router.post('/', function(req, res, next) {
       html: template,
     })
     .fireMail();
-  res.send('done!');
+  res.json({ result: 'ok', msg: 'The email has successfully sent.' });
 });
 
 module.exports = router;
