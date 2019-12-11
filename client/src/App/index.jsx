@@ -7,7 +7,7 @@ const App = () => (
     <Switch>
       <Route exact path="/" component={home} />
       <Route path="/match" component={match} />
-      <Route path="/myteam/:seq" component={myteam} />
+      <Route path="/myteam" component={myteam} />
       <Route component={error} />
     </Switch>
   </div>
