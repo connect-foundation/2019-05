@@ -3,16 +3,20 @@ const passport = require('../../middlewares/passport');
 const { env } = process;
 
 const startNaverLogin = (req, res, next) => {
-  passport.authenticate('naver', null)(req,res,next);
+  passport.authenticate('naver', null)(req, res, next);
 };
 
 const failMessage = (req, res) => {
   console.log('/auth/naver failed, stopped');
-  res.status(400).json({status: 400, msg: 'naver-login failed, stopped'})
+  res.status(400).json({ status: 400, msg: 'naver-login failed, stopped' });
 };
 
 const successOrFailLogin = (req, res, next) => {
-  passport.authenticate('naver', {failureRedirect: '#!/auth/login'})(req,res,next);
+  passport.authenticate('naver', { failureRedirect: '#!/auth/login' })(
+    req,
+    res,
+    next
+  );
 };
 
 function publishToken(req, res, next) {
