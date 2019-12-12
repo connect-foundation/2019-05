@@ -1,17 +1,23 @@
 @import '../../../commonStyle';
 
 .home-quick-match {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  height: calc(100vh - #{$header-height + $footer-height});
+  height: calc(100vh - #{$header-height});
   min-height: 550px;
-
+  background: url('../../../assets/images/background.jpg') center center;
+  background-size: auto;
+  &__layer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: #53a7dd;
+    opacity: 0.2;
+  }
   .grid-container {
     text-align: center;
   }
-
-  .home__section-title {
+  #53A7DD .home__section-title {
     margin-bottom: 20px;
     font-size: 50px;
   }

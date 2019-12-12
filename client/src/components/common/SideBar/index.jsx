@@ -24,10 +24,16 @@ const authenticateUser = async (token) => {
 
 const SideBar = () => {
   const [cookeis] = useCookies();
+<<<<<<< HEAD
+  const { activated, setActivated } = useContext(SideBarContext);
+  const openState = activated ? 'side-bar--opening' : '';
+  const { playerState, dispatch } = useContext(PlayerContext);
+=======
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
   const openState = sideBarState.activated ? 'side-bar--opening' : '';
 
   const { userState, userDispatch } = useContext(UserContext);
+>>>>>>> be35d58f6a194162d4711b8df857149bcb0a357a
 
   const [loginState] = useAsync(authenticateUser.bind(null, cookeis.jwt), []);
   const { data: playerId } = loginState;

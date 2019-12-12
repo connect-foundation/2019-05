@@ -13,7 +13,7 @@ const DateTimeFilter = () => {
     <div className="match-filter">
       <DatePicker />
       <TimeRangePicker />
-      <RankSwitch />
+      {/* <RankSwitch /> */}
       <NotificationBtn />
     </div>
   );

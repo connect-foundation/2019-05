@@ -24,7 +24,11 @@ const ServiceLogo = () => (
   </Link>
 );
 
+<<<<<<< HEAD
+export const HamburgerBtn = ({ onClick }) => {
+=======
 export const HamburgerBtn = () => {
+>>>>>>> be35d58f6a194162d4711b8df857149bcb0a357a
   const [openState, setOpenState] = useState('');
   const { sideBarDispatch } = useContext(SideBarContext);
   const hamClickHandler = () => {
