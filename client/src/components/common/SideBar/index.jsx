@@ -61,8 +61,8 @@ const LoginWithNaver = ({ isLoggedIn }) => {
       <a
         href={
           !isLoggedIn
-            ? 'http://127.0.0.1:4000/auth/naver'
-            : 'http://127.0.0.1:4000/auth/logout'
+            ? process.env.REACT_APP_DOMAIN + '/api/auth/naver'
+            : process.env.REACT_APP_DOMAIN + '/api/auth/logout'
         }
       >
         <img
