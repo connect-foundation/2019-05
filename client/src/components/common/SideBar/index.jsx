@@ -1,43 +1,48 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useContext, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+
 import { SideBarContext } from '../../../contexts/SideBar/Context';
 import { PlayerContext } from '../../../contexts/User/Context';
 import { playerActions } from '../../../contexts/User/Reducer';
-import useAsync from '../../../hooks/useAsync';
+
 import naverLoginPng from '../../../assets/images/naver_login_green_mid.PNG';
 import naverLogoutPng from '../../../assets/images/naver_logout_green_mid.PNG';
-import './index.scss';
 
-const getUserId = async () => {
+import './index.scss';
+import useAsync from '../../../hooks/useAsync';
+
+const authenticateUser = async (token) => {
+  if (!token) return null;
   const response = await axios('http://127.0.0.1:4000/user', {
-    withCredentials: true,
-    mode: 'cors',
-    credentials: 'include',
+    headers: { Authorization: token },
   });
   return response.data.userInfo.playerId;
 };
 
 const SideBar = () => {
-  const [loginState] = useAsync(getUserId, []);
+  const [cookeis] = useCookies();
   const { activated, setActivated } = useContext(SideBarContext);
   const openState = activated ? 'side-bar--opening' : '';
 
   const { playerState, dispatch } = useContext(PlayerContext);
-  const { data: playerId, error } = loginState;
+
+  const [loginState] = useAsync(authenticateUser.bind(null, cookeis.jwt), []);
+  const { data: playerId } = loginState;
 
   useEffect(() => {
     if (!playerId) return;
     dispatch({ type: playerActions.LOGIN, payload: playerId });
-  }, [loginState]);
+  }, [playerId]);
 
   return (
     <>
       <nav className={`side-bar ${openState}`}>
         <TeamInfo />
         <CloseBtn activated={activated} setActivated={setActivated} />
-        {error ? <span>error</span> : ''}
         <LoginWithNaver isLoggedIn={!!playerState.playerId} />
         <Notifications />
       </nav>
@@ -48,7 +53,13 @@ const SideBar = () => {
 const LoginWithNaver = ({ isLoggedIn }) => {
   return (
     <div className="auth-button">
-      <a href="http://127.0.0.1:4000/auth/naver">
+      <a
+        href={
+          !isLoggedIn
+            ? 'http://127.0.0.1:4000/auth/naver'
+            : 'http://127.0.0.1:4000/auth/logout'
+        }
+      >
         <img
           className="auth-button__img"
           src={isLoggedIn ? naverLogoutPng : naverLoginPng}
@@ -60,14 +71,18 @@ const LoginWithNaver = ({ isLoggedIn }) => {
 };
 
 const Notifications = () => {
-  const matches = ['match 1', 'match 2', 'match 3'];
+  const matches = [
+    { seq: 1, content: 'match 1' },
+    { seq: 2, content: 'match 2' },
+    { seq: 3, content: 'match 3' },
+  ];
   return (
     <>
       <hr />
       <h2>알람 신청 목록</h2>
       <ul>
-        {matches.map((match, idx) => (
-          <li key={idx}>{match}</li>
+        {matches.map((match) => (
+          <li key={match.seq}>{match.content}</li>
         ))}
       </ul>
     </>
