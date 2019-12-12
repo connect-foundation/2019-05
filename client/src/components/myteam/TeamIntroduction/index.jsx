@@ -113,7 +113,12 @@ const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
           </button>
         </div>
         <div className="team-info__container">
-          <input type="hidden" name="seq" value={teamInfo.seq} />
+          <input
+            type="hidden"
+            name="seq"
+            value={teamInfo.seq}
+            ref={teamInfoRef.seq}
+          />
           <EmblemSection
             logo={teamInfo.logo}
             name={teamInfo.name}
