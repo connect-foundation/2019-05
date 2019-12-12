@@ -27,29 +27,6 @@ const ServiceLogo = () => (
   </Link>
 );
 
-const NavBar = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const { dispatch } = useContext(FilterContext);
-
-  const handleOnClick = () => dispatch({ type: 'INITIALIZE_STATE' });
-
-  useEffect(() => {
-    const cookie = document.cookie.split('=')[1];
-    setIsLogin(cookie === 'true');
-  }, []);
-
-  return (
-    <nav className="nav-bar">
-      <Link to="/match">
-        <div className="nav-bar__button" onClick={handleOnClick}>
-          매치 검색
-        </div>
-      </Link>
-      {isLogin ? <UserIcon /> : <LoginBtn />}
-    </nav>
-  );
-};
-
 export const HamburgerBtn = ({ onClick }) => {
   const [openState, setOpenState] = useState('');
   const { setActivated } = useContext(SideBarContext);
