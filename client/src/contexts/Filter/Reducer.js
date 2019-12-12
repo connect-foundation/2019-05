@@ -1,28 +1,22 @@
-import moment from 'moment';
+import actions from './Actions';
+import initialState from './InitialState';
 
-const filterInitialState = {
-  matchDay: moment(),
-  startTime: '10:00',
-  endTime: '12:00',
-  isSimilerRank: false,
-};
-
-const filterReducer = (state, action) => {
+const Reducer = (state, action) => {
   /* eslint indent: ["error", 2, { "SwitchCase": 1 }] */
   switch (action.type) {
-    case 'SET_MATCH_DAY':
+    case actions.SET_MATCH_DAY:
       return { ...state, matchDay: action.payload };
-    case 'SET_START_TIME':
+    case actions.SET_START_TIME:
       return { ...state, startTime: action.payload };
-    case 'SET_END_TIME':
+    case actions.SET_END_TIME:
       return { ...state, endTime: action.payload };
-    case 'SET_SIMILER_RANK':
+    case actions.SET_SIMILER_RANK:
       return { ...state, isSimilerRank: !state.isSimilerRank };
-    case 'INITIALIZE_STATE':
-      return { ...filterInitialState };
+    case actions.INITIALIZE_STATE:
+      return { ...initialState };
     default:
       throw new Error('Unhandled action!');
   }
 };
 
-export default filterReducer;
+export default Reducer;
