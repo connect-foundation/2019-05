@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { SideBarContext } from '../../../contexts/SideBar/Context';
-import { PlayerContext } from '../../../contexts/User/Context';
-import { playerActions } from '../../../contexts/User/Reducer';
+import { SideBarActions, SideBarContext } from '../../../contexts/SideBar';
+import { UserContext, UserActions } from '../../../contexts/User';
 
 import naverLoginPng from '../../../assets/images/naver_login_green_mid.PNG';
 import naverLogoutPng from '../../../assets/images/naver_logout_green_mid.PNG';
@@ -25,30 +24,45 @@ const authenticateUser = async (token) => {
 
 const SideBar = () => {
   const [cookeis] = useCookies();
+<<<<<<< HEAD
   const { activated, setActivated } = useContext(SideBarContext);
   const openState = activated ? 'side-bar--opening' : '';
   const { playerState, dispatch } = useContext(PlayerContext);
+=======
+  const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
+  const openState = sideBarState.activated ? 'side-bar--opening' : '';
+
+  const { userState, userDispatch } = useContext(UserContext);
+>>>>>>> be35d58f6a194162d4711b8df857149bcb0a357a
 
   const [loginState] = useAsync(authenticateUser.bind(null, cookeis.jwt), []);
   const { data: playerId } = loginState;
 
+  const handleActivated = () => {
+    sideBarDispatch({
+      type: SideBarActions.TOGGLE_ACTIVATED,
+    });
+  };
+
   useEffect(() => {
     if (!playerId) return;
-    dispatch({ type: playerActions.LOGIN, payload: playerId });
+    userDispatch({ type: UserActions.LOGIN, payload: playerId });
   }, [playerId]);
 
   return (
     <>
       <nav className={`side-bar ${openState}`}>
         <TeamInfo />
-        <CloseBtn activated={activated} setActivated={setActivated} />
-        <LoginWithNaver isLoggedIn={!!playerState.playerId} />
+        <CloseBtn
+          activated={sideBarState.activated}
+          setActivated={handleActivated}
+        />
+        <LoginWithNaver isLoggedIn={!!userState.playerId} />
         <Notifications />
       </nav>
     </>
   );
 };
-
 const LoginWithNaver = ({ isLoggedIn }) => {
   return (
     <div className="auth-button">
@@ -68,7 +82,6 @@ const LoginWithNaver = ({ isLoggedIn }) => {
     </div>
   );
 };
-
 const Notifications = () => {
   const matches = [
     { seq: 1, content: 'match 1' },
@@ -94,15 +107,12 @@ const CloseBtn = ({ activated, setActivated }) => (
     </button>
   </div>
 );
-
 const TeamInfo = () => (
   <div>
     <h2>팀 정보</h2>
     <p>팀명: 킹동</p>
-
     <p>이름: 킹동</p>
     <button className="btn">팀 페이지</button>
   </div>
 );
-
 export default SideBar;

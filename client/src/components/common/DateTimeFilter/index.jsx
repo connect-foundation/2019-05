@@ -5,7 +5,7 @@ import TimePicker from 'react-times';
 import 'react-times/css/classic/default.css';
 import 'react-dates/lib/css/_datepicker.css';
 import Switch from 'react-switch';
-import { FilterContext } from '../../../contexts/Filter/Context';
+import { FilterContext, FilterActions } from '../../../contexts/Filter';
 import './index.scss';
 
 const DateTimeFilter = () => {
@@ -21,10 +21,10 @@ const DateTimeFilter = () => {
 
 const DatePicker = () => {
   const [focused, setFocused] = useState(false);
-  const { filterState, dispatch } = useContext(FilterContext);
+  const { filterState, filterDispatch } = useContext(FilterContext);
   const handleChange = (date) => {
-    dispatch({
-      type: 'SET_MATCH_DAY',
+    filterDispatch({
+      type: FilterActions.SET_MATCH_DAY,
       payload: date,
     });
   };
@@ -44,20 +44,20 @@ const DatePicker = () => {
 };
 
 const TimeRangePicker = () => {
-  const { filterState, dispatch } = useContext(FilterContext);
+  const { filterState, filterDispatch } = useContext(FilterContext);
   const { startTime, endTime } = filterState;
 
   const handleStartTimeChange = (time) => {
     const { hour, minute } = time;
-    dispatch({
-      type: 'SET_START_TIME',
+    filterDispatch({
+      type: FilterActions.SET_START_TIME,
       payload: `${hour}:${minute}`,
     });
   };
   const handleEndTimeChange = (time) => {
     const { hour, minute } = time;
-    dispatch({
-      type: 'SET_END_TIME',
+    filterDispatch({
+      type: FilterActions.SET_END_TIME,
       payload: `${hour}:${minute}`,
     });
   };
@@ -81,8 +81,8 @@ const TimeRangePicker = () => {
 
 // 랭킹 토글
 const RankSwitch = () => {
-  const { filterState, dispatch } = useContext(FilterContext);
-  const handleChange = () => dispatch({ type: 'SET_SIMILER_RANK' });
+  const { filterState, filterDispatch } = useContext(FilterContext);
+  const handleChange = () => filterDispatch({ type: 'SET_SIMILER_RANK' });
 
   return (
     <div className="rank-switch">

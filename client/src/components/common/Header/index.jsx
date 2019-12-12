@@ -1,9 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { faUserCircle, faBars } from '@fortawesome/free-solid-svg-icons';
-import { FilterContext } from '../../../contexts/Filter/Context';
-import { SideBarContext } from '../../../contexts/SideBar/Context';
+import { SideBarContext, SideBarActions } from '../../../contexts/SideBar';
 import './Header.scss';
 import './hamburger.css';
 
@@ -27,13 +24,19 @@ const ServiceLogo = () => (
   </Link>
 );
 
+<<<<<<< HEAD
 export const HamburgerBtn = ({ onClick }) => {
+=======
+export const HamburgerBtn = () => {
+>>>>>>> be35d58f6a194162d4711b8df857149bcb0a357a
   const [openState, setOpenState] = useState('');
-  const { setActivated } = useContext(SideBarContext);
+  const { sideBarDispatch } = useContext(SideBarContext);
   const hamClickHandler = () => {
     const newValue = openState === 'is-active' ? '' : 'is-active';
     setOpenState(newValue);
-    setActivated(true);
+    sideBarDispatch({
+      type: SideBarActions.TOGGLE_ACTIVATED,
+    });
   };
   return (
     <button
@@ -47,24 +50,5 @@ export const HamburgerBtn = ({ onClick }) => {
     </button>
   );
 };
-
-const LoginBtn = () => (
-  <div className="nav-bar__login">
-    <a href="http://127.0.0.1:4000/auth/naver">로그인</a>
-  </div>
-);
-
-const UserIcon = () => (
-  <div className="nav-bar__user-info">
-    <FontAwesomeIcon icon={faUserCircle} size="2x" />
-    <div className="nav-bar__user-detail">
-      <ul>
-        <li>
-          <a href="http://127.0.0.1:4000/auth/logout">로그아웃</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
 
 export default Header;

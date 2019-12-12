@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import MatchCard from '../MatchCard';
 import useAsync from '../../../hooks/useAsync';
-import { FilterContext } from '../../../contexts/Filter/Context';
+import { FilterContext } from '../../../contexts/Filter';
 import { FetchLoadingView, FetchErrorView } from '../../../template';
 import './index.scss';
 

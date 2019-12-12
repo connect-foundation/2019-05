@@ -3,7 +3,7 @@ import loadJs from 'load-js';
 import axios from 'axios';
 
 import useAsync from '../../../hooks/useAsync';
-import { MatchContext } from '../../../contexts/Match/Context';
+import { MatchContext } from '../../../contexts/Match';
 import matchActions from '../../../contexts/Match/Actions';
 import { FetchLoadingView, FetchErrorView } from '../../../template';
 

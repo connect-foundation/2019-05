@@ -1,21 +1,15 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
-import { FilterProvider } from './contexts/Filter/Context';
-import { SideBarProvider } from './contexts/SideBar/Context';
-import { PlayerProvider } from './contexts/User/Context';
+import ProviderWrapper from './contexts/ProviderWrapper';
 import App from './App';
 
 const Root = () => (
   <BrowserRouter>
     <CookiesProvider>
-      <PlayerProvider>
-        <SideBarProvider>
-          <FilterProvider>
-            <App />
-          </FilterProvider>
-        </SideBarProvider>
-      </PlayerProvider>
+      <ProviderWrapper>
+        <App />
+      </ProviderWrapper>
     </CookiesProvider>
   </BrowserRouter>
 );

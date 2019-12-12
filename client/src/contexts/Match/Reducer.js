@@ -1,19 +1,19 @@
-import matchActions from './Actions';
+import actions from './Actions';
 import {
   findDistrictToName,
   changeDistrictInfo,
   getDistrict,
 } from '../../util';
 
-const matchReducer = (state, action) => {
+const Reducer = (state, action) => {
   /* eslint indent: ["error", 2, { "SwitchCase": 1 }] */
   switch (action.type) {
-    case matchActions.TOGGLE_VIEW_MATCH_REGIST_MODAL:
+    case actions.TOGGLE_VIEW_MATCH_REGIST_MODAL:
       return {
         ...state,
         isViewRegistModal: !state.isViewRegistModal,
       };
-    case matchActions.CLICK_DISTRICT: {
+    case actions.CLICK_DISTRICT: {
       const { clickedDName } = action.payload;
       const selected = { ...findDistrictToName(clickedDName) };
       selected.isSelected = !selected.isSelected;
@@ -28,4 +28,4 @@ const matchReducer = (state, action) => {
   }
 };
 
-export default matchReducer;
+export default Reducer;

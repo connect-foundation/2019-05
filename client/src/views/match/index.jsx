@@ -12,7 +12,7 @@ import {
   MatchRegist,
   MatchRegistModal,
 } from '../../components/match';
-import { MatchProvider } from '../../contexts/Match/Context';
+import { MatchProvider } from '../../contexts/Match';
 import { SideBar } from '../../components/common/';
 import './index.scss';
 
