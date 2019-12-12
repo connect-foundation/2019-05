@@ -99,7 +99,7 @@ const Notifications = () => {
     { seq: 2, content: 'match 2' },
     { seq: 3, content: 'match 3' },
   ];
-  const handlerBtnClick = () => {
+  const handleBtnClick = () => {
     setOpen(!open);
   };
   const btnClass = classNames({
@@ -107,7 +107,7 @@ const Notifications = () => {
   });
   return (
     <>
-      <ContentButton className={btnClass} onClick={handlerBtnClick}>
+      <ContentButton className={btnClass} onClick={handleBtnClick}>
         🛎 알림 신청 내역 &nbsp; {open ? '🙉' : '🙈'}
         {open ? <NotiList matches={matches} /> : null}
       </ContentButton>
