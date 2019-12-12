@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,11 +11,12 @@ import {
 } from '../../../contexts/SideBar';
 import { UserContext, UserActionCreator } from '../../../contexts/User';
 
-import naverLoginPng from '../../../assets/images/naver_login_green_mid.PNG';
+import naverLoginPng from '../../../assets/images/naver_login_green_long.PNG';
 import naverLogoutPng from '../../../assets/images/naver_logout_green_mid.PNG';
-
+import barcaLogo from '../../../assets/images/fc-barcelona-logo.png';
 import './index.scss';
 import useAsync from '../../../hooks/useAsync';
+import classNames from 'classnames';
 
 const authenticateUser = async (token) => {
   if (!token) return null;
@@ -43,31 +44,47 @@ const SideBar = () => {
   }, [playerId]);
 
   return (
-    <>
-      <nav className={`side-bar ${openState}`}>
-        <TeamInfo />
-        <CloseBtn
-          activated={sideBarState.activated}
-          setActivated={handleActivated}
-        />
-        <LoginWithNaver isLoggedIn={!!userState.playerId} />
-        <Notifications />
-      </nav>
-    </>
+    <nav className={`side-bar ${openState}`}>
+      <CloseBtn
+        activated={sideBarState.activated}
+        setActivated={handleActivated}
+      />
+      {playerId ? <TeamInfo /> : <></>}
+      {playerId ? <InnerLayerWhenLoggedIn /> : <InnerLayerWhenLoggedOut />}
+      <LoginWithNaver isLoggedIn={!!userState.playerId} />
+    </nav>
   );
 };
+const InnerLayerWhenLoggedIn = () => (
+  <>
+    <ContentButton>🚀예시 버튼</ContentButton>
+    <Notifications />
+  </>
+);
+const InnerLayerWhenLoggedOut = () => (
+  <div className="side-bar__inner-layer--loggedout">
+    <h1>
+      지금 바로 퀵킥의 <br />
+      멤버가 되어 보세요!
+    </h1>
+  </div>
+);
 const LoginWithNaver = ({ isLoggedIn }) => {
+  const authClass = classNames({
+    'auth-button__img--login': !isLoggedIn,
+    'auth-button__img--logout': isLoggedIn,
+  });
   return (
     <div className="auth-button">
       <a
         href={
-          !isLoggedIn
-            ? 'http://127.0.0.1:4000/auth/naver'
-            : 'http://127.0.0.1:4000/auth/logout'
+          isLoggedIn
+            ? 'http://127.0.0.1:4000/auth/logout'
+            : 'http://127.0.0.1:4000/auth/naver'
         }
       >
         <img
-          className="auth-button__img"
+          className={authClass}
           src={isLoggedIn ? naverLogoutPng : naverLoginPng}
           alt="login/logout btn"
         />
@@ -76,23 +93,34 @@ const LoginWithNaver = ({ isLoggedIn }) => {
   );
 };
 const Notifications = () => {
+  const [open, setOpen] = useState(false);
   const matches = [
     { seq: 1, content: 'match 1' },
     { seq: 2, content: 'match 2' },
     { seq: 3, content: 'match 3' },
   ];
+  const handlerBtnClick = () => {
+    setOpen(!open);
+  };
+  const btnClass = classNames({
+    pressed: open,
+  });
   return (
     <>
-      <hr />
-      <h2>알람 신청 목록</h2>
-      <ul>
-        {matches.map((match) => (
-          <li key={match.seq}>{match.content}</li>
-        ))}
-      </ul>
+      <ContentButton className={btnClass} onClick={handlerBtnClick}>
+        🛎 알림 신청 내역 &nbsp; {open ? '🙉' : '🙈'}
+        {open ? <NotiList matches={matches} /> : null}
+      </ContentButton>
     </>
   );
 };
+const NotiList = ({ matches }) => (
+  <ul>
+    {matches.map((match) => (
+      <li key={match.seq}>{match.content}</li>
+    ))}
+  </ul>
+);
 const CloseBtn = ({ activated, setActivated }) => (
   <div className="close-btn">
     <button type="button" onClick={() => setActivated(!activated)}>
@@ -102,10 +130,34 @@ const CloseBtn = ({ activated, setActivated }) => (
 );
 const TeamInfo = () => (
   <div>
-    <h2>팀 정보</h2>
-    <p>팀명: 킹동</p>
-    <p>이름: 킹동</p>
-    <button className="btn">팀 페이지</button>
+    <Emblem />
+    <ContentButton>⚙️팀 페이지</ContentButton>
   </div>
 );
+
+const ContentButton = ({ className, children, onClick }) => {
+  return (
+    <div className={`${className} side-bar__content-button`} onClick={onClick}>
+      {children}
+    </div>
+  );
+};
+
+const Emblem = () => {
+  return (
+    <>
+      <div className="side-bar__emblem-wrapper">
+        <div className="side-bar__emblem">
+          <img src={barcaLogo} alt="" />
+        </div>
+      </div>
+      <div className="side-bar__team-name-wrapper">
+        <div className="side-bar__team-name">
+          <h2>FC Barcelona</h2>
+        </div>
+      </div>
+    </>
+  );
+};
+
 export default SideBar;

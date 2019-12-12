@@ -38,7 +38,7 @@ export const HamburgerBtn = () => {
   return (
     <button
       onClick={hamClickHandler}
-      className={`hamburger hamburger--spin ${openState}`}
+      className={`hamburger ${openState}`}
       type="button"
     >
       <span className="hamburger-box">

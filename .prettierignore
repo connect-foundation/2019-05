@@ -1,5 +1,4 @@
-.prettierignore
-public/*
+client/public
 yarn.lock
 package.json
 README.md
