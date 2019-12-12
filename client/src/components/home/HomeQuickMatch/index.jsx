@@ -14,6 +14,7 @@ const HomeQuickMatch = () => (
         Quick Match!
       </Link>
     </div>
+    <div className="home-quick-match__layer"></div>
   </div>
 );
 
