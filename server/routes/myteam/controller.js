@@ -56,11 +56,10 @@ const uploadEmblemImage = async (req, res) => {
 
     const imgForUpload = await imgResizer(req.file);
 
-    const fileName =
-      Date.now().toString() + '-' + req.body.team + fileExtension;
+    const fileName = Date.now().toString() + '-' + req.body.seq + fileExtension;
 
     await S3.upload({
-      Bucket: env.STORAGE_BUCKET_NAME,
+      Bucket: env.EMBLEM_STORAGE_BUCKET_NAME,
       Key: fileName,
       Body: imgForUpload,
       ACL: 'public-read',

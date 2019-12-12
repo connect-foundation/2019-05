@@ -18,6 +18,7 @@ mutation($seq: Int, $name: String, $logo: String, $homeArea: Area, $introduction
 const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
   const [modState, setModState] = useState(false);
   const teamInfoRef = {
+    seq: useRef(),
     emblem: useRef(),
     name: useRef(),
     home: useRef(),
@@ -112,6 +113,12 @@ const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
           </button>
         </div>
         <div className="team-info__container">
+          <input
+            type="hidden"
+            name="seq"
+            value={teamInfo.seq}
+            ref={teamInfoRef.seq}
+          />
           <EmblemSection
             logo={teamInfo.logo}
             name={teamInfo.name}

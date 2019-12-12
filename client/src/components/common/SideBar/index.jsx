@@ -20,9 +20,12 @@ import classNames from 'classnames';
 
 const authenticateUser = async (token) => {
   if (!token) return null;
-  const response = await axios('http://127.0.0.1:4000/user', {
-    headers: { Authorization: token },
-  });
+  const response = await axios(
+    process.env.REACT_APP_API_SERVER_ADDRESS + '/user',
+    {
+      headers: { Authorization: token },
+    }
+  );
   return response.data.userInfo.playerId;
 };
 
@@ -78,9 +81,9 @@ const LoginWithNaver = ({ isLoggedIn }) => {
     <div className="auth-button">
       <a
         href={
-          isLoggedIn
-            ? 'http://127.0.0.1:4000/auth/logout'
-            : 'http://127.0.0.1:4000/auth/naver'
+          !isLoggedIn
+            ? process.env.REACT_APP_API_SERVER_ADDRESS + '/auth/naver'
+            : process.env.REACT_APP_API_SERVER_ADDRESS + '/auth/logout'
         }
       >
         <img

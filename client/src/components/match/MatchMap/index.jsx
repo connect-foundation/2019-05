@@ -9,7 +9,7 @@ import { FetchLoadingView, FetchErrorView } from '../../../template';
 import './index.scss';
 
 const NAVER_MAP_API_REQUEST_URL = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.REACT_APP_NCP_CLIENT_ID}`;
-const SEOUL_DISTRICT_REQUEST_URL = `/req/data?request=GetFeature&key=${process.env.REACT_APP_MAP_DISTRICT_KEY}&size=25&data=LT_C_ADSIGG_INFO&attrfilter=full_nm:like:서울&domain=${process.env.REACT_APP_DOMAIN}`;
+const SEOUL_DISTRICT_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/map`;
 
 const LIMIT_SELECT_DISTRICT_CNT = 5;
 const ONE_SECOND = 1000;
@@ -37,7 +37,7 @@ const getNaverMap = async () => {
 
 const getDistrcitData = async () => {
   const response = await axios(SEOUL_DISTRICT_REQUEST_URL);
-  return response.data.response.result.featureCollection.features;
+  return response.data.districtInfo.features;
 };
 
 const MapView = (mapData, districtData) => {
