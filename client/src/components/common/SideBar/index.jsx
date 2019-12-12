@@ -19,9 +19,12 @@ import useAsync from '../../../hooks/useAsync';
 
 const authenticateUser = async (token) => {
   if (!token) return null;
-  const response = await axios('http://127.0.0.1:4000/user', {
-    headers: { Authorization: token },
-  });
+  const response = await axios(
+    process.env.REACT_APP_API_SERVER_ADDRESS + '/user',
+    {
+      headers: { Authorization: token },
+    }
+  );
   return response.data.userInfo.playerId;
 };
 
@@ -62,8 +65,8 @@ const LoginWithNaver = ({ isLoggedIn }) => {
       <a
         href={
           !isLoggedIn
-            ? process.env.REACT_APP_DOMAIN + '/api/auth/naver'
-            : process.env.REACT_APP_DOMAIN + '/api/auth/logout'
+            ? process.env.REACT_APP_API_SERVER_ADDRESS + '/auth/naver'
+            : process.env.REACT_APP_API_SERVER_ADDRESS + '/auth/logout'
         }
       >
         <img
