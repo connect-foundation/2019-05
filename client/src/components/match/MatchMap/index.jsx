@@ -3,8 +3,7 @@ import loadJs from 'load-js';
 import axios from 'axios';
 
 import useAsync from '../../../hooks/useAsync';
-import { MatchContext } from '../../../contexts/Match';
-import matchActions from '../../../contexts/Match/Actions';
+import { MatchActionCreator, MatchContext } from '../../../contexts/Match';
 import { FetchLoadingView, FetchErrorView } from '../../../template';
 
 import './index.scss';
@@ -88,7 +87,7 @@ const MatchMap = () => {
 const NaverMap = (props) => {
   /* eslint react/prop-types: 0 */
   const { mapData, districtData } = props;
-  const { matchState, dispatch } = useContext(MatchContext);
+  const { matchState, matchDispatch } = useContext(MatchContext);
   const [naverMap, setNaverMap] = useState(undefined);
   const [curMarker, setCurMarker] = useState([]);
   const [selectedMarkers, setSelectedMarkers] = useState([]);
@@ -240,10 +239,7 @@ const NaverMap = (props) => {
       }
     }
     const clickedDName = target.property_sig_kor_nm;
-    dispatch({
-      type: matchActions.CLICK_DISTRICT,
-      payload: { clickedDName },
-    });
+    matchDispatch(MatchActionCreator.clickDistrict(clickedDName));
   };
 
   const registMarkerEvent = (marker) => {
