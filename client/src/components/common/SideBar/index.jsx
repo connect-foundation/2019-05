@@ -26,6 +26,8 @@ const authenticateUser = async (token) => {
 const SideBar = () => {
   const [cookeis] = useCookies();
   const { activated, setActivated } = useContext(SideBarContext);
+  const openState = activated ? 'side-bar--opening' : '';
+
   const { playerState, dispatch } = useContext(PlayerContext);
 
   const [loginState] = useAsync(authenticateUser.bind(null, cookeis.jwt), []);
@@ -36,17 +38,15 @@ const SideBar = () => {
     dispatch({ type: playerActions.LOGIN, payload: playerId });
   }, [playerId]);
 
-  return activated ? (
+  return (
     <>
-      <nav className="side-bar">
+      <nav className={`side-bar ${openState}`}>
         <TeamInfo />
         <CloseBtn activated={activated} setActivated={setActivated} />
         <LoginWithNaver isLoggedIn={!!playerState.playerId} />
         <Notifications />
       </nav>
     </>
-  ) : (
-    <></>
   );
 };
 
@@ -80,7 +80,6 @@ const Notifications = () => {
     <>
       <hr />
       <h2>알람 신청 목록</h2>
-
       <ul>
         {matches.map((match) => (
           <li key={match.seq}>{match.content}</li>
@@ -103,7 +102,7 @@ const TeamInfo = () => (
     <p>팀명: 킹동</p>
 
     <p>이름: 킹동</p>
-    <button type="button">팀 페이지로 이동</button>
+    <button className="btn">팀 페이지</button>
   </div>
 );
 

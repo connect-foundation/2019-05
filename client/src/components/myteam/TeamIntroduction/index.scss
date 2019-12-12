@@ -1,0 +1,66 @@
+@import '../../../commonStyle';
+
+.team-introduction {
+  padding: 80px 0;
+
+  .team-info__title {
+    margin-bottom: 50px;
+    h2 {
+      margin-bottom: 6px;
+      font-size: 34px;
+      color: $quick_black;
+    }
+    .btn__modify {
+      height: 24px;
+      padding: 0 10px;
+      appearance: none;
+      border: 0 none;
+      border-radius: 12px;
+      background-color: $quick_navy;
+      font-size: 12px;
+      font-weight: bold;
+      color: #fff;
+    }
+  }
+
+  .team-info__container {
+    display: flex;
+    margin-bottom: 40px;
+    padding-left: 20px;
+  }
+
+  .emblem__container {
+    margin-right: 50px;
+    .emblem__image {
+      width: 100px;
+      margin-bottom: 15px;
+      img {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+
+  .team-name__container {
+    .team-name__title {
+      margin-bottom: 5px;
+      font-size: 24px;
+      color: $quick_black;
+    }
+    .team-name__area {
+      display: inline-block;
+      padding: 4px 10px;
+      background-color: $quick_navy;
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .team-intro__container {
+      padding-top: 30px;
+      #teamIntro {
+        width: 100%;
+        min-width: 400px;
+      }
+    }
+  }
+}
