@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import MDSpinner from 'react-md-spinner';
 import MatchCard from '../MatchCard';
 import useAsync from '../../../hooks/useAsync';
 import { FilterContext } from '../../../contexts/Filter/Context';
+import { FetchLoadingView, FetchErrorView } from '../../../template';
 import './index.scss';
 
 const MATCH_LIST_FETCH_QUERY = `
@@ -23,30 +23,13 @@ query ($startTime: String, $endTime: String, $date: String){
   }
 }`;
 
-const listLoadingView = () => {
-  return (
-    <div className="spinner-container">
-      <MDSpinner size="80px" borderSize="7px" />
-    </div>
-  );
-};
+const LIST_FETCH_ERROR_MSG = '리스트 불러오기를 실패했습니다...';
 
-const listErrorView = (reFetchList) => {
-  return (
-    <>
-      <span>리스트 불러오기를 실패했습니다...</span>
-      <button type="button" onClick={reFetchList}>
-        리스트 다시 불러오기
-      </button>
-    </>
-  );
-};
-
-const noSearchListView = () => {
+const NoListView = () => {
   return <span>원하시는 조건에 맞는 경기가 없어요...</span>;
 };
 
-const successListView = (matchList) => {
+const ListView = (matchList) => {
   return (
     <>
       {matchList.map((match) => (
@@ -56,13 +39,13 @@ const successListView = (matchList) => {
   );
 };
 
-const renderMatchListView = (listState, reFetchList) => {
+const renderingMatchListView = (listState, reFetchList) => {
   const { loading, data: matchList, error } = listState;
-  if (loading) return listLoadingView();
-  if (error) return listErrorView(reFetchList);
-  if (!matchList) return null;
-  if (matchList.length === 0) return noSearchListView();
-  return successListView(matchList);
+  if (loading) return FetchLoadingView();
+  if (error) return FetchErrorView(reFetchList, LIST_FETCH_ERROR_MSG);
+  if (!matchList) return [];
+  if (matchList.length === 0) return NoListView();
+  return ListView(matchList);
 };
 
 const createQueryBaseOnState = (state) => {
@@ -104,7 +87,7 @@ const MatchList = () => {
 
   return (
     <div className="match-list">
-      {renderMatchListView(listState, reFetchList)}
+      {renderingMatchListView(listState, reFetchList)}
     </div>
   );
 };
