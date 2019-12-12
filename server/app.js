@@ -45,7 +45,10 @@ server.start(
   {
     port: 4000,
     endpoint: '/graphql',
-    playground: '/playground',
+    playground:
+      process.env.NODE_ENV === 'development'
+        ? process.env.GRAPHQL_PLAYGROUND
+        : false,
   },
   ({ port }) => console.log(`QuickKick API Server is opened on ${port}`)
 );
