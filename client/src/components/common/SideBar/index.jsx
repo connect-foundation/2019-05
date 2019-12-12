@@ -27,7 +27,6 @@ const SideBar = () => {
   const [cookeis] = useCookies();
   const { activated, setActivated } = useContext(SideBarContext);
   const openState = activated ? 'side-bar--opening' : '';
-
   const { playerState, dispatch } = useContext(PlayerContext);
 
   const [loginState] = useAsync(authenticateUser.bind(null, cookeis.jwt), []);
