@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import MatchCard from '../MatchCard';
-import { FilterContext } from '../../../contexts/Filter/Context';
+import { FilterContext } from '../../../contexts/Filter';
 import './index.scss';
 
 const INIT_MATCH_LIST_FETCH_QUERY = `
@@ -21,7 +21,7 @@ query ($startTime: String, $endTime: String, $date: String){
 }`;
 
 const MatchList = () => {
-  const { filterState, dispatch } = useContext(FilterContext);
+  const { filterState } = useContext(FilterContext);
   const [matchList, setMatchList] = useState([]);
   const [fetchQuery, setFetchQuery] = useState({
     query: INIT_MATCH_LIST_FETCH_QUERY,

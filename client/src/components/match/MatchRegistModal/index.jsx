@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { getDistrict } from '../../../util';
 
-import { MatchContext } from '../../../contexts/Match/Context';
+import { MatchContext, MatchActions } from '../../../contexts/Match';
 import './index.scss';
 
 const SEOUL_DISTRICT = getDistrict();
@@ -34,10 +34,10 @@ const MatchRegistModal = () => {
 };
 
 const ModalHeader = () => {
-  const { matchState, dispatch } = useContext(MatchContext);
+  const { matchState, matchDispatch } = useContext(MatchContext);
   const handleCloseBtn = () => {
-    dispatch({
-      type: 'TOGGLE_VIEW_MATCH_REGIST_MODAL',
+    matchDispatch({
+      type: MatchActions.TOGGLE_VIEW_MATCH_REGIST_MODAL,
       isViewRegistModal: matchState.isViewRegistModal,
     });
   };

@@ -1,10 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { SideBarContext } from '../../../contexts/SideBar/Context';
-import { PlayerContext } from '../../../contexts/User/Context';
-import { playerActions } from '../../../contexts/User/Reducer';
+import { SideBarContext, SideBarActions } from '../../../contexts/SideBar';
+import { UserContext, UserActions } from '../../../contexts/User';
 import useAsync from '../../../hooks/useAsync';
 import naverLoginPng from '../../../assets/images/naver_login_green_mid.PNG';
 import naverLogoutPng from '../../../assets/images/naver_logout_green_mid.PNG';
@@ -21,22 +20,29 @@ const getUserId = async () => {
 
 const SideBar = () => {
   const [loginState] = useAsync(getUserId, []);
-  const { activated, setActivated } = useContext(SideBarContext);
-  const { playerState, dispatch } = useContext(PlayerContext);
+  const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
+  const { userState, userDispatch } = useContext(UserContext);
   const { data: playerId, error } = loginState;
+  const setActivated = () => {
+    sideBarDispatch({
+      type: SideBarActions.TOGGLE_ACTIVATED,
+    });
+  };
 
   useEffect(() => {
     if (!playerId) return;
-    dispatch({ type: playerActions.LOGIN, payload: playerId });
+    userDispatch({ type: UserActions.LOGIN, payload: playerId });
   }, [loginState]);
 
-  return activated ? (
+  return sideBarState.activated ? (
     <>
       <nav className="side-bar">
         <TeamInfo />
-        <CloseBtn activated={activated} setActivated={setActivated} />
-        {error ? <span>error</span> : ''}
-        <LoginWithNaver isLoggedIn={!!playerState.playerId} />
+        <CloseBtn
+          activated={sideBarState.activated}
+          setActivated={setActivated}
+        />
+        <LoginWithNaver isLoggedIn={!!userState.playerId} />
         <Notifications />
       </nav>
     </>

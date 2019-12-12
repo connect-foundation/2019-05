@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header, Footer } from '../../components/common';
 
-const Myteam = () => (
+const myteam = () => (
   <div className="myTeam">
     <Header />
     <div>내팀내팀내팀</div>
@@ -9,4 +9,4 @@ const Myteam = () => (
   </div>
 );
 
-export default Myteam;
+export default myteam;
