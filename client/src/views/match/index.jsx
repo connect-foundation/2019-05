@@ -23,7 +23,6 @@ const match = () => (
       <Header />
       <div className="grid-container">
         <ViewTitle title="match" />
-        <AreaFilter />
         <DateTimeFilter />
         <div className="match-container">
           <div className="match-board">

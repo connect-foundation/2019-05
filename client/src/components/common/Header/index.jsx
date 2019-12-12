@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { SideBarContext, SideBarActions } from '../../../contexts/SideBar';
+import {
+  SideBarContext,
+  SideBarActionCreator,
+} from '../../../contexts/SideBar';
 import './Header.scss';
 import './hamburger.css';
 
@@ -30,9 +33,7 @@ export const HamburgerBtn = () => {
   const hamClickHandler = () => {
     const newValue = openState === 'is-active' ? '' : 'is-active';
     setOpenState(newValue);
-    sideBarDispatch({
-      type: SideBarActions.TOGGLE_ACTIVATED,
-    });
+    sideBarDispatch(SideBarActionCreator.toggleActivated());
   };
   return (
     <button

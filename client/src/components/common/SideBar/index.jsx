@@ -5,8 +5,11 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { SideBarActions, SideBarContext } from '../../../contexts/SideBar';
-import { UserContext, UserActions } from '../../../contexts/User';
+import {
+  SideBarActionCreator,
+  SideBarContext,
+} from '../../../contexts/SideBar';
+import { UserContext, UserActionCreator } from '../../../contexts/User';
 
 import naverLoginPng from '../../../assets/images/naver_login_green_mid.PNG';
 import naverLogoutPng from '../../../assets/images/naver_logout_green_mid.PNG';
@@ -31,14 +34,12 @@ const SideBar = () => {
   const { data: playerId } = loginState;
 
   const handleActivated = () => {
-    sideBarDispatch({
-      type: SideBarActions.TOGGLE_ACTIVATED,
-    });
+    sideBarDispatch(SideBarActionCreator.toggleActivated());
   };
 
   useEffect(() => {
     if (!playerId) return;
-    userDispatch({ type: UserActions.LOGIN, payload: playerId });
+    userDispatch(UserActionCreator.login(playerId));
   }, [playerId]);
 
   return (
