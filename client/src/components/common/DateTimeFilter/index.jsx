@@ -4,8 +4,7 @@ import { SingleDatePicker } from 'react-dates';
 import TimePicker from 'react-times';
 import 'react-times/css/classic/default.css';
 import 'react-dates/lib/css/_datepicker.css';
-import Switch from 'react-switch';
-import { FilterContext, FilterActions } from '../../../contexts/Filter';
+import { FilterContext, FilterActionCreator } from '../../../contexts/Filter';
 import './index.scss';
 
 const DateTimeFilter = () => {
@@ -13,7 +12,6 @@ const DateTimeFilter = () => {
     <div className="match-filter">
       <DatePicker />
       <TimeRangePicker />
-      {/* <RankSwitch /> */}
       <NotificationBtn />
     </div>
   );
@@ -23,10 +21,7 @@ const DatePicker = () => {
   const [focused, setFocused] = useState(false);
   const { filterState, filterDispatch } = useContext(FilterContext);
   const handleChange = (date) => {
-    filterDispatch({
-      type: FilterActions.SET_MATCH_DAY,
-      payload: date,
-    });
+    filterDispatch(FilterActionCreator.setMatchDay(date));
   };
 
   return (
@@ -49,17 +44,13 @@ const TimeRangePicker = () => {
 
   const handleStartTimeChange = (time) => {
     const { hour, minute } = time;
-    filterDispatch({
-      type: FilterActions.SET_START_TIME,
-      payload: `${hour}:${minute}`,
-    });
+    const newStartTime = `${hour}:${minute}`;
+    filterDispatch(FilterActionCreator.setStartTime(newStartTime));
   };
   const handleEndTimeChange = (time) => {
     const { hour, minute } = time;
-    filterDispatch({
-      type: FilterActions.SET_END_TIME,
-      payload: `${hour}:${minute}`,
-    });
+    const newEndTime = `${hour}:${minute}`;
+    filterDispatch(FilterActionCreator.setEndTime(newEndTime));
   };
 
   return (
@@ -74,22 +65,6 @@ const TimeRangePicker = () => {
         time={endTime}
         onTimeChange={(time) => handleEndTimeChange(time)}
         theme="classic"
-      />
-    </div>
-  );
-};
-
-// 랭킹 토글
-const RankSwitch = () => {
-  const { filterState, filterDispatch } = useContext(FilterContext);
-  const handleChange = () => filterDispatch({ type: 'SET_SIMILER_RANK' });
-
-  return (
-    <div className="rank-switch">
-      <Switch
-        onChange={handleChange}
-        checked={filterState.isSimilerRank}
-        onColor="#5CAEAE"
       />
     </div>
   );
