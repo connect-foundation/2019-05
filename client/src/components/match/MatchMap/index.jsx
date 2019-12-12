@@ -1,14 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react';
 import loadJs from 'load-js';
 import axios from 'axios';
-import MDSpinner from 'react-md-spinner';
+
 import useAsync from '../../../hooks/useAsync';
 import { MatchContext } from '../../../contexts/Match';
 import matchActions from '../../../contexts/Match/Actions';
+import { FetchLoadingView, FetchErrorView } from '../../../template';
+
 import './index.scss';
 
 const NAVER_MAP_API_REQUEST_URL = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.REACT_APP_NCP_CLIENT_ID}`;
 const SEOUL_DISTRICT_REQUEST_URL = `/req/data?request=GetFeature&key=${process.env.REACT_APP_MAP_DISTRICT_KEY}&size=25&data=LT_C_ADSIGG_INFO&attrfilter=full_nm:like:서울&domain=${process.env.REACT_APP_DOMAIN}`;
+
+const LIMIT_SELECT_DISTRICT_CNT = 5;
+const ONE_SECOND = 1000;
+const MAP_FETCH_ERROR_MSG = '맵 불러오기를 실패했습니다...';
+const DISTRICT_FETCH_ERROR_MSG = '지역 정보 불러오기를 실패했습니다...';
 
 const markerElement = {
   mapTitle:
@@ -24,9 +31,6 @@ const markerElement = {
     '<div style="position:relative; display:inline-block; text-align:center; font-size:20px; width:400px; heigth:30px; top:-15px; left:-200px; color:red;"> <span>더 이상 지역구를 선택할 수 없습니다.</span> </div>',
 };
 
-const LIMIT_SELECT_DISTRICT_CNT = 5;
-const ONE_SECOND = 1000;
-
 const getNaverMap = async () => {
   await loadJs({ url: NAVER_MAP_API_REQUEST_URL, cache: false });
   return window.naver.maps;
@@ -37,51 +41,46 @@ const getDistrcitData = async () => {
   return response.data.response.result.featureCollection.features;
 };
 
+const MapView = (mapData, districtData) => {
+  return <NaverMap mapData={mapData} districtData={districtData} />;
+};
+
+const renderingMatchMapView = (map, refetchMap, district, refetchDistrict) => {
+  const { loading: mapLoading, data: mapData, error: mapError } = map;
+  const {
+    loading: districtLoding,
+    data: districtData,
+    error: districtError,
+  } = district;
+  if (mapLoading || districtLoding) {
+    return FetchLoadingView();
+  }
+  if (mapError) {
+    return FetchErrorView(refetchMap, MAP_FETCH_ERROR_MSG);
+  }
+  if (districtError) {
+    return FetchErrorView(refetchDistrict, DISTRICT_FETCH_ERROR_MSG);
+  }
+  if (!mapData) return null;
+  if (!districtData) return null;
+  return MapView(mapData, districtData);
+};
+
 const MatchMap = () => {
   const [naverMapState, reFetchNaverMap] = useAsync(getNaverMap, []);
   const [seoulDistrictState, reFetchDisrictData] = useAsync(
     getDistrcitData,
     []
   );
-  const { loading: mapLoading, data: mapData, error: mapError } = naverMapState;
-  const {
-    loading: districtLoding,
-    data: districtData,
-    error: districtError,
-  } = seoulDistrictState;
 
-  if (mapLoading || districtLoding) {
-    return (
-      <div className="match-map">
-        <div className="spinner-container">
-          <MDSpinner size="80px" borderSize="7px" />
-        </div>
-      </div>
-    );
-  }
-  if (mapError) {
-    return (
-      <div className="match-map">
-        <button type="button" onClick={reFetchNaverMap}>
-          맵 다시 불러오기
-        </button>
-      </div>
-    );
-  }
-  if (districtError) {
-    return (
-      <div className="match-map">
-        <button type="button" onClick={reFetchDisrictData}>
-          지역 정보 다시 불러오기
-        </button>
-      </div>
-    );
-  }
-  if (!mapData) return null;
-  if (!districtData) return null;
   return (
     <div className="match-map">
-      <NaverMap mapData={mapData} districtData={districtData} />
+      {renderingMatchMapView(
+        naverMapState,
+        reFetchNaverMap,
+        seoulDistrictState,
+        reFetchDisrictData
+      )}
     </div>
   );
 };

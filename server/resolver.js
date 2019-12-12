@@ -145,6 +145,23 @@ const resolvers = {
         endTime,
       });
     },
+    UpdateTeamInfo: (
+      _,
+      { seq, name, logo, homeArea, introduction },
+      { prisma }
+    ) => {
+      return prisma.updateTeam({
+        data: {
+          name,
+          logo,
+          homeArea,
+          introduction,
+        },
+        where: {
+          seq,
+        },
+      });
+    },
   }, // mutation
   Match: {
     author: ({ seq }, _, { prisma }) => {
@@ -165,7 +182,9 @@ const resolvers = {
       return prisma.team({ seq }).members();
     },
     uploadMatchList: ({ seq }, _, { prisma }) => {
-      return prisma.team({ seq }).uploadMatchList();
+      return prisma.team({ seq }).uploadMatchList({
+        orderBy: 'date_DESC',
+      });
     },
     matchingDoneList: ({ seq }, _, { prisma }) => {
       return prisma.team({ seq }).matchingDoneList();

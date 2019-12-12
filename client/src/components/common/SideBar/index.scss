@@ -1,23 +1,22 @@
 @import '../../../commonStyle.scss';
 
 .side-bar {
-  padding: 100px 20px;
-  height: 100vh;
+  padding: 70px 20px;
+  height: 100%;
   z-index: 3000;
+  box-sizing: border-box;
   background: $quick_white;
   color: $quick_navy;
   box-shadow: 2px 0 5px rgba(163, 121, 121, 0.5);
   position: fixed;
-
-  right: 0;
+  right: -400px;
   top: 0;
   width: 400px;
-  z-index: 3001;
-
-  animation-duration: 0.3s;
-  animation-name: slidein;
+  transition: all 0.5s ease-in-out;
+  &--opening {
+    right: 0;
+  }
 }
-
 .close-btn {
   position: absolute;
   right: 25px;
@@ -30,20 +29,23 @@
   }
 }
 
+.btn {
+  display: block;
+  width: 80px;
+  height: 30px;
+  background-color: $quick_navy;
+  border: 0 none;
+  border-radius: 15px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  appearance: none;
+  cursor: pointer;
+}
+
 .auth-button {
-  width: fit-content;
   &__img {
     width: 100px;
   }
   cursor: pointer;
-}
-
-@keyframes slidein {
-  from {
-    transform: translateX(100%);
-  }
-
-  to {
-    transform: translateX(0%);
-  }
 }
