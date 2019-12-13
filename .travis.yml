@@ -23,7 +23,7 @@ jobs:
     #PULL_REQUEST CHECKING STAGE
     - stage: 'TEST'
       name: 'FRONT TEST'
-      if: type = pull_request
+      if: branch = develop type = pull_request
       before_install:
         - cd client
         - openssl aes-256-cbc -K $encrypted_a1542a79f8e3_key -iv $encrypted_a1542a79f8e3_iv -in env.tar.enc -out ./env.tar -d
@@ -41,7 +41,7 @@ jobs:
         - yarn test
 
     - name: 'BACK TEST'
-      if: type = pull_request
+      if: branch = develop type = pull_request
       before_install:
         - cd server
         - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in env.tar.enc -out ./env.tar -d
@@ -56,45 +56,13 @@ jobs:
       install:
         - yarn install
       script:
-        - npm test
-
-    #DEVELOP SERVER BUILD STAGE
-    - stage: 'DEV BUILD'
-      name: 'DEV SERVER FRONT BUILD'
-      if: branch = develop AND type = push
-      before_script:
-        - cd client
-        - openssl aes-256-cbc -K $encrypted_a1542a79f8e3_key -iv $encrypted_a1542a79f8e3_iv -in env.tar.enc -out ./env.tar -d
-        - tar xvf env.tar
-        - GIT_DIFF_RESULT=$(eval $(echo bash ../diff_checking.sh $TRAVIS_COMMIT_RANGE))
-        - IS_CHANGED_FRONT=$(echo $GIT_DIFF_RESULT | cut -d ',' -f1)
-        - |
-          if [ $IS_CHANGED_FRONT != true ]; then
-            echo 'Front directory not change'
-            travis_terminate 0
-          fi
-      script: skip
-
-    - name: 'DEV SERVER BACK BUILD'
-      if: branch = develop AND type = push
-      before_script:
-        - cd server
-        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in env.tar.enc -out ./env.tar -d
-        - tar xvf env.tar
-        - GIT_DIFF_RESULT=$(eval $(echo bash ../diff_checking.sh $TRAVIS_COMMIT_RANGE))
-        - IS_CHANGED_BACK=$(echo $GIT_DIFF_RESULT | cut -d ',' -f2)
-        - |
-          if [ $IS_CHANGED_BACK != true ]; then
-            echo 'Back directory not change'
-            travis_terminate 0
-          fi
-      script: skip
+        - yarn test
 
     #PRODUCT SERVER BUILD STAGE
     - stage: 'PROD BUILD'
       name: 'PROD SERVER FRONT BUILD'
       if: branch = master AND type = push
-      before_script:
+      before_install:
         - cd client
         - openssl aes-256-cbc -K $encrypted_a1542a79f8e3_key -iv $encrypted_a1542a79f8e3_iv -in env.tar.enc -out ./env.tar -d
         - tar xvf env.tar
@@ -105,13 +73,17 @@ jobs:
             echo 'Front directory not change'
             travis_terminate 0
           fi
-      script: skip
+      install:
+        - yarn install
+        - sudo apt-get install sshpass
+      script:
+        - yarn build
+      after_script:
+        - sshpass -p "$PROD_SERVER_PASSWORD" scp -r -o StrictHostKeyChecking=no ./build root@"$PROD_SERVER_IP":/home/quickkick
 
     - name: 'PROD SERVER BACK BUILD'
       if: branch = master AND type = push
-      install:
-        - sudo apt-get install sshpass
-      before_script:
+      before_install:
         - cd server
         - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in env.tar.enc -out ./env.tar -d
         - tar xvf env.tar
@@ -122,9 +94,13 @@ jobs:
             echo 'Back directory not change'
             travis_terminate 0
           fi
-        #- docker build -t "$DOCKER_USERNAME/quickkick-api:latest" ./server
+      install:
+        - yarn install
+        - sudo apt-get install sshpass
+      before_script:
+        - docker build -t "${DOCKER_USERNAME}"/quickkick-api:latest .
       script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - echo "$DOCKER_PASSWORD" | docker login -u "${DOCKER_USERNAME}" --password-stdin
       after_script:
-        #- docker push "${DOCKER_USERNAME}/quickkick-api:latest
+        - docker push "${DOCKER_USERNAME}"/quickkick-api:latest
         - sshpass -p "$PROD_SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no root@"$PROD_SERVER_IP" "/home/quickick/api/prod.api.build.sh"
