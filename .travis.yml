@@ -16,7 +16,6 @@ services:
 branches:
   only:
     - master
-    - develop
 
 jobs:
   include:
@@ -63,7 +62,7 @@ jobs:
     #PRODUCT SERVER BUILD STAGE
     - stage: 'PROD BUILD'
       name: 'PROD SERVER FRONT BUILD'
-      if: branch = master AND type = push
+      if: type = push
       before_install:
         - cd client
         - GIT_DIFF_RESULT=$(eval $(echo bash ../diff_checking.sh $TRAVIS_COMMIT_RANGE))
@@ -85,7 +84,7 @@ jobs:
         - sshpass -p "$PROD_SERVER_PASSWORD" scp -r -o StrictHostKeyChecking=no ./build root@"$PROD_SERVER_IP":/home/quickkick
 
     - name: 'PROD SERVER BACK BUILD'
-      if: branch = master AND type = push
+      if: type = push
       before_install:
         - cd server
         - GIT_DIFF_RESULT=$(eval $(echo bash ../diff_checking.sh $TRAVIS_COMMIT_RANGE))
