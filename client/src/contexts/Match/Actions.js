@@ -1,6 +1,0 @@
-const actions = {
-  TOGGLE_VIEW_MATCH_REGIST_MODAL: 'TOGGLE_VIEW_MATCH_REGIST_MODAL',
-  CLICK_DISTRICT: 'CLICK_DISTRICT',
-};
-
-export default actions;
