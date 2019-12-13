@@ -1,20 +1,13 @@
 import React from 'react';
 import { Header, Footer } from '../../components/common';
-import {
-  HomeQuickMatch,
-  HomeMatchStatus,
-  HomeTeamRanking,
-  HomeIntroduce,
-} from '../../components/home';
+import { HomeQuickMatch } from '../../components/home';
+import { SideBar } from '../../components/common/';
 
 const home = () => (
   <div className="home">
+    <SideBar />
     <Header />
     <HomeQuickMatch />
-    <HomeMatchStatus />
-    <HomeTeamRanking />
-    <HomeIntroduce />
-    <Footer />
   </div>
 );
 

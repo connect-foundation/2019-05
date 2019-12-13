@@ -1,0 +1,109 @@
+@import '../../../commonStyle.scss';
+$sidebar_width: 260px;
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.side-bar {
+  padding: 80px 30px;
+  height: 100%;
+  z-index: 3000;
+  box-sizing: border-box;
+  background: $quick_white;
+  color: $quick_navy;
+  box-shadow: 20px 20px 20px 20px rgba(0, 0, 0, 0.5);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  right: -$sidebar_width;
+  top: 0;
+  width: $sidebar_width;
+  transition: all 0.2s ease-in-out;
+  &__inner-layer {
+    &--loggedout {
+      padding: 240px 0 20px 0;
+      text-align: center;
+    }
+  }
+  &--opening {
+    background-color: whitesmoke;
+    right: 0;
+  }
+  &__content-button {
+    border: 1px solid $quick_light_navy;
+    border-radius: 5px;
+    padding: 6px 12px;
+    margin: 3px 0;
+    width: 80%;
+    display: inline-block;
+    color: $quick_light_navy;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    &:hover,
+    &:active {
+      background: $quick_light_navy;
+      color: $quick_white;
+    }
+  }
+  &__content-subject {
+    font-size: 10px;
+  }
+  &__emblem-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__emblem {
+    width: 80%;
+    display: flex;
+  }
+  &__team-name-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__team-name {
+    display: flex;
+  }
+}
+.close-btn {
+  position: absolute;
+  right: 25px;
+  top: 25px;
+  button {
+    appearance: none;
+    border: 0 none;
+    background: none;
+    cursor: pointer;
+  }
+}
+.pressed {
+  background: $quick_light_navy;
+  color: $quick_white;
+}
+.btn {
+  display: block;
+  width: 80px;
+  height: 30px;
+  background-color: $quick_navy;
+  border: 0 none;
+  border-radius: 15px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  appearance: none;
+  cursor: pointer;
+}
+
+.auth-button {
+  &__img {
+    max-height: 100%;
+    max-width: 100%;
+    &--logout {
+      height: 40px;
+    }
+  }
+  cursor: pointer;
+}

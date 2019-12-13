@@ -9,4 +9,4 @@ RUN yarn install
 
 
 EXPOSE 4000
-CMD ["node", "app.js"]
+CMD ["yarn", "start-prod"]

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  SideBarContext,
+  SideBarActionCreator,
+} from '../../../contexts/SideBar';
 import './Header.scss';
-import { faSignInAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import logo from '../../../assets/images/quickkick-logo.png';
+import './hamburger.css';
 
 const Header = () => (
   <div className="header">
@@ -12,7 +14,7 @@ const Header = () => (
         <ServiceLogo />
       </div>
       <div className="header__right">
-        <NavBar />
+        <HamburgerBtn />
       </div>
     </div>
   </div>
@@ -20,51 +22,30 @@ const Header = () => (
 
 const ServiceLogo = () => (
   <Link to="/">
-    <img className="logo" src={logo} alt="퀵킥 로고" />
+    <span className="pointChar">Q</span>uick<span className="pointChar">K</span>
+    ick
   </Link>
 );
 
-const NavBar = () => {
-  const [isLogin, setIsLogin] = useState(false);
-
-  useEffect(() => {
-    const cookie = document.cookie.split('=')[1];
-    setIsLogin(cookie === 'true');
-  }, []);
-
+export const HamburgerBtn = () => {
+  const [openState, setOpenState] = useState('');
+  const { sideBarDispatch } = useContext(SideBarContext);
+  const hamClickHandler = () => {
+    const newValue = openState === 'is-active' ? '' : 'is-active';
+    setOpenState(newValue);
+    sideBarDispatch(SideBarActionCreator.toggleActivated());
+  };
   return (
-    <nav className="nav-bar">
-      <div className="nav-bar__button">
-        <Link to="/match">매치 검색</Link>
-      </div>
-      <div className="nav-bar__button">
-        <Link to="/ranking">팀 목록 보기</Link>
-      </div>
-      {isLogin ? <UserIcon /> : <LoginBtn />}
-    </nav>
+    <button
+      onClick={hamClickHandler}
+      className={`hamburger ${openState}`}
+      type="button"
+    >
+      <span className="hamburger-box">
+        <span className="hamburger-inner" />
+      </span>
+    </button>
   );
 };
-
-const LoginBtn = () => (
-  <div className="nav-bar__login">
-    <a href="http://127.0.0.1:4000/auth/naver">로그인</a>
-  </div>
-);
-
-const UserIcon = () => (
-  <div className="nav-bar__user-info">
-    <FontAwesomeIcon icon={faUserCircle} size="2x" />
-    <div className="nav-bar__user-detail">
-      <ul>
-        <li>
-          <Link to="/team/1">내 팀 보기</Link>
-        </li>
-        <li>
-          <a href="http://127.0.0.1:4000/auth/logout">로그아웃</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-);
 
 export default Header;

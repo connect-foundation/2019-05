@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Button } from '../../common';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import MatchCard from '../MatchCard';
+import useAsync from '../../../hooks/useAsync';
+import { FilterContext } from '../../../contexts/Filter';
+import { FetchLoadingView, FetchErrorView } from '../../../template';
 import './index.scss';
 
-const INIT_MATCH_LIST_FETCH_QUERY = `{
-  PendingMatches{
+const MATCH_LIST_FETCH_QUERY = `
+query ($startTime: String, $endTime: String, $date: String){
+  PendingMatches(first:20, startTime: $startTime, endTime: $endTime, date: $date){
     seq
     host{
       seq
       name
+      logo
     }
+    area
     stadium
     date
     startTime
@@ -17,91 +23,73 @@ const INIT_MATCH_LIST_FETCH_QUERY = `{
   }
 }`;
 
-const MatchList = () => {
-  const [matchList, setMatchList] = useState([]);
-  const [fetchQuery, setFetchQuery] = useState({
-    query: INIT_MATCH_LIST_FETCH_QUERY,
+const LIST_FETCH_ERROR_MSG = '리스트 불러오기를 실패했습니다...';
+
+const NoListView = () => {
+  return <span>원하시는 조건에 맞는 경기가 없어요...</span>;
+};
+
+const ListView = (matchList) => {
+  return (
+    <>
+      {matchList.map((match) => (
+        <MatchCard key={match.seq} matchInfo={match} />
+      ))}
+    </>
+  );
+};
+
+const renderingMatchListView = (listState, reFetchList) => {
+  const { loading, data: matchList, error } = listState;
+  if (loading) return FetchLoadingView();
+  if (error) return FetchErrorView(reFetchList, LIST_FETCH_ERROR_MSG);
+  if (!matchList) return [];
+  if (matchList.length === 0) return NoListView();
+  return ListView(matchList);
+};
+
+const createQueryBaseOnState = (state) => {
+  return {
+    query: MATCH_LIST_FETCH_QUERY,
+    variables: {
+      startTime: state.startTime,
+      endTime: state.endTime,
+      date: state.matchDay.format('YYYY[-]MM[-]DD'),
+    },
+  };
+};
+
+const getMatchList = async (fetchQuery) => {
+  if (!fetchQuery) return null;
+  const response = await axios({
+    method: 'post',
+    url: process.env.REACT_APP_GRAPHQL_ENDPOINT,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: JSON.stringify(fetchQuery),
   });
+  return response.data.data.PendingMatches;
+};
+
+const MatchList = () => {
+  const { filterState } = useContext(FilterContext);
+  const [fetchQuery, setFetchQuery] = useState(null);
+
   useEffect(() => {
-    const fetchSetting = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(fetchQuery),
-    };
-    (async () => {
-      try {
-        const data = await fetch('http://localhost:4000/graphql', fetchSetting);
-        const result = await data.json();
-        setMatchList(result.data.PendingMatches);
-      } catch (error) {
-        setMatchList(undefined);
-      }
-    })();
-    return () => {
-      setMatchList([]);
-    };
-  }, [fetchQuery]);
+    setFetchQuery(createQueryBaseOnState(filterState));
+  }, [filterState]);
+
+  const [listState, reFetchList] = useAsync(
+    getMatchList.bind(null, fetchQuery),
+    [fetchQuery]
+  );
+
   return (
     <div className="match-list">
-      {matchList ? (
-        matchList.map((match) => (
-          <MatchCard key={match.seq} matchInfo={match} />
-        ))
-      ) : (
-        <span>리스트가 존재하지 않습니다.</span>
-      )}
+      {renderingMatchListView(listState, reFetchList)}
     </div>
   );
-};
-
-const MatchCard = (props) => {
-  const { matchInfo } = props;
-  const { date, startTime, endTime, host, stadium } = matchInfo;
-  const month = date.substr(4, 2);
-  const day = date.substr(6, 2);
-  const year = date.substr(0, 4);
-  const start_hour = startTime.substr(0, 2);
-  const end_hour = endTime.substr(0, 2);
-  const start_minute = startTime.substr(2, 2);
-  const end_minute = startTime.substr(2, 2);
-
-  return (
-    <div className="match-card">
-      <div className="sash">마감임박</div>
-      <div className="team-info">
-        <div className="team-info__item team-info__item--date">
-          <div className="team-info__month">DEC</div>
-          <div className="team-info__day">{day}</div>
-          <div className="team-info__year">{year}</div>
-        </div>
-        <div className="team-info__item">
-          <div className="team-info__area">서울 남동권 리그</div>
-          <div className="team-info__hostname">{host.name} vs ... </div>
-          <div className="team-info__stadium">
-            {start_hour}:{start_minute} - {end_hour}:{end_minute} @{stadium}
-          </div>
-        </div>
-      </div>
-      <div className="button-box">
-        <Button className="button button--team "> 매치 신청</Button>
-      </div>
-    </div>
-  );
-};
-
-MatchCard.propTypes = {
-  matchInfo: PropTypes.shape({
-    host: PropTypes.shape({
-      seq: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-    stadium: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    startTime: PropTypes.string.isRequired,
-    endTime: PropTypes.string.isRequired,
-  }).isRequired,
 };
 
 export default MatchList;

@@ -1,11 +1,41 @@
-// 임시 적용
+@import '../../../commonStyle';
 
 .home-quick-match {
+  height: calc(100vh - #{$header-height});
+  min-height: 550px;
+  background: $quick_background url('../../../assets/images/background.jpg')
+    right bottom no-repeat;
+  background-size: 50%;
   .grid-container {
-    padding-top: 20px;
-    font-size: 50px;
+    display: flex;
     text-align: center;
-    // border: dashed 1px red;
-    height: 500px;
+    position: relative;
+  }
+  .home__section-title {
+    margin-bottom: 20px;
+    font-size: 36px;
+    color: #fff;
+    word-break: keep-all;
+  }
+  .home--left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 40%;
+    height: calc(100vh - #{$header-height});
+    padding: 0 0 0 60px;
+    box-sizing: border-box;
+  }
+  .go-match-btn {
+    display: block;
+    padding: 0 20px;
+    height: 54px;
+    margin: 80px auto 0;
+    background-color: $quick_navy;
+    border-radius: 27px;
+    font-size: 24px;
+    font-weight: bold;
+    color: $quick_white;
+    line-height: 54px;
   }
 }

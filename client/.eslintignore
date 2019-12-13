@@ -1,0 +1,5 @@
+README.md
+.prettierrc
+.env
+public/*
+cypress/

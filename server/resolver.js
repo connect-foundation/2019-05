@@ -11,12 +11,21 @@ const resolvers = {
         },
       });
     },
-    PendingMatches: (_, { host }, { prisma }) => {
+    PendingMatches: (
+      _,
+      { first, area, startTime, endTime, date },
+      { prisma }
+    ) => {
       return prisma.matches({
         where: {
-          host,
           guest: null,
+          area_in: area,
+          startTime_gte: startTime,
+          endTime_lte: endTime,
+          date,
         },
+        first,
+        orderBy: 'date_ASC',
       });
     },
     Match: (_, { seq }, { prisma }) => {
@@ -136,8 +145,28 @@ const resolvers = {
         endTime,
       });
     },
+    UpdateTeamInfo: (
+      _,
+      { seq, name, logo, homeArea, introduction },
+      { prisma }
+    ) => {
+      return prisma.updateTeam({
+        data: {
+          name,
+          logo,
+          homeArea,
+          introduction,
+        },
+        where: {
+          seq,
+        },
+      });
+    },
   }, // mutation
   Match: {
+    author: ({ seq }, _, { prisma }) => {
+      return prisma.match({ seq }).author();
+    },
     host: ({ seq }, _, { prisma }) => {
       return prisma.match({ seq }).host();
     },
@@ -153,7 +182,9 @@ const resolvers = {
       return prisma.team({ seq }).members();
     },
     uploadMatchList: ({ seq }, _, { prisma }) => {
-      return prisma.team({ seq }).uploadMatchList();
+      return prisma.team({ seq }).uploadMatchList({
+        orderBy: 'date_DESC',
+      });
     },
     matchingDoneList: ({ seq }, _, { prisma }) => {
       return prisma.team({ seq }).matchingDoneList();
