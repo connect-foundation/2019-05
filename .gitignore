@@ -17,11 +17,6 @@ dist/
 .DS_Store
 .env
 .env.*
-.env.development
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 env.tar
 
 npm-debug.log*
