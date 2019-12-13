@@ -44,5 +44,4 @@ describe('match page', () => {
 
     cy.get('.match-regist-modal').should('not.be.visible');
   });
-  it('can click maximum 5 districts in the map', () => {});
 });
