@@ -71,7 +71,11 @@ yarn start
 
 ![skill stack](https://ifh.cc/g/axgHK.jpg)
 
-## 프로젝트 구조
+## 인프라
+
+![infra](https://ifh.cc/g/7Ng1G.png)
+
+## 프로젝트 폴더 구조
 
 ```
 
