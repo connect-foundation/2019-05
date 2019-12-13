@@ -22,6 +22,7 @@ dist/
 .env.development.local
 .env.test.local
 .env.production.local
+env.tar
 
 npm-debug.log*
 yarn-debug.log*
