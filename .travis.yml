@@ -39,7 +39,6 @@ jobs:
         - yarn install
       script:
         - yarn test
-        - yarn cypress:run
 
     - name: 'BACK TEST'
       if: type = pull_request
