@@ -77,7 +77,6 @@ const Myteam = () => {
     <div className="myTeam">
       <Header />
       <TeamIntroduction teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
-      <Footer />
     </div>
   );
 };
