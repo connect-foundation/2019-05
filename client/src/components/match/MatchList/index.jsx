@@ -3,12 +3,13 @@ import axios from 'axios';
 import MatchCard from '../MatchCard';
 import useAsync from '../../../hooks/useAsync';
 import { FilterContext } from '../../../contexts/Filter';
+import { MatchContext } from '../../../contexts/Match';
 import { FetchLoadingView, FetchErrorView } from '../../../template';
 import './index.scss';
 
 const MATCH_LIST_FETCH_QUERY = `
-query ($startTime: String, $endTime: String, $date: String){
-  PendingMatches(first:20, startTime: $startTime, endTime: $endTime, date: $date){
+query ($startTime: String, $endTime: String, $date: String, $area: [Area]){
+  PendingMatches(first:20, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
     seq
     host{
       seq
@@ -48,13 +49,22 @@ const renderingMatchListView = (listState, reFetchList) => {
   return ListView(matchList);
 };
 
-const createQueryBaseOnState = (state) => {
+const getSelectedDistrictArray = (match) => {
+  let newArr = Object.keys(match.districtInfo).filter((districtCode) => {
+    if (match.districtInfo[districtCode].isSelected) return true;
+  });
+  if (newArr.length === 0) newArr = undefined;
+  return newArr;
+};
+
+const createQueryBaseOnState = (filter, match) => {
   return {
     query: MATCH_LIST_FETCH_QUERY,
     variables: {
-      startTime: state.startTime,
-      endTime: state.endTime,
-      date: state.matchDay.format('YYYY[-]MM[-]DD'),
+      startTime: filter.startTime,
+      endTime: filter.endTime,
+      date: filter.matchDay.format('YYYY[-]MM[-]DD'),
+      area: getSelectedDistrictArray(match),
     },
   };
 };
@@ -74,11 +84,12 @@ const getMatchList = async (fetchQuery) => {
 
 const MatchList = () => {
   const { filterState } = useContext(FilterContext);
+  const { matchState } = useContext(MatchContext);
   const [fetchQuery, setFetchQuery] = useState(null);
 
   useEffect(() => {
-    setFetchQuery(createQueryBaseOnState(filterState));
-  }, [filterState]);
+    setFetchQuery(createQueryBaseOnState(filterState, matchState));
+  }, [filterState, matchState]);
 
   const [listState, reFetchList] = useAsync(
     getMatchList.bind(null, fetchQuery),
