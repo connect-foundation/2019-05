@@ -15,9 +15,6 @@ const HomeQuickMatch = () => (
           Quick Match!
         </Link>
       </div>
-      <div className="home--right background__image">
-        <img src={backgroundImg} alt="" />
-      </div>
     </div>
   </div>
 );

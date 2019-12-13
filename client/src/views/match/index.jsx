@@ -32,7 +32,6 @@ const match = () => (
           <MatchMap />
         </div>
       </div>
-      <Footer />
       <MatchRegistModal />
     </div>
   </MatchProvider>
