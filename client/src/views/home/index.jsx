@@ -8,7 +8,6 @@ const home = () => (
     <SideBar />
     <Header />
     <HomeQuickMatch />
-    <Footer />
   </div>
 );
 
