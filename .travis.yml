@@ -23,7 +23,7 @@ jobs:
     #PULL_REQUEST CHECKING STAGE
     - stage: 'TEST'
       name: 'FRONT TEST'
-      if: branch = develop AND type = pull_request
+      if: type = pull_request
       before_install:
         - cd client
         - GIT_DIFF_RESULT=$(eval $(echo bash ../diff_checking.sh $TRAVIS_COMMIT_RANGE))
@@ -42,7 +42,7 @@ jobs:
         - yarn test
 
     - name: 'BACK TEST'
-      if: branch = develop AND type = pull_request
+      if: type = pull_request
       before_install:
         - cd server
         - GIT_DIFF_RESULT=$(eval $(echo bash ../diff_checking.sh $TRAVIS_COMMIT_RANGE))
@@ -106,4 +106,4 @@ jobs:
         - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
       after_script:
         - docker push $DOCKER_USERNAME/quickkick-api:latest
-        - sshpass -p $PROD_SERVER_PASSWORD ssh -o StrictHostKeyChecking=no root@$PROD_SERVER_IP "/home/quickick/api/prod.api.build.sh"
+        - sshpass -p $PROD_SERVER_PASSWORD ssh -o StrictHostKeyChecking=no root@$PROD_SERVER_IP "/home/quickkick/api/prod.api.build.sh"
