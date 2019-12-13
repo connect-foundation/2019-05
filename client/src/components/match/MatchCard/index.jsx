@@ -8,7 +8,7 @@ const MatchCard = (props) => {
   const { matchInfo } = props;
   const { date, startTime, endTime, host, stadium, area } = matchInfo;
 
-  if (host.logo === null) host.logo = '/default_logo.png';
+  //if (host.logo === null) host.logo = '/default_logo.png';
   return (
     <div className="match-card">
       <div className="match-info">
@@ -25,7 +25,14 @@ const MatchCard = (props) => {
       </div>
       <div className="team-info">
         <div className="team-info__logo">
-          <img src={host.logo} alt={host.name} />
+          <img
+            src={
+              host.logo === null
+                ? '/default_logo.png'
+                : `https://kr.object.ncloudstorage.com/quickkick-emblem/${host.logo}`
+            }
+            alt={host.name}
+          />
         </div>
         <div className="team-info__name">{host.name}</div>
       </div>

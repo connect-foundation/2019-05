@@ -15,6 +15,7 @@ const createError = require('./middlewares/createError');
 const mailRouter = require('./routes/mail');
 const userRouter = require('./routes/user');
 const myteamRouter = require('./routes/myteam');
+const mapRouter = require('./routes/map');
 const cors = require('cors');
 const server = new GraphQLServer({
   typeDefs: './schema.graphql',
@@ -40,12 +41,16 @@ app.use('/auth', authRouter);
 app.use('/mail', mailRouter);
 app.use('/user', userRouter);
 app.use('/myteam', myteamRouter);
+app.use('/map', mapRouter);
 
 server.start(
   {
     port: 4000,
     endpoint: '/graphql',
-    playground: '/playground',
+    playground:
+      process.env.NODE_ENV === 'development'
+        ? process.env.GRAPHQL_PLAYGROUND
+        : false,
   },
   ({ port }) => console.log(`QuickKick API Server is opened on ${port}`)
 );

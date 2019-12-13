@@ -31,7 +31,8 @@ yarn-error.log*
 .cache/
 
 #prisma setup
-prisma/
+docker-compose.yml
+prisma.yml
 
 #personal files
 personal/

@@ -6,6 +6,7 @@ import { TeamIntroduction } from '../../components/myteam';
 const gql = `
 query ($seq: Int){
   Team(seq:$seq){
+    seq
     name
     logo
     homeArea
