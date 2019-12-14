@@ -23,7 +23,7 @@ const match = () => (
       <Header />
       <div className="grid-container">
         <ViewTitle title="match" />
-        <DateTimeFilter />
+        <DateTimeFilter where="match" />
         <div className="match-container">
           <div className="match-board">
             <MatchRegist />
