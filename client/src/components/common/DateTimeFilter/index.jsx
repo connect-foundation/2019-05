@@ -7,12 +7,12 @@ import 'react-dates/lib/css/_datepicker.css';
 import { FilterContext, FilterActionCreator } from '../../../contexts/Filter';
 import './index.scss';
 
-const DateTimeFilter = () => {
+const DateTimeFilter = ({ where }) => {
   return (
     <div className="match-filter">
       <DatePicker />
       <TimeRangePicker />
-      <NotificationBtn />
+      {where === 'match' ? <NotificationBtn /> : null}
     </div>
   );
 };
@@ -60,7 +60,6 @@ const TimeRangePicker = () => {
         onTimeChange={(time) => handleStartTimeChange(time)}
         theme="classic"
       />
-      ~
       <TimePicker
         time={endTime}
         onTimeChange={(time) => handleEndTimeChange(time)}

@@ -80,11 +80,9 @@ const LoginWithNaver = ({ isLoggedIn }) => {
   return (
     <div className="auth-button">
       <a
-        href={
-          !isLoggedIn
-            ? process.env.REACT_APP_API_SERVER_ADDRESS + '/auth/naver'
-            : process.env.REACT_APP_API_SERVER_ADDRESS + '/auth/logout'
-        }
+        href={`${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/${
+          isLoggedIn ? 'naver' : 'logout'
+        }`}
       >
         <img
           className={authClass}
