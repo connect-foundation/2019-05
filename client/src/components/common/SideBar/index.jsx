@@ -11,8 +11,9 @@ import {
 } from '../../../contexts/SideBar';
 import { UserContext, UserActionCreator } from '../../../contexts/User';
 
-import naverLoginPng from '../../../assets/images/naver_login_green_long.PNG';
-import naverLogoutPng from '../../../assets/images/naver_logout_green_mid.PNG';
+import naverLoginPng from '../../../assets/images/naver_auth_btn/naver_login_green_long.PNG';
+import naverLogoutPng from '../../../assets/images/naver_auth_btn/naver_logout_green_mid.PNG';
+import kakaoLoginPng from '../../../assets/images/kakao_auth_btn/kakao_login.png';
 import barcaLogo from '../../../assets/images/fc-barcelona-logo.png';
 import './index.scss';
 import useAsync from '../../../hooks/useAsync';
@@ -30,11 +31,11 @@ const authenticateUser = async (token) => {
 };
 
 const SideBar = () => {
-  const [cookeis] = useCookies();
+  const [cookies] = useCookies();
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
-  const openState = sideBarState.activated ? 'side-bar--opening' : '';
+  const openState = sideBarState.activated ? 'side-bar--open' : '';
   const { userState, userDispatch } = useContext(UserContext);
-  const [loginState] = useAsync(authenticateUser.bind(null, cookeis.jwt), []);
+  const [loginState] = useAsync(authenticateUser.bind(null, cookies.jwt), []);
   const { data: playerId } = loginState;
 
   const handleActivated = () => {
@@ -52,47 +53,59 @@ const SideBar = () => {
         activated={sideBarState.activated}
         setActivated={handleActivated}
       />
-      {playerId ? <TeamInfo /> : <></>}
       {playerId ? <InnerLayerWhenLoggedIn /> : <InnerLayerWhenLoggedOut />}
-      <LoginWithNaver isLoggedIn={!!userState.playerId} />
     </nav>
   );
 };
 const InnerLayerWhenLoggedIn = () => (
   <>
+    <TeamInfo />
     <ContentButton>🚀예시 버튼</ContentButton>
     <Notifications />
+    <div className="empty"></div>
+    <LogoutButton />
   </>
 );
-const InnerLayerWhenLoggedOut = () => (
-  <div className="side-bar__inner-layer--loggedout">
-    <h1>
-      지금 바로 퀵킥의 <br />
-      멤버가 되어 보세요!
-    </h1>
-  </div>
-);
-const LoginWithNaver = ({ isLoggedIn }) => {
-  const authClass = classNames({
-    'auth-button__img--login': !isLoggedIn,
-    'auth-button__img--logout': isLoggedIn,
-  });
+const InnerLayerWhenLoggedOut = () => {
+  const message = '지금 바로 퀵킥의 멤버가 되어 보세요!';
+  return (
+    <>
+      <div className="side-bar__inner-layer--loggedout">
+        <h1>{message}</h1>
+        <LoginButton />
+      </div>
+    </>
+  );
+};
+
+const LogoutButton = () => {
+  const LOGOUT_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/logout`;
   return (
     <div className="auth-button">
-      <a
-        href={`${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/${
-          isLoggedIn ? 'naver' : 'logout'
-        }`}
-      >
-        <img
-          className={authClass}
-          src={isLoggedIn ? naverLogoutPng : naverLoginPng}
-          alt="login/logout btn"
-        />
+      <a href={LOGOUT_ADDR}>
+        <div className="auth-button--logout">로그아웃</div>
       </a>
     </div>
   );
 };
+const LoginButton = () => {
+  const classes = 'auth-button__img';
+  const NAVER_LOGIN_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/naver`;
+  const KAKAO_LOGIN_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/kakao`;
+
+  return (
+    <div className="auth-button">
+      <a href={NAVER_LOGIN_ADDR}>
+        <img className={classes} src={naverLoginPng} alt="naver login" />
+      </a>
+
+      <a href={KAKAO_LOGIN_ADDR}>
+        <img className={classes} src={kakaoLoginPng} alt="kakao login" />
+      </a>
+    </div>
+  );
+};
+
 const Notifications = () => {
   const [open, setOpen] = useState(false);
   const matches = [
