@@ -1,8 +1,9 @@
 @import '../../../commonStyle';
 
 .team-introduction {
-  padding: 80px;
-  box-sizing: border-box;
+  .grid-container {
+    padding: 80px;
+  }
   .team-info__title {
     margin-bottom: 50px;
     h2 {
