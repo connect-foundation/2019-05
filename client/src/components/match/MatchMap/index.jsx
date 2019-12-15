@@ -18,7 +18,7 @@ const DISTRICT_FETCH_ERROR_MSG = '지역 정보 불러오기를 실패했습니�
 
 const markerElement = {
   mapTitle:
-    '<div style="display:inline-block; text-align:center; font-size:20px; margin-top: 50px; width: 265px; heigth: 25px;"> <span>서울 지역구 풋살 매칭 현황 지도</span> </div>',
+    '<div style="display:inline-block; text-align:center; font-size:20px; margin-top: 50px; width: 265px; height: 25px;"> <span>서울 지역구 풋살 매칭 현황 지도</span> </div>',
   districtName: (name) => {
     const width = (name.length + 2) * 10;
     return `
@@ -27,7 +27,7 @@ const markerElement = {
         </div>`;
   },
   overDistrictCnt:
-    '<div style="position:relative; display:inline-block; text-align:center; font-size:20px; width:400px; heigth:30px; top:-15px; left:-200px; color:red;"> <span>더 이상 지역구를 선택할 수 없습니다.</span> </div>',
+    '<div style="position:relative; display:inline-block; text-align:center; font-size:20px; width:400px; height:30px; top:-15px; left:-200px; color:red;"> <span>더 이상 지역구를 선택할 수 없습니다.</span> </div>',
 };
 
 const getNaverMap = async () => {

@@ -3,13 +3,11 @@ const router = express.Router();
 const mailSender = require('../utils/nodemailer');
 const template = require('../utils/mailTemplate');
 router.get('/', (req, res, next) => {
-  mailSender
-    .setOptions({
-      to: ['seungnam2@gmail.com'],
-      subject: 'seungnam',
-      html: template,
-    })
-    .fireMail();
+  mailSender.fireMail({
+    to: ['seungnam2@gmail.com'],
+    subject: 'seungnam',
+    html: template,
+  });
   res.json({ result: 'ok', msg: 'The email has successfully sent.' });
 });
 
@@ -25,13 +23,11 @@ router.post('/', function(req, res, next) {
       <li>area:${area}</li>
     </ul>
   `;
-  mailSender
-    .setOptions({
-      to: ['seungnam2@gmail.com'],
-      subject: host.name,
-      html: template,
-    })
-    .fireMail();
+  mailSender.fireMail({
+    to: ['seungnam2@gmail.com'],
+    subject: host.name,
+    html: template,
+  });
   res.json({ result: 'ok', msg: 'The email has successfully sent.' });
 });
 
