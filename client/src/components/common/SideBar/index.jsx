@@ -10,10 +10,6 @@ import {
   SideBarContext,
 } from '../../../contexts/SideBar';
 import { UserContext, UserActionCreator } from '../../../contexts/User';
-
-import naverLoginPng from '../../../assets/images/naver_auth_btn/naver_login_green_long.PNG';
-import naverLogoutPng from '../../../assets/images/naver_auth_btn/naver_logout_green_mid.PNG';
-import kakaoLoginPng from '../../../assets/images/kakao_auth_btn/kakao_login.png';
 import barcaLogo from '../../../assets/images/fc-barcelona-logo.png';
 import './index.scss';
 import useAsync from '../../../hooks/useAsync';
@@ -46,9 +42,13 @@ const SideBar = () => {
     if (!playerId) return;
     userDispatch(UserActionCreator.login(playerId));
   }, [playerId]);
-
+  const sideBarClass = classNames({
+    'side-bar': true,
+    'side-bar--open': sideBarState.activated,
+    'side-bar__inner-layer--loggedin': playerId,
+  });
   return (
-    <nav className={`side-bar ${openState}`}>
+    <nav className={sideBarClass}>
       <CloseBtn
         activated={sideBarState.activated}
         setActivated={handleActivated}
@@ -57,24 +57,25 @@ const SideBar = () => {
     </nav>
   );
 };
-const InnerLayerWhenLoggedIn = () => (
-  <>
-    <TeamInfo />
-    <ContentButton>🚀예시 버튼</ContentButton>
-    <Notifications />
-    <div className="empty"></div>
-    <LogoutButton />
-  </>
-);
+const InnerLayerWhenLoggedIn = () => {
+  return (
+    <>
+      <TeamInfo />
+      <ContentButton>🚀예시 버튼</ContentButton>
+      <Notifications />
+      <EmptySpace />
+      <LogoutButton />
+    </>
+  );
+};
+
 const InnerLayerWhenLoggedOut = () => {
   const message = '지금 바로 퀵킥의 멤버가 되어 보세요!';
   return (
-    <>
-      <div className="side-bar__inner-layer--loggedout">
-        <h1>{message}</h1>
-        <LoginButton />
-      </div>
-    </>
+    <div className="side-bar__inner-layer--loggedout">
+      <h1>{message}</h1>
+      <LoginButtons />
+    </div>
   );
 };
 
@@ -88,19 +89,18 @@ const LogoutButton = () => {
     </div>
   );
 };
-const LoginButton = () => {
-  const classes = 'auth-button__img';
+
+const LoginButtons = () => {
   const NAVER_LOGIN_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/naver`;
   const KAKAO_LOGIN_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/kakao`;
 
   return (
     <div className="auth-button">
       <a href={NAVER_LOGIN_ADDR}>
-        <img className={classes} src={naverLoginPng} alt="naver login" />
+        <AuthButton provider="naver" />
       </a>
-
       <a href={KAKAO_LOGIN_ADDR}>
-        <img className={classes} src={kakaoLoginPng} alt="kakao login" />
+        <AuthButton provider="kakao" />
       </a>
     </div>
   );
@@ -108,6 +108,7 @@ const LoginButton = () => {
 
 const Notifications = () => {
   const [open, setOpen] = useState(false);
+
   const matches = [
     { seq: 1, content: 'match 1' },
     { seq: 2, content: 'match 2' },
@@ -122,12 +123,14 @@ const Notifications = () => {
   return (
     <>
       <ContentButton className={btnClass} onClick={handleBtnClick}>
-        🛎 알림 신청 내역 &nbsp; {open ? '🙉' : '🙈'}
+        🛎 알림 신청 내역 &nbsp;{' '}
+        {open ? <span role="img">🙉</span> : <span role="img">🙈</span>}
         {open ? <NotiList matches={matches} /> : null}
       </ContentButton>
     </>
   );
 };
+
 const NotiList = ({ matches }) => (
   <ul>
     {matches.map((match) => (
@@ -135,6 +138,7 @@ const NotiList = ({ matches }) => (
     ))}
   </ul>
 );
+
 const CloseBtn = ({ activated, setActivated }) => (
   <div className="close-btn">
     <button type="button" onClick={() => setActivated(!activated)}>
@@ -142,6 +146,7 @@ const CloseBtn = ({ activated, setActivated }) => (
     </button>
   </div>
 );
+
 const TeamInfo = () => (
   <div>
     <Emblem />
@@ -149,7 +154,7 @@ const TeamInfo = () => (
   </div>
 );
 
-const ContentButton = ({ className, children, onClick }) => {
+const ContentButton = ({ className = '', children, onClick }) => {
   return (
     <div className={`${className} side-bar__content-button`} onClick={onClick}>
       {children}
@@ -173,5 +178,19 @@ const Emblem = () => {
     </>
   );
 };
+
+const AuthButton = ({ provider }) => {
+  const message = `${provider === 'naver' ? '네이버 ' : '카카오'} 로그인`;
+  return (
+    <>
+      <div className={`new-auth-button new-auth-button--${provider}`}>
+        <img className="auth-logo" src={`${provider}.svg`} alt="" />
+        <span className="auth-message">{message}</span>
+      </div>
+    </>
+  );
+};
+
+const EmptySpace = () => <div className="empty"></div>;
 
 export default SideBar;
