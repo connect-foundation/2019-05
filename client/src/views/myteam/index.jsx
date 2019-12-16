@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import useAsync from '../../hooks/useAsync';
 import { Header, SideBar } from '../../components/common';
-import { TeamIntroduction, TeamMembers } from '../../components/myteam';
+import {
+  TeamIntroduction,
+  TeamMembers,
+  TeamMatchList,
+} from '../../components/myteam';
 
 const gql = `
 query ($seq: Int){
@@ -25,6 +29,12 @@ query ($seq: Int){
       date
       startTime
       endTime
+      appliedLists {
+        seq
+        team{
+          name
+        }
+      }
     }
     onApplyingList {
       match {
@@ -81,6 +91,7 @@ const Myteam = () => {
         <Header />
         <TeamIntroduction teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
         <TeamMembers members={teamInfo.members} />
+        <TeamMatchList />
       </div>
     </>
   );
