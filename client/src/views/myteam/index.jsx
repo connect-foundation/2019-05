@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useAsync from '../../hooks/useAsync';
-import { Header, Footer } from '../../components/common';
-import { TeamIntroduction } from '../../components/myteam';
+import { Header, SideBar } from '../../components/common';
+import { TeamIntroduction, TeamMembers } from '../../components/myteam';
 
 const gql = `
 query ($seq: Int){
@@ -72,12 +72,16 @@ const Myteam = () => {
     if (!teamData) return;
     setTeamInfo(teamData.Team);
   }, [teamData]);
-  if (teamDataLoading || teamError) return null;
+  if (teamDataLoading || teamError || !teamInfo) return null;
   return (
-    <div className="myTeam">
-      <Header />
-      <TeamIntroduction teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
-    </div>
+    <>
+      <SideBar />
+      <div className="myTeam">
+        <Header />
+        <TeamIntroduction teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
+        <TeamMembers members={teamInfo.members} />
+      </div>
+    </>
   );
 };
 

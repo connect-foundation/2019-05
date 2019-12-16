@@ -5,9 +5,11 @@ const resolvers = {
         where: {
           seq,
           area,
-          host: {
-            seq: host,
-          },
+          host: host
+            ? {
+                seq: host,
+              }
+            : undefined,
         },
       });
     },
@@ -46,9 +48,11 @@ const resolvers = {
         where: {
           seq,
           playerId,
-          team: {
-            seq: team,
-          },
+          team: team
+            ? {
+                seq: team,
+              }
+            : undefined,
         },
       });
     },
@@ -61,9 +65,11 @@ const resolvers = {
     Notifiers: (_, { seq, player }, { prisma }) => {
       return prisma.notifiers({
         seq,
-        player: {
-          seq: player,
-        },
+        player: player
+          ? {
+              seq: player,
+            }
+          : undefined,
       });
     },
     Notifier: (_, { seq }, { prisma }) => {
@@ -82,11 +88,13 @@ const resolvers = {
     CreatePlayer: (_, { playerId, team, name, phone, email }, { prisma }) => {
       return prisma.createPlayer({
         playerId,
-        team: {
-          connect: {
-            seq: team,
-          },
-        },
+        team: team
+          ? {
+              connect: {
+                seq: team,
+              },
+            }
+          : null,
         name,
         phone,
         email,

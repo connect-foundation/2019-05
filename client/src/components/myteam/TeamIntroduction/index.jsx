@@ -1,5 +1,6 @@
 import React, { useState, useRef, forwardRef } from 'react';
 import PropTypes from 'prop-types';
+import sanitizeHtml from 'sanitize-html';
 import { getDistrict, convertDistrictCode } from '../../../util';
 
 import './index.scss';
@@ -28,7 +29,9 @@ const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
     const teamInfoForm = new FormData();
     Object.entries(teamInfoRef).forEach((ref) => {
       const refValue =
-        ref[0] === 'emblem' ? ref[1].current.files[0] : ref[1].current.value;
+        ref[0] === 'emblem'
+          ? ref[1].current.files[0]
+          : sanitizeHtml(ref[1].current.value);
       teamInfoForm.append(ref[1].current.name, refValue);
     });
     return teamInfoForm;
