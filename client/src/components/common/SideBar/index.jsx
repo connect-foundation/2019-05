@@ -14,7 +14,6 @@ import barcaLogo from '../../../assets/images/fc-barcelona-logo.png';
 import './index.scss';
 import useAsync from '../../../hooks/useAsync';
 import classNames from 'classnames';
-import { TEAM_INFO_FETCH_QUERY } from '../../../util/query';
 
 const authenticateUser = async (token) => {
   if (!token) return null;
@@ -43,9 +42,13 @@ const SideBar = () => {
     if (!playerId) return;
     userDispatch(UserActionCreator.login(playerId));
   }, [playerId]);
-
+  const sideBarClass = classNames({
+    'side-bar': true,
+    'side-bar--open': sideBarState.activated,
+    'side-bar__inner-layer--loggedin': playerId,
+  });
   return (
-    <nav className={`side-bar ${openState}`}>
+    <nav className={sideBarClass}>
       <CloseBtn
         activated={sideBarState.activated}
         setActivated={handleActivated}
@@ -55,22 +58,6 @@ const SideBar = () => {
   );
 };
 const InnerLayerWhenLoggedIn = () => {
-  // const [value, setValue] = useState('');
-  // const fetchBody = {
-  //   query: TEAM_INFO_FETCH_QUERY,
-  // };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const { data } = await axios.post(
-  //       'http://localhost:4000/graphql',
-  //       fetchBody
-  //     );
-  //     setValue(data.data);
-  //   };
-  //   fetchData();
-  // }, []);
-  // console.log(value);
   return (
     <>
       <TeamInfo />
@@ -81,6 +68,7 @@ const InnerLayerWhenLoggedIn = () => {
     </>
   );
 };
+
 const InnerLayerWhenLoggedOut = () => {
   const message = '지금 바로 퀵킥의 멤버가 되어 보세요!';
   return (
@@ -101,6 +89,7 @@ const LogoutButton = () => {
     </div>
   );
 };
+
 const LoginButtons = () => {
   const NAVER_LOGIN_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/naver`;
   const KAKAO_LOGIN_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/kakao`;
@@ -116,6 +105,7 @@ const LoginButtons = () => {
     </div>
   );
 };
+
 const Notifications = () => {
   const [open, setOpen] = useState(false);
 
@@ -140,6 +130,7 @@ const Notifications = () => {
     </>
   );
 };
+
 const NotiList = ({ matches }) => (
   <ul>
     {matches.map((match) => (
@@ -147,6 +138,7 @@ const NotiList = ({ matches }) => (
     ))}
   </ul>
 );
+
 const CloseBtn = ({ activated, setActivated }) => (
   <div className="close-btn">
     <button type="button" onClick={() => setActivated(!activated)}>
@@ -154,6 +146,7 @@ const CloseBtn = ({ activated, setActivated }) => (
     </button>
   </div>
 );
+
 const TeamInfo = () => (
   <div>
     <Emblem />
@@ -161,7 +154,7 @@ const TeamInfo = () => (
   </div>
 );
 
-const ContentButton = ({ className, children, onClick }) => {
+const ContentButton = ({ className = '', children, onClick }) => {
   return (
     <div className={`${className} side-bar__content-button`} onClick={onClick}>
       {children}
@@ -199,4 +192,5 @@ const AuthButton = ({ provider }) => {
 };
 
 const EmptySpace = () => <div className="empty"></div>;
+
 export default SideBar;
