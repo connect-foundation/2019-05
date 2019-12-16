@@ -216,6 +216,11 @@ enum Area {
   KDG
 }
 
+enum Auth {
+  KAKAO
+  NAVER
+}
+
 type BatchPayload {
   count: Long!
 }
@@ -1122,6 +1127,7 @@ type Player {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   notiList(where: NotifierWhereInput, orderBy: NotifierOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notifier!]
   uploadMatchList(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
 }
@@ -1139,6 +1145,7 @@ input PlayerCreateInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   notiList: NotifierCreateManyWithoutPlayerInput
   uploadMatchList: MatchCreateManyWithoutAuthorInput
 }
@@ -1165,6 +1172,7 @@ input PlayerCreateWithoutNotiListInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   uploadMatchList: MatchCreateManyWithoutAuthorInput
 }
 
@@ -1174,6 +1182,7 @@ input PlayerCreateWithoutTeamInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   notiList: NotifierCreateManyWithoutPlayerInput
   uploadMatchList: MatchCreateManyWithoutAuthorInput
 }
@@ -1185,6 +1194,7 @@ input PlayerCreateWithoutUploadMatchListInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   notiList: NotifierCreateManyWithoutPlayerInput
 }
 
@@ -1204,6 +1214,8 @@ enum PlayerOrderByInput {
   phone_DESC
   email_ASC
   email_DESC
+  authProvider_ASC
+  authProvider_DESC
 }
 
 type PlayerPreviousValues {
@@ -1212,6 +1224,7 @@ type PlayerPreviousValues {
   name: String
   phone: String
   email: String
+  authProvider: Auth
 }
 
 input PlayerScalarWhereInput {
@@ -1279,6 +1292,10 @@ input PlayerScalarWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
+  authProvider: Auth
+  authProvider_not: Auth
+  authProvider_in: [Auth!]
+  authProvider_not_in: [Auth!]
   AND: [PlayerScalarWhereInput!]
   OR: [PlayerScalarWhereInput!]
   NOT: [PlayerScalarWhereInput!]
@@ -1308,6 +1325,7 @@ input PlayerUpdateInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   notiList: NotifierUpdateManyWithoutPlayerInput
   uploadMatchList: MatchUpdateManyWithoutAuthorInput
 }
@@ -1317,6 +1335,7 @@ input PlayerUpdateManyDataInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
 }
 
 input PlayerUpdateManyMutationInput {
@@ -1324,6 +1343,7 @@ input PlayerUpdateManyMutationInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
 }
 
 input PlayerUpdateManyWithoutTeamInput {
@@ -1363,6 +1383,7 @@ input PlayerUpdateWithoutNotiListDataInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   uploadMatchList: MatchUpdateManyWithoutAuthorInput
 }
 
@@ -1371,6 +1392,7 @@ input PlayerUpdateWithoutTeamDataInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   notiList: NotifierUpdateManyWithoutPlayerInput
   uploadMatchList: MatchUpdateManyWithoutAuthorInput
 }
@@ -1381,6 +1403,7 @@ input PlayerUpdateWithoutUploadMatchListDataInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   notiList: NotifierUpdateManyWithoutPlayerInput
 }
 
@@ -1471,6 +1494,10 @@ input PlayerWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
+  authProvider: Auth
+  authProvider_not: Auth
+  authProvider_in: [Auth!]
+  authProvider_not_in: [Auth!]
   notiList_every: NotifierWhereInput
   notiList_some: NotifierWhereInput
   notiList_none: NotifierWhereInput

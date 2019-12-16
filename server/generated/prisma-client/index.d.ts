@@ -321,6 +321,8 @@ export type Area =
 
 export type Result = "HOST" | "GUEST" | "DRAW";
 
+export type Auth = "KAKAO" | "NAVER";
+
 export type PlayerOrderByInput =
   | "seq_ASC"
   | "seq_DESC"
@@ -331,7 +333,9 @@ export type PlayerOrderByInput =
   | "phone_ASC"
   | "phone_DESC"
   | "email_ASC"
-  | "email_DESC";
+  | "email_DESC"
+  | "authProvider_ASC"
+  | "authProvider_DESC";
 
 export type NotifierOrderByInput =
   | "seq_ASC"
@@ -467,6 +471,10 @@ export interface PlayerWhereInput {
   email_not_starts_with?: Maybe<String>;
   email_ends_with?: Maybe<String>;
   email_not_ends_with?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
+  authProvider_not?: Maybe<Auth>;
+  authProvider_in?: Maybe<Auth[] | Auth>;
+  authProvider_not_in?: Maybe<Auth[] | Auth>;
   notiList_every?: Maybe<NotifierWhereInput>;
   notiList_some?: Maybe<NotifierWhereInput>;
   notiList_none?: Maybe<NotifierWhereInput>;
@@ -883,6 +891,7 @@ export interface PlayerCreateWithoutTeamInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
   notiList?: Maybe<NotifierCreateManyWithoutPlayerInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutAuthorInput>;
 }
@@ -981,6 +990,7 @@ export interface PlayerCreateWithoutUploadMatchListInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
   notiList?: Maybe<NotifierCreateManyWithoutPlayerInput>;
 }
 
@@ -1146,6 +1156,7 @@ export interface PlayerUpdateWithoutTeamDataInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
   notiList?: Maybe<NotifierUpdateManyWithoutPlayerInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutAuthorInput>;
 }
@@ -1378,6 +1389,7 @@ export interface PlayerUpdateWithoutUploadMatchListDataInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
   notiList?: Maybe<NotifierUpdateManyWithoutPlayerInput>;
 }
 
@@ -1805,6 +1817,10 @@ export interface PlayerScalarWhereInput {
   email_not_starts_with?: Maybe<String>;
   email_ends_with?: Maybe<String>;
   email_not_ends_with?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
+  authProvider_not?: Maybe<Auth>;
+  authProvider_in?: Maybe<Auth[] | Auth>;
+  authProvider_not_in?: Maybe<Auth[] | Auth>;
   AND?: Maybe<PlayerScalarWhereInput[] | PlayerScalarWhereInput>;
   OR?: Maybe<PlayerScalarWhereInput[] | PlayerScalarWhereInput>;
   NOT?: Maybe<PlayerScalarWhereInput[] | PlayerScalarWhereInput>;
@@ -1820,6 +1836,7 @@ export interface PlayerUpdateManyDataInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
 }
 
 export interface TeamUpsertWithoutOnApplyingListInput {
@@ -1890,6 +1907,7 @@ export interface PlayerCreateWithoutNotiListInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutAuthorInput>;
 }
 
@@ -1914,6 +1932,7 @@ export interface PlayerUpdateWithoutNotiListDataInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutAuthorInput>;
 }
 
@@ -1936,6 +1955,7 @@ export interface PlayerCreateInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
   notiList?: Maybe<NotifierCreateManyWithoutPlayerInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutAuthorInput>;
 }
@@ -1946,6 +1966,7 @@ export interface PlayerUpdateInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
   notiList?: Maybe<NotifierUpdateManyWithoutPlayerInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutAuthorInput>;
 }
@@ -1955,6 +1976,7 @@ export interface PlayerUpdateManyMutationInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
+  authProvider?: Maybe<Auth>;
 }
 
 export interface StadiumCreateInput {
@@ -2288,6 +2310,7 @@ export interface Player {
   name?: String;
   phone?: String;
   email?: String;
+  authProvider?: Auth;
 }
 
 export interface PlayerPromise extends Promise<Player>, Fragmentable {
@@ -2297,6 +2320,7 @@ export interface PlayerPromise extends Promise<Player>, Fragmentable {
   name: () => Promise<String>;
   phone: () => Promise<String>;
   email: () => Promise<String>;
+  authProvider: () => Promise<Auth>;
   notiList: <T = FragmentableArray<Notifier>>(args?: {
     where?: NotifierWhereInput;
     orderBy?: NotifierOrderByInput;
@@ -2326,6 +2350,7 @@ export interface PlayerSubscription
   name: () => Promise<AsyncIterator<String>>;
   phone: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
+  authProvider: () => Promise<AsyncIterator<Auth>>;
   notiList: <T = Promise<AsyncIterator<NotifierSubscription>>>(args?: {
     where?: NotifierWhereInput;
     orderBy?: NotifierOrderByInput;
@@ -2355,6 +2380,7 @@ export interface PlayerNullablePromise
   name: () => Promise<String>;
   phone: () => Promise<String>;
   email: () => Promise<String>;
+  authProvider: () => Promise<Auth>;
   notiList: <T = FragmentableArray<Notifier>>(args?: {
     where?: NotifierWhereInput;
     orderBy?: NotifierOrderByInput;
@@ -3085,6 +3111,7 @@ export interface PlayerPreviousValues {
   name?: String;
   phone?: String;
   email?: String;
+  authProvider?: Auth;
 }
 
 export interface PlayerPreviousValuesPromise
@@ -3095,6 +3122,7 @@ export interface PlayerPreviousValuesPromise
   name: () => Promise<String>;
   phone: () => Promise<String>;
   email: () => Promise<String>;
+  authProvider: () => Promise<Auth>;
 }
 
 export interface PlayerPreviousValuesSubscription
@@ -3105,6 +3133,7 @@ export interface PlayerPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
   phone: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
+  authProvider: () => Promise<AsyncIterator<Auth>>;
 }
 
 export interface StadiumSubscriptionPayload {
@@ -3256,6 +3285,10 @@ export const models: Model[] = [
   },
   {
     name: "Player",
+    embedded: false
+  },
+  {
+    name: "Auth",
     embedded: false
   },
   {
