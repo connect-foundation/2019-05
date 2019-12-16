@@ -33,6 +33,9 @@ img {
       word-break: keep-all;
       text-align: center;
     }
+    &--loggedin {
+      padding: 70px 30px 10px;
+    }
   }
   &--open {
     background-color: whitesmoke;
@@ -43,7 +46,7 @@ img {
     border: 1px solid $quick_light_navy;
     border-radius: 5px;
     padding: 6px 12px;
-    margin: 3px 0;
+    margin: 4px 0;
     width: 200px;
     display: inline-block;
     color: $quick_light_navy;
