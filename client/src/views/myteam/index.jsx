@@ -16,6 +16,7 @@ query ($seq: Int){
       seq
       name
       phone
+      email
     }
     uploadMatchList{
       stadium
