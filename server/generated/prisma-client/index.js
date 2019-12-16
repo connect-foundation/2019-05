@@ -29,6 +29,10 @@ var models = [
     embedded: false,
   },
   {
+    name: 'Status',
+    embedded: false,
+  },
+  {
     name: 'Apply',
     embedded: false,
   },

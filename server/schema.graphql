@@ -9,6 +9,7 @@ type Team {
     lose: Int!
     rating: Int!
     teamUniqueId: String!
+    owner: Player!
     members: [Player!]
     uploadMatchList: [Match!]
     matchingDoneList: [Match!]
@@ -68,6 +69,7 @@ type Match {
     author: Player!
     host: Team!
     guest: Team
+    status: Status!
     stadium: String!
     address: String
     area: Area!
@@ -77,6 +79,11 @@ type Match {
     description: String
     result: Result
     appliedLists: [Apply!]
+}
+
+enum Status {
+    OPEN
+    CLOSED
 }
 
 type Apply{
