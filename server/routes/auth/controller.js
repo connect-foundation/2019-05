@@ -37,14 +37,14 @@ const successOrFailLoginInKakao = (req, res, next) => {
   );
 };
 
-function publishToken(req, res, next) {
+const publishToken = (req, res, next) => {
   const playerId = convertToString(req.user.id);
   const payload = { playerId };
   const expiresIn = { expiresIn: '5m' };
   const token = jwt.sign(payload, env.JWT_SECRET, expiresIn);
   res.cookie('jwt', token);
   next();
-}
+};
 
 const redirectToHome = (req, res) => {
   return res.redirect(env.REDIRECT_URL);
