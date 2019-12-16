@@ -15,10 +15,10 @@ const boostCamperInfo = [
   { teamNum: 4, name: '김준표' },
   { teamNum: 4, name: '우혜주' },
   { teamNum: 4, name: '육지수' },
-  { teamNum: 5, name: '김종윤' },
-  { teamNum: 5, name: '김동균' },
-  { teamNum: 5, name: '김웅기' },
-  { teamNum: 5, name: '노승남' },
+  { teamNum: 5, name: '언더독1' },
+  { teamNum: 5, name: '언더독2' },
+  { teamNum: 5, name: '언더독3' },
+  { teamNum: 5, name: '언더독4' },
   { teamNum: 6, name: '배형진' },
   { teamNum: 6, name: '성재호' },
   { teamNum: 6, name: '이정환' },
@@ -111,11 +111,12 @@ const UNDER_DOGGS_PLAYER_ID = {
   노승남: '18209540',
 };
 const TEST_EMAIL = [
-  'seungnam2@gmail.com',
   'dhorlawhddbs@naver.com',
+  'seungnam2@gmail.com',
   'eastgerm_8@naver.com',
   'raf_1@daum.net',
 ];
+const TEST_PHONE = ['01033084808', '01051141777', '01046178768', '01052514984'];
 const stardiumSet = [
   {
     name: '송파 천마풋살파크',
@@ -443,10 +444,7 @@ const Team = [
 ];
 
 const inputUnderDoggsPlayerId = (playerInfo, idx) => {
-  if (playerInfo.teamNum !== UNDER_DOGGS_TEAM_NUM) {
-    return idx + '';
-  }
-  return UNDER_DOGGS_PLAYER_ID[playerInfo.name];
+  return idx + '';
 };
 
 const Player = boostCamperInfo.map((playerInfo, idx) => {
@@ -458,8 +456,9 @@ const Player = boostCamperInfo.map((playerInfo, idx) => {
       },
     },
     name: playerInfo.name,
-    phone: DEFAULT_PHONE_NUMBER,
+    phone: TEST_PHONE[idx % 4],
     email: TEST_EMAIL[idx % 4],
+    authProvider: 'NAVER',
   };
 });
 
@@ -557,6 +556,7 @@ const createMatchData = () => {
         },
       },
       guest: null,
+      status: 'OPEN',
       stadium: randomStadium.name,
       address: randomStadium.address,
       area: randomStadium.district,
@@ -587,6 +587,7 @@ const createMatchData = () => {
         },
       },
       guest: null,
+      status: 'OPEN',
       stadium: randomStadium.name,
       address: randomStadium.address,
       area: randomStadium.district,

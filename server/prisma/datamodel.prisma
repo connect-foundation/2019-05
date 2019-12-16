@@ -9,6 +9,7 @@ type Team {
     lose: Int! @default(value: 0)
     rating: Int! @default(value: 1000)
     teamUniqueId: String! @unique
+    owner: Player @relation(link:INLINE, name: "TeamOwner")
     members: [Player!] @relation(name: "PlayersTeam")
     uploadMatchList: [Match!] @relation(name: "MatchHostTeam")
     matchingDoneList: [Match!] @relation(name: "MatchGuestTeam")
@@ -22,9 +23,10 @@ type Player {
     name: String
     phone: String
     email: String
-    authProvider: Auth
+    authProvider: Auth!
     notiList: [Notifier!] @relation(name: "NotiPlayer")
     uploadMatchList: [Match!] @relation(name: "MatchAuthor")
+    teamCreate: [Team] @relation(name: "TeamOwner")
 }
 enum Auth {
     KAKAO
@@ -69,6 +71,7 @@ type Match {
     author: Player! @relation(link:INLINE, name: "MatchAuthor")
     host: Team! @relation(link:INLINE, name: "MatchHostTeam")
     guest: Team @relation(link:INLINE, name: "MatchGuestTeam")
+    status: Status!
     stadium: String!
     address: String
     area: Area!
@@ -80,6 +83,10 @@ type Match {
     appliedLists: [Apply!] @relation(name: "AppliedMatch")
 }
 
+enum Status {
+    OPEN
+    CLOSED
+}
 type Apply{
     seq: Int! @id
     team: Team @relation(link:INLINE, name: "ApplyingTeam")
