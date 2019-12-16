@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useAsync from '../../hooks/useAsync';
-import { Header, Footer } from '../../components/common';
+import { Header, SideBar } from '../../components/common';
 import { TeamIntroduction, TeamMembers } from '../../components/myteam';
 
 const gql = `
@@ -74,11 +74,14 @@ const Myteam = () => {
   }, [teamData]);
   if (teamDataLoading || teamError || !teamInfo) return null;
   return (
-    <div className="myTeam">
-      <Header />
-      <TeamIntroduction teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
-      <TeamMembers members={teamInfo.members} />
-    </div>
+    <>
+      <SideBar />
+      <div className="myTeam">
+        <Header />
+        <TeamIntroduction teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
+        <TeamMembers members={teamInfo.members} />
+      </div>
+    </>
   );
 };
 
