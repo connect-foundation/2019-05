@@ -15,7 +15,7 @@ const TeamMembers = ({ members }) => {
 
     return members.map((val, idx) => {
       return (
-        <tr>
+        <tr key={val.seq}>
           <td>{idx + 1}</td>
           <td>{val.name}</td>
           <td>{val.phone}</td>

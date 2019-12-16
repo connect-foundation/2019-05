@@ -23,6 +23,7 @@ query ($seq: Int){
       email
     }
     uploadMatchList{
+      seq
       stadium
       address
       area
@@ -91,7 +92,10 @@ const Myteam = () => {
         <Header />
         <TeamIntroduction teamInfo={teamInfo} setTeamInfo={setTeamInfo} />
         <TeamMembers members={teamInfo.members} />
-        <TeamMatchList />
+        <TeamMatchList
+          uploadMatches={teamInfo.uploadMatchList}
+          applyingMatches={teamInfo.onApplyingList}
+        />
       </div>
     </>
   );
