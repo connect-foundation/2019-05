@@ -42,13 +42,11 @@ const SideBar = () => {
     if (!playerId) return;
     userDispatch(UserActionCreator.login(playerId));
   }, [playerId]);
-
   const sideBarClass = classNames({
     'side-bar': true,
     'side-bar--open': sideBarState.activated,
     'side-bar__inner-layer--loggedin': playerId,
   });
-
   return (
     <nav className={sideBarClass}>
       <CloseBtn
