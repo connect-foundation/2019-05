@@ -887,7 +887,7 @@ export interface TeamCreateWithoutOnApplyingListInput {
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
   teamUniqueId: String;
-  owner: PlayerCreateOneWithoutTeamCreateInput;
+  owner?: Maybe<PlayerCreateOneWithoutTeamCreateInput>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
@@ -905,7 +905,7 @@ export interface PlayerCreateWithoutTeamCreateInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
-  authProvider?: Maybe<Auth>;
+  authProvider: Auth;
   notiList?: Maybe<NotifierCreateManyWithoutPlayerInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutAuthorInput>;
 }
@@ -926,7 +926,7 @@ export interface TeamCreateWithoutMembersInput {
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
   teamUniqueId: String;
-  owner: PlayerCreateOneWithoutTeamCreateInput;
+  owner?: Maybe<PlayerCreateOneWithoutTeamCreateInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
@@ -965,7 +965,7 @@ export interface PlayerCreateWithoutUploadMatchListInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
-  authProvider?: Maybe<Auth>;
+  authProvider: Auth;
   notiList?: Maybe<NotifierCreateManyWithoutPlayerInput>;
   teamCreate?: Maybe<TeamCreateManyWithoutOwnerInput>;
 }
@@ -1022,7 +1022,7 @@ export interface PlayerCreateWithoutTeamInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
-  authProvider?: Maybe<Auth>;
+  authProvider: Auth;
   notiList?: Maybe<NotifierCreateManyWithoutPlayerInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutAuthorInput>;
   teamCreate?: Maybe<TeamCreateManyWithoutOwnerInput>;
@@ -1067,7 +1067,7 @@ export interface TeamCreateWithoutUploadMatchListInput {
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
   teamUniqueId: String;
-  owner: PlayerCreateOneWithoutTeamCreateInput;
+  owner?: Maybe<PlayerCreateOneWithoutTeamCreateInput>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
@@ -1151,7 +1151,7 @@ export interface TeamCreateWithoutMatchingDoneListInput {
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
   teamUniqueId: String;
-  owner: PlayerCreateOneWithoutTeamCreateInput;
+  owner?: Maybe<PlayerCreateOneWithoutTeamCreateInput>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   onApplyingList?: Maybe<ApplyCreateManyWithoutTeamInput>;
@@ -1181,16 +1181,18 @@ export interface TeamUpdateWithoutOnApplyingListDataInput {
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
   teamUniqueId?: Maybe<String>;
-  owner?: Maybe<PlayerUpdateOneRequiredWithoutTeamCreateInput>;
+  owner?: Maybe<PlayerUpdateOneWithoutTeamCreateInput>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
 }
 
-export interface PlayerUpdateOneRequiredWithoutTeamCreateInput {
+export interface PlayerUpdateOneWithoutTeamCreateInput {
   create?: Maybe<PlayerCreateWithoutTeamCreateInput>;
   update?: Maybe<PlayerUpdateWithoutTeamCreateDataInput>;
   upsert?: Maybe<PlayerUpsertWithoutTeamCreateInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
   connect?: Maybe<PlayerWhereUniqueInput>;
 }
 
@@ -1224,7 +1226,7 @@ export interface TeamUpdateWithoutMembersDataInput {
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
   teamUniqueId?: Maybe<String>;
-  owner?: Maybe<PlayerUpdateOneRequiredWithoutTeamCreateInput>;
+  owner?: Maybe<PlayerUpdateOneWithoutTeamCreateInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
@@ -1538,7 +1540,7 @@ export interface TeamUpdateWithoutUploadMatchListDataInput {
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
   teamUniqueId?: Maybe<String>;
-  owner?: Maybe<PlayerUpdateOneRequiredWithoutTeamCreateInput>;
+  owner?: Maybe<PlayerUpdateOneWithoutTeamCreateInput>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
   onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
@@ -1832,7 +1834,7 @@ export interface TeamUpdateWithoutMatchingDoneListDataInput {
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
   teamUniqueId?: Maybe<String>;
-  owner?: Maybe<PlayerUpdateOneRequiredWithoutTeamCreateInput>;
+  owner?: Maybe<PlayerUpdateOneWithoutTeamCreateInput>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   onApplyingList?: Maybe<ApplyUpdateManyWithoutTeamInput>;
@@ -2179,7 +2181,7 @@ export interface PlayerCreateWithoutNotiListInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
-  authProvider?: Maybe<Auth>;
+  authProvider: Auth;
   uploadMatchList?: Maybe<MatchCreateManyWithoutAuthorInput>;
   teamCreate?: Maybe<TeamCreateManyWithoutOwnerInput>;
 }
@@ -2229,7 +2231,7 @@ export interface PlayerCreateInput {
   name?: Maybe<String>;
   phone?: Maybe<String>;
   email?: Maybe<String>;
-  authProvider?: Maybe<Auth>;
+  authProvider: Auth;
   notiList?: Maybe<NotifierCreateManyWithoutPlayerInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutAuthorInput>;
   teamCreate?: Maybe<TeamCreateManyWithoutOwnerInput>;
@@ -2282,7 +2284,7 @@ export interface TeamCreateInput {
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
   teamUniqueId: String;
-  owner: PlayerCreateOneWithoutTeamCreateInput;
+  owner?: Maybe<PlayerCreateOneWithoutTeamCreateInput>;
   members?: Maybe<PlayerCreateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchCreateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchCreateManyWithoutGuestInput>;
@@ -2299,7 +2301,7 @@ export interface TeamUpdateInput {
   lose?: Maybe<Int>;
   rating?: Maybe<Int>;
   teamUniqueId?: Maybe<String>;
-  owner?: Maybe<PlayerUpdateOneRequiredWithoutTeamCreateInput>;
+  owner?: Maybe<PlayerUpdateOneWithoutTeamCreateInput>;
   members?: Maybe<PlayerUpdateManyWithoutTeamInput>;
   uploadMatchList?: Maybe<MatchUpdateManyWithoutHostInput>;
   matchingDoneList?: Maybe<MatchUpdateManyWithoutGuestInput>;
@@ -2591,7 +2593,7 @@ export interface Player {
   name?: String;
   phone?: String;
   email?: String;
-  authProvider?: Auth;
+  authProvider: Auth;
 }
 
 export interface PlayerPromise extends Promise<Player>, Fragmentable {
@@ -3426,7 +3428,7 @@ export interface PlayerPreviousValues {
   name?: String;
   phone?: String;
   email?: String;
-  authProvider?: Auth;
+  authProvider: Auth;
 }
 
 export interface PlayerPreviousValuesPromise

@@ -9,7 +9,7 @@ type Team {
     lose: Int! @default(value: 0)
     rating: Int! @default(value: 1000)
     teamUniqueId: String! @unique
-    owner: Player! @relation(link:INLINE, name: "TeamOwner")
+    owner: Player @relation(link:INLINE, name: "TeamOwner")
     members: [Player!] @relation(name: "PlayersTeam")
     uploadMatchList: [Match!] @relation(name: "MatchHostTeam")
     matchingDoneList: [Match!] @relation(name: "MatchGuestTeam")
@@ -23,7 +23,7 @@ type Player {
     name: String
     phone: String
     email: String
-    authProvider: Auth
+    authProvider: Auth!
     notiList: [Notifier!] @relation(name: "NotiPlayer")
     uploadMatchList: [Match!] @relation(name: "MatchAuthor")
     teamCreate: [Team] @relation(name: "TeamOwner")

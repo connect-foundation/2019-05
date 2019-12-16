@@ -9,7 +9,7 @@ type Team {
     lose: Int!
     rating: Int!
     teamUniqueId: String!
-    owner: Player!
+    owner: Player
     members: [Player!]
     uploadMatchList: [Match!]
     matchingDoneList: [Match!]
@@ -23,7 +23,7 @@ type Player {
     name: String
     phone: String
     email: String
-    authProvider: Auth
+    authProvider: Auth!
     notiList: [Notifier!]
     uploadMatchList: [Match!]
 }
