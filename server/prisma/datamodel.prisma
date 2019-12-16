@@ -22,8 +22,13 @@ type Player {
     name: String
     phone: String
     email: String
+    authProvider: Auth
     notiList: [Notifier!] @relation(name: "NotiPlayer")
     uploadMatchList: [Match!] @relation(name: "MatchAuthor")
+}
+enum Auth {
+    KAKAO
+    NAVER
 }
 
 enum Result {
