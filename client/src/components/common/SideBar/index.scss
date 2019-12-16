@@ -1,13 +1,16 @@
 @import '../../../commonStyle.scss';
 $sidebar_width: 260px;
-
+$naver_background: #07d405;
+$naver_text_color: #fff;
+$kakao_background: #ffe813;
+$kakao_text_color: #3c1d1e;
 img {
   max-width: 100%;
   max-height: 100%;
 }
 
 .side-bar {
-  padding: 80px 30px 10px;
+  // padding: 80px 30px 10px;
   height: 100%;
   z-index: 3000;
   box-sizing: border-box;
@@ -17,13 +20,16 @@ img {
   position: fixed;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   right: -$sidebar_width;
   top: 0;
   width: $sidebar_width;
   transition: all 0.2s ease-in-out;
   &__inner-layer {
     &--loggedout {
-      padding: 200px 0 20px 0;
+      h1 {
+        font-size: 28px;
+      }
       word-break: keep-all;
       text-align: center;
     }
@@ -136,4 +142,34 @@ img {
 
 .empty {
   flex: 1 1;
+}
+
+.new-auth-button {
+  margin-top: 5px;
+  font-size: 13px;
+  width: 180px;
+  height: 40px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  &--naver {
+    background-color: $naver_background;
+    color: $naver_text_color;
+  }
+  &--kakao {
+    background-color: $kakao_background;
+    color: $kakao_text_color;
+  }
+}
+
+.auth-logo {
+  margin-left: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.auth-message {
+  width: calc(100% - 50px);
+  font-weight: bold;
 }
