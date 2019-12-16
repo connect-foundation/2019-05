@@ -22,10 +22,14 @@ type Player {
     name: String
     phone: String
     email: String
+    authProvider: Auth
     notiList: [Notifier!]
     uploadMatchList: [Match!]
 }
-
+enum Auth {
+    KAKAO
+    NAVER
+}
 enum Result {
     HOST
     GUEST
