@@ -41,16 +41,15 @@ const settingSubscription = async () => {
   return subscription;
 };
 
-const Reducer = async (state, action) => {
+const Reducer = (state, action) => {
   /* eslint indent: ["error", 2, { "SwitchCase": 1 }] */
   switch (action.type) {
     case actions.LOGIN: {
-      const subscription = await settingSubscription();
       return {
         ...state,
         playerId: action.payload.playerId,
         playerTeam: action.payload.playerTeam,
-        subscription,
+        subscription: action.payload.subscription,
       };
     }
     case actions.LOGOUT:
