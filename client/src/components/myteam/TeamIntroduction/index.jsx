@@ -1,8 +1,8 @@
-import React, { useState, useRef, forwardRef } from 'react';
+import React, { useState, useRef, forwardRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import sanitizeHtml from 'sanitize-html';
 import { getDistrict, convertDistrictCode } from '../../../util';
-
+import { UserContext } from '../../../contexts/User';
 import './index.scss';
 
 const SEOUL_DISTRICT = getDistrict();
@@ -18,6 +18,7 @@ mutation($seq: Int, $name: String, $logo: String, $homeArea: Area, $introduction
 
 const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
   const [modState, setModState] = useState(false);
+  const { userState } = useContext(UserContext);
   const teamInfoRef = {
     seq: useRef(),
     emblem: useRef(),
@@ -63,7 +64,7 @@ const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
     const fetchBody = {
       query: gql,
       variables: {
-        seq: 5,
+        seq: userState.playerTeam,
         name: teamInfoForm.get('teamName'),
         logo: imgUploadResult ? imgUploadResult.name : undefined,
         homeArea: teamInfoForm.get('homeArea'),
