@@ -42,8 +42,7 @@ const publishToken = (req, res, next) => {
   const playerId = convertToString(req.user.id);
   const payload = { authProvider, playerId };
   const token = jwt.sign(payload, env.JWT_SECRET);
-  const httpOnly = { httpOnly: true };
-  res.cookie('jwt', token, httpOnly);
+  res.cookie('jwt', token);
   next();
 };
 
