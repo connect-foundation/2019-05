@@ -63,6 +63,7 @@ const SideBar = () => {
 
   return (
     <nav className={sideBarClass}>
+      {/* <SMSButton /> */}
       <CloseBtn
         activated={sideBarState.activated}
         setActivated={handleActivated}
@@ -266,6 +267,20 @@ const AuthButton = ({ provider }) => {
   );
 };
 
+// const SMSButton = () => {
+//   const URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification2/sms`;
+//   const requestBody = {
+//     content: `불광FC로부터 매치 신청이 들어왔습니다.
+//     https://quickkick.site 이 URL을 눌러 매치를 수락하세요.`,
+//   };
+//   const handleSMS = () => {
+//     axios
+//       .post(URL, requestBody)
+//       .then((res) => console.log(res))
+//       .catch((e) => console.log(e));
+//   };
+//   return <button onClick={handleSMS}>SMS 전송하기</button>;
+// };
 const EmptySpace = () => <div className="empty"></div>;
 
 export default SideBar;
