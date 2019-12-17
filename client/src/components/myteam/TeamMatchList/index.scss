@@ -1,0 +1,78 @@
+@import '../../../commonStyle';
+
+.team-match {
+  background: #eee;
+  .grid-container {
+    padding: 120px 80px;
+  }
+  h2 {
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: $quick_black;
+  }
+  .team-match__category {
+    display: flex;
+    margin-bottom: 20px;
+    button {
+      appearance: none;
+      border: 0 none;
+      margin-right: 30px;
+      background: none;
+      font-size: 18px;
+      outline: none;
+      cursor: pointer;
+      &.active {
+        color: $quick_mint;
+        text-decoration: underline;
+      }
+    }
+    &--upload {
+      position: relative;
+
+      &:after {
+        display: block;
+        position: absolute;
+        content: '';
+        width: 1px;
+        height: 24px;
+        right: -30px;
+        top: 0;
+        background-color: $quick_black;
+      }
+    }
+    &--apply {
+      padding-left: 30px;
+    }
+  }
+
+  .team-match__card {
+    display: flex;
+    width: 100%;
+    margin-bottom: 30px;
+    padding: 40px 60px;
+    box-sizing: border-box;
+    background: #fff;
+    font-family: 'Noto Sans KR', sans-serif;
+
+    .team-match__date,
+    .team-match__time {
+      font-size: 24px;
+      font-weight: 300;
+      color: $quick_black;
+      line-height: 24px;
+    }
+
+    .team-match__time {
+      padding: 0 50px;
+    }
+
+    .team-match__area {
+      padding-right: 60px;
+      line-height: 24px;
+    }
+  }
+
+  .team-match__no-result {
+    margin-top: 100px;
+  }
+}
