@@ -49,22 +49,22 @@ const renderingMatchListView = (listState, reFetchList) => {
   return ListView(matchList);
 };
 
-const getSelectedDistrictArray = (match) => {
-  let newArr = Object.keys(match.districtInfo).filter((districtCode) => {
-    if (match.districtInfo[districtCode].isSelected) return true;
-  });
+const getSelectedDistrictArray = (districtInfo) => {
+  let newArr = Object.keys(districtInfo).filter(
+    (districtCode) => districtInfo[districtCode].isSelected
+  );
   if (newArr.length === 0) newArr = undefined;
   return newArr;
 };
 
-const createQueryBaseOnState = (filter, match) => {
+const createQueryBaseOnState = (filter, districtInfo) => {
   return {
     query: MATCH_LIST_FETCH_QUERY,
     variables: {
       startTime: filter.startTime,
       endTime: filter.endTime,
       date: filter.matchDay.format('YYYY[-]MM[-]DD'),
-      area: getSelectedDistrictArray(match),
+      area: getSelectedDistrictArray(districtInfo),
     },
   };
 };
@@ -88,8 +88,8 @@ const MatchList = () => {
   const [fetchQuery, setFetchQuery] = useState(null);
 
   useEffect(() => {
-    setFetchQuery(createQueryBaseOnState(filterState, matchState));
-  }, [filterState, matchState]);
+    setFetchQuery(createQueryBaseOnState(filterState, matchState.districtInfo));
+  }, [filterState, matchState.districtInfo]);
 
   const [listState, reFetchList] = useAsync(
     getMatchList.bind(null, fetchQuery),

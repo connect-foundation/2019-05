@@ -16,6 +16,7 @@ const mailRouter = require('./routes/mail');
 const userRouter = require('./routes/user');
 const myteamRouter = require('./routes/myteam');
 const mapRouter = require('./routes/map');
+const notificationRouter = require('./routes/notification');
 const cors = require('cors');
 const server = new GraphQLServer({
   typeDefs: './schema.graphql',
@@ -40,6 +41,7 @@ app.use('/mail', mailRouter);
 app.use('/user', userRouter);
 app.use('/myteam', myteamRouter);
 app.use('/map', mapRouter);
+app.use('/notification', notificationRouter);
 
 server.start(
   {

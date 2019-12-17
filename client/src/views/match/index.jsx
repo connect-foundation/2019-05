@@ -10,6 +10,7 @@ import {
   MatchMap,
   MatchRegist,
   MatchRegistModal,
+  MatchApplyModal,
 } from '../../components/match';
 import { MatchProvider } from '../../contexts/Match';
 import './index.scss';
@@ -31,6 +32,7 @@ const match = () => (
         </div>
       </div>
       <MatchRegistModal />
+      <MatchApplyModal />
     </div>
   </MatchProvider>
 );
