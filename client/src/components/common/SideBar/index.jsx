@@ -6,13 +6,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
+import useAsync from '../../../hooks/useAsync';
 import {
   SideBarActionCreator,
   SideBarContext,
 } from '../../../contexts/SideBar';
 import { UserContext, UserActionCreator } from '../../../contexts/User';
 import './index.scss';
-import useAsync from '../../../hooks/useAsync';
 import updatePlayerInfo from '../../../util/functions';
 
 const authenticateUser = async (token) => {
@@ -29,7 +29,7 @@ const authenticateUser = async (token) => {
 const SideBar = () => {
   const [cookies] = useCookies();
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
-  const { userDispatch } = useContext(UserContext);
+  const { userState, userDispatch } = useContext(UserContext);
   const [loginState] = useAsync(authenticateUser.bind(null, cookies.jwt), []);
   const [playerInfo, setPlayerInfo] = useState(null);
   const { data: playerId } = loginState;
@@ -67,16 +67,24 @@ const SideBar = () => {
         activated={sideBarState.activated}
         setActivated={handleActivated}
       />
-      {playerId ? (
-        <InnerLayerWhenLoggedIn playerInfo={playerInfo} />
-      ) : (
-        <InnerLayerWhenLoggedOut />
-      )}
+      <InnerLayer playerInfo={playerInfo} userState={userState} />
     </nav>
   );
 };
 
-const InnerLayerWhenLoggedIn = ({ playerInfo }) => {
+const InnerLayer = ({ playerInfo, userState }) => {
+  const { playerId, playerTeam } = userState;
+
+  const NowInnerLayer = () => {
+    if (!playerId) return <WhenLoggedOut />;
+    if (!playerTeam) return <WhenLoggedInWithoutTeam />;
+    return <WhenLoggedInWithTeam playerInfo={playerInfo} />;
+  };
+
+  return <>{NowInnerLayer()}</>;
+};
+
+const WhenLoggedInWithTeam = ({ playerInfo }) => {
   return (
     <>
       <NotiToggleButton />
@@ -94,7 +102,16 @@ const InnerLayerWhenLoggedIn = ({ playerInfo }) => {
   );
 };
 
-const InnerLayerWhenLoggedOut = () => (
+const WhenLoggedInWithoutTeam = () => {
+  return (
+    <>
+      <button>팀 정보 입력하러 가기 !!</button>
+      <LogoutButton />
+    </>
+  );
+};
+
+const WhenLoggedOut = () => (
   <div className="side-bar__inner-layer--loggedout">
     <h1>
       지금 바로

@@ -1,11 +1,11 @@
-import { TEAM_INFO_FETCH_QUERY } from './query';
 import axios from 'axios';
+import { TEAM_INFO_FETCH_QUERY } from './query';
 
 const updatePlayerInfo = async (playerId) => {
   const fetchBody = {
     query: TEAM_INFO_FETCH_QUERY,
     variables: {
-      playerId: playerId,
+      playerId,
     },
   };
 
