@@ -6,7 +6,7 @@ import * as workerSetup from './util/workerSetup';
 
 ReactDOM.render(<Root />, document.getElementById('root'));
 
-if (workerSetup.isExistRegistration()) {
-  workerSetup.unregister();
-}
-workerSetup.register();
+workerSetup.isExistRegistration().then((isEixst) => {
+  const workerAction = isEixst ? workerSetup.updater : workerSetup.register;
+  workerAction();
+});
