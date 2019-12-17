@@ -1,5 +1,6 @@
 import React, { useState, useRef, forwardRef } from 'react';
 import PropTypes from 'prop-types';
+import sanitizeHtml from 'sanitize-html';
 import { getDistrict, convertDistrictCode } from '../../../util';
 
 import './index.scss';
@@ -28,7 +29,9 @@ const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
     const teamInfoForm = new FormData();
     Object.entries(teamInfoRef).forEach((ref) => {
       const refValue =
-        ref[0] === 'emblem' ? ref[1].current.files[0] : ref[1].current.value;
+        ref[0] === 'emblem'
+          ? ref[1].current.files[0]
+          : sanitizeHtml(ref[1].current.value);
       teamInfoForm.append(ref[1].current.name, refValue);
     });
     return teamInfoForm;
@@ -98,6 +101,10 @@ const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
     setModState(!modState);
   };
 
+  const handleCancelBtnClick = () => {
+    setModState(!modState);
+  };
+
   if (!teamInfo) return null;
   return (
     <div className="team-introduction">
@@ -111,6 +118,15 @@ const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
           >
             {modState ? '수정 완료' : '팀 정보 수정'}
           </button>
+          {modState ? (
+            <button
+              type="button"
+              className="btn__modify"
+              onClick={handleCancelBtnClick}
+            >
+              취소
+            </button>
+          ) : null}
         </div>
         <div className="team-info__container">
           <input
@@ -129,6 +145,7 @@ const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
             name={teamInfo.name}
             home={teamInfo.homeArea}
             intro={teamInfo.introduction}
+            teamUniqueId={teamInfo.teamUniqueId}
             mod={modState}
             ref={teamInfoRef}
           />
@@ -167,7 +184,7 @@ const EmblemSection = forwardRef(({ logo, name, mod }, ref) => {
 
 const TeamNameSection = forwardRef(
   (
-    { name, home, intro, mod },
+    { name, home, intro, teamUniqueId, mod },
     { name: nameRef, home: homeRef, intro: introRef }
   ) => {
     return (
@@ -191,6 +208,12 @@ const TeamNameSection = forwardRef(
         ) : (
           <span className="team-name__area">{convertDistrictCode(home)}</span>
         )}
+        <p className="team-uniqueId">
+          <span className="team-uniqueId__title">TeamId:</span> {teamUniqueId}
+          <span className="team-uniqueId__inform">
+            (다른 팀원이 이 id를 입력하여 팀에 가입할 수 있습니다.)
+          </span>
+        </p>
         <IntroTextSection intro={intro} mod={mod} ref={introRef} />
       </div>
     );

@@ -1,13 +1,16 @@
 @import '../../../commonStyle.scss';
 $sidebar_width: 260px;
-
+$naver_background: #07d405;
+$naver_text_color: #fff;
+$kakao_background: #ffe813;
+$kakao_text_color: #3c1d1e;
 img {
   max-width: 100%;
   max-height: 100%;
 }
 
 .side-bar {
-  padding: 80px 30px;
+  // padding: 80px 30px 10px;
   height: 100%;
   z-index: 3000;
   box-sizing: border-box;
@@ -17,26 +20,34 @@ img {
   position: fixed;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   right: -$sidebar_width;
   top: 0;
   width: $sidebar_width;
   transition: all 0.2s ease-in-out;
   &__inner-layer {
     &--loggedout {
-      padding: 240px 0 20px 0;
+      h1 {
+        font-size: 28px;
+      }
+      word-break: keep-all;
       text-align: center;
     }
+    &--loggedin {
+      padding: 50px 30px 10px;
+    }
   }
-  &--opening {
+  &--open {
     background-color: whitesmoke;
     right: 0;
   }
   &__content-button {
+    box-sizing: border-box;
     border: 1px solid $quick_light_navy;
     border-radius: 5px;
     padding: 6px 12px;
     margin: 3px 0;
-    width: 80%;
+    width: 200px;
     display: inline-block;
     color: $quick_light_navy;
     transition: all 0.2s ease-in-out;
@@ -98,12 +109,70 @@ img {
 }
 
 .auth-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   &__img {
     max-height: 100%;
     max-width: 100%;
-    &--logout {
-      height: 40px;
+    border-radius: 5px;
+    height: 40px;
+  }
+  &--logout {
+    box-sizing: border-box;
+    border: 1px solid crimson;
+    text-align: center;
+    background-color: crimson;
+    font-weight: bold;
+    color: $quick_white;
+    width: 200px;
+    height: 40px;
+    border-radius: 5px;
+    line-height: 40px;
+    font-size: 17px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    &:hover {
+      font-size: 19px;
+      border: 1px solid crimson;
+      background: $quick_white;
+      color: crimson;
     }
   }
   cursor: pointer;
+}
+
+.empty {
+  flex: 1 1;
+}
+
+.new-auth-button {
+  margin-top: 5px;
+  font-size: 13px;
+  width: 180px;
+  height: 40px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  &--naver {
+    background-color: $naver_background;
+    color: $naver_text_color;
+  }
+  &--kakao {
+    background-color: $kakao_background;
+    color: $kakao_text_color;
+  }
+}
+
+.auth-logo {
+  margin-left: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.auth-message {
+  width: calc(100% - 50px);
+  font-weight: bold;
 }

@@ -1,10 +1,9 @@
 import React from 'react';
 import {
   Header,
-  Footer,
   ViewTitle,
   DateTimeFilter,
-  AreaFilter,
+  SideBar,
 } from '../../components/common';
 import {
   MatchList,
@@ -13,7 +12,6 @@ import {
   MatchRegistModal,
 } from '../../components/match';
 import { MatchProvider } from '../../contexts/Match';
-import { SideBar } from '../../components/common/';
 import './index.scss';
 
 const match = () => (
@@ -23,7 +21,7 @@ const match = () => (
       <Header />
       <div className="grid-container">
         <ViewTitle title="match" />
-        <DateTimeFilter />
+        <DateTimeFilter where="match" />
         <div className="match-container">
           <div className="match-board">
             <MatchRegist />

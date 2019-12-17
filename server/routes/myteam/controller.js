@@ -32,9 +32,9 @@ const imgResizer = async (file) => {
   const imgW = img.getWidth();
   const imgH = img.getHeight();
 
-  if (imgW <= 100 && imgH <= 100) return await img.getBufferAsync(Jimp.AUTO);
+  if (imgW <= 150 && imgH <= 150) return await img.getBufferAsync(Jimp.AUTO);
 
-  const size = imgW >= imgH ? [100, Jimp.AUTO] : [Jimp.AUTO, 100];
+  const size = imgW >= imgH ? [150, Jimp.AUTO] : [Jimp.AUTO, 150];
   return await img
     .resize(size[0], size[1])
     .quality(100)

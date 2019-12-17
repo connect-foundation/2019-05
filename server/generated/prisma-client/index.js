@@ -13,6 +13,10 @@ var models = [
     embedded: false,
   },
   {
+    name: 'Auth',
+    embedded: false,
+  },
+  {
     name: 'Result',
     embedded: false,
   },
@@ -22,6 +26,10 @@ var models = [
   },
   {
     name: 'Match',
+    embedded: false,
+  },
+  {
+    name: 'Status',
     embedded: false,
   },
   {

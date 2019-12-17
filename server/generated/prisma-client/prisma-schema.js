@@ -216,6 +216,11 @@ enum Area {
   KDG
 }
 
+enum Auth {
+  KAKAO
+  NAVER
+}
+
 type BatchPayload {
   count: Long!
 }
@@ -227,6 +232,7 @@ type Match {
   author: Player!
   host: Team!
   guest: Team
+  status: Status!
   stadium: String!
   address: String
   area: Area!
@@ -249,6 +255,7 @@ input MatchCreateInput {
   author: PlayerCreateOneWithoutUploadMatchListInput!
   host: TeamCreateOneWithoutUploadMatchListInput!
   guest: TeamCreateOneWithoutMatchingDoneListInput
+  status: Status!
   stadium: String!
   address: String
   area: Area!
@@ -285,6 +292,7 @@ input MatchCreateWithoutAppliedListsInput {
   author: PlayerCreateOneWithoutUploadMatchListInput!
   host: TeamCreateOneWithoutUploadMatchListInput!
   guest: TeamCreateOneWithoutMatchingDoneListInput
+  status: Status!
   stadium: String!
   address: String
   area: Area!
@@ -299,6 +307,7 @@ input MatchCreateWithoutAuthorInput {
   seq: Int
   host: TeamCreateOneWithoutUploadMatchListInput!
   guest: TeamCreateOneWithoutMatchingDoneListInput
+  status: Status!
   stadium: String!
   address: String
   area: Area!
@@ -314,6 +323,7 @@ input MatchCreateWithoutGuestInput {
   seq: Int
   author: PlayerCreateOneWithoutUploadMatchListInput!
   host: TeamCreateOneWithoutUploadMatchListInput!
+  status: Status!
   stadium: String!
   address: String
   area: Area!
@@ -329,6 +339,7 @@ input MatchCreateWithoutHostInput {
   seq: Int
   author: PlayerCreateOneWithoutUploadMatchListInput!
   guest: TeamCreateOneWithoutMatchingDoneListInput
+  status: Status!
   stadium: String!
   address: String
   area: Area!
@@ -348,6 +359,8 @@ type MatchEdge {
 enum MatchOrderByInput {
   seq_ASC
   seq_DESC
+  status_ASC
+  status_DESC
   stadium_ASC
   stadium_DESC
   address_ASC
@@ -368,6 +381,7 @@ enum MatchOrderByInput {
 
 type MatchPreviousValues {
   seq: Int!
+  status: Status!
   stadium: String!
   address: String
   area: Area!
@@ -387,6 +401,10 @@ input MatchScalarWhereInput {
   seq_lte: Int
   seq_gt: Int
   seq_gte: Int
+  status: Status
+  status_not: Status
+  status_in: [Status!]
+  status_not_in: [Status!]
   stadium: String
   stadium_not: String
   stadium_in: [String!]
@@ -506,6 +524,7 @@ input MatchUpdateInput {
   author: PlayerUpdateOneRequiredWithoutUploadMatchListInput
   host: TeamUpdateOneRequiredWithoutUploadMatchListInput
   guest: TeamUpdateOneWithoutMatchingDoneListInput
+  status: Status
   stadium: String
   address: String
   area: Area
@@ -518,6 +537,7 @@ input MatchUpdateInput {
 }
 
 input MatchUpdateManyDataInput {
+  status: Status
   stadium: String
   address: String
   area: Area
@@ -529,6 +549,7 @@ input MatchUpdateManyDataInput {
 }
 
 input MatchUpdateManyMutationInput {
+  status: Status
   stadium: String
   address: String
   area: Area
@@ -593,6 +614,7 @@ input MatchUpdateWithoutAppliedListsDataInput {
   author: PlayerUpdateOneRequiredWithoutUploadMatchListInput
   host: TeamUpdateOneRequiredWithoutUploadMatchListInput
   guest: TeamUpdateOneWithoutMatchingDoneListInput
+  status: Status
   stadium: String
   address: String
   area: Area
@@ -606,6 +628,7 @@ input MatchUpdateWithoutAppliedListsDataInput {
 input MatchUpdateWithoutAuthorDataInput {
   host: TeamUpdateOneRequiredWithoutUploadMatchListInput
   guest: TeamUpdateOneWithoutMatchingDoneListInput
+  status: Status
   stadium: String
   address: String
   area: Area
@@ -620,6 +643,7 @@ input MatchUpdateWithoutAuthorDataInput {
 input MatchUpdateWithoutGuestDataInput {
   author: PlayerUpdateOneRequiredWithoutUploadMatchListInput
   host: TeamUpdateOneRequiredWithoutUploadMatchListInput
+  status: Status
   stadium: String
   address: String
   area: Area
@@ -634,6 +658,7 @@ input MatchUpdateWithoutGuestDataInput {
 input MatchUpdateWithoutHostDataInput {
   author: PlayerUpdateOneRequiredWithoutUploadMatchListInput
   guest: TeamUpdateOneWithoutMatchingDoneListInput
+  status: Status
   stadium: String
   address: String
   area: Area
@@ -695,6 +720,10 @@ input MatchWhereInput {
   author: PlayerWhereInput
   host: TeamWhereInput
   guest: TeamWhereInput
+  status: Status
+  status_not: Status
+  status_in: [Status!]
+  status_not_in: [Status!]
   stadium: String
   stadium_not: String
   stadium_in: [String!]
@@ -1122,8 +1151,10 @@ type Player {
   name: String
   phone: String
   email: String
+  authProvider: Auth!
   notiList(where: NotifierWhereInput, orderBy: NotifierOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notifier!]
   uploadMatchList(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
+  teamCreate(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team!]
 }
 
 type PlayerConnection {
@@ -1139,8 +1170,10 @@ input PlayerCreateInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth!
   notiList: NotifierCreateManyWithoutPlayerInput
   uploadMatchList: MatchCreateManyWithoutAuthorInput
+  teamCreate: TeamCreateManyWithoutOwnerInput
 }
 
 input PlayerCreateManyWithoutTeamInput {
@@ -1150,6 +1183,11 @@ input PlayerCreateManyWithoutTeamInput {
 
 input PlayerCreateOneWithoutNotiListInput {
   create: PlayerCreateWithoutNotiListInput
+  connect: PlayerWhereUniqueInput
+}
+
+input PlayerCreateOneWithoutTeamCreateInput {
+  create: PlayerCreateWithoutTeamCreateInput
   connect: PlayerWhereUniqueInput
 }
 
@@ -1165,6 +1203,20 @@ input PlayerCreateWithoutNotiListInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth!
+  uploadMatchList: MatchCreateManyWithoutAuthorInput
+  teamCreate: TeamCreateManyWithoutOwnerInput
+}
+
+input PlayerCreateWithoutTeamCreateInput {
+  seq: Int
+  playerId: String!
+  team: TeamCreateOneWithoutMembersInput
+  name: String
+  phone: String
+  email: String
+  authProvider: Auth!
+  notiList: NotifierCreateManyWithoutPlayerInput
   uploadMatchList: MatchCreateManyWithoutAuthorInput
 }
 
@@ -1174,8 +1226,10 @@ input PlayerCreateWithoutTeamInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth!
   notiList: NotifierCreateManyWithoutPlayerInput
   uploadMatchList: MatchCreateManyWithoutAuthorInput
+  teamCreate: TeamCreateManyWithoutOwnerInput
 }
 
 input PlayerCreateWithoutUploadMatchListInput {
@@ -1185,7 +1239,9 @@ input PlayerCreateWithoutUploadMatchListInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth!
   notiList: NotifierCreateManyWithoutPlayerInput
+  teamCreate: TeamCreateManyWithoutOwnerInput
 }
 
 type PlayerEdge {
@@ -1204,6 +1260,8 @@ enum PlayerOrderByInput {
   phone_DESC
   email_ASC
   email_DESC
+  authProvider_ASC
+  authProvider_DESC
 }
 
 type PlayerPreviousValues {
@@ -1212,6 +1270,7 @@ type PlayerPreviousValues {
   name: String
   phone: String
   email: String
+  authProvider: Auth!
 }
 
 input PlayerScalarWhereInput {
@@ -1279,6 +1338,10 @@ input PlayerScalarWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
+  authProvider: Auth
+  authProvider_not: Auth
+  authProvider_in: [Auth!]
+  authProvider_not_in: [Auth!]
   AND: [PlayerScalarWhereInput!]
   OR: [PlayerScalarWhereInput!]
   NOT: [PlayerScalarWhereInput!]
@@ -1308,8 +1371,10 @@ input PlayerUpdateInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   notiList: NotifierUpdateManyWithoutPlayerInput
   uploadMatchList: MatchUpdateManyWithoutAuthorInput
+  teamCreate: TeamUpdateManyWithoutOwnerInput
 }
 
 input PlayerUpdateManyDataInput {
@@ -1317,6 +1382,7 @@ input PlayerUpdateManyDataInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
 }
 
 input PlayerUpdateManyMutationInput {
@@ -1324,6 +1390,7 @@ input PlayerUpdateManyMutationInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
 }
 
 input PlayerUpdateManyWithoutTeamInput {
@@ -1357,12 +1424,34 @@ input PlayerUpdateOneRequiredWithoutUploadMatchListInput {
   connect: PlayerWhereUniqueInput
 }
 
+input PlayerUpdateOneWithoutTeamCreateInput {
+  create: PlayerCreateWithoutTeamCreateInput
+  update: PlayerUpdateWithoutTeamCreateDataInput
+  upsert: PlayerUpsertWithoutTeamCreateInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PlayerWhereUniqueInput
+}
+
 input PlayerUpdateWithoutNotiListDataInput {
   playerId: String
   team: TeamUpdateOneWithoutMembersInput
   name: String
   phone: String
   email: String
+  authProvider: Auth
+  uploadMatchList: MatchUpdateManyWithoutAuthorInput
+  teamCreate: TeamUpdateManyWithoutOwnerInput
+}
+
+input PlayerUpdateWithoutTeamCreateDataInput {
+  playerId: String
+  team: TeamUpdateOneWithoutMembersInput
+  name: String
+  phone: String
+  email: String
+  authProvider: Auth
+  notiList: NotifierUpdateManyWithoutPlayerInput
   uploadMatchList: MatchUpdateManyWithoutAuthorInput
 }
 
@@ -1371,8 +1460,10 @@ input PlayerUpdateWithoutTeamDataInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   notiList: NotifierUpdateManyWithoutPlayerInput
   uploadMatchList: MatchUpdateManyWithoutAuthorInput
+  teamCreate: TeamUpdateManyWithoutOwnerInput
 }
 
 input PlayerUpdateWithoutUploadMatchListDataInput {
@@ -1381,7 +1472,9 @@ input PlayerUpdateWithoutUploadMatchListDataInput {
   name: String
   phone: String
   email: String
+  authProvider: Auth
   notiList: NotifierUpdateManyWithoutPlayerInput
+  teamCreate: TeamUpdateManyWithoutOwnerInput
 }
 
 input PlayerUpdateWithWhereUniqueWithoutTeamInput {
@@ -1392,6 +1485,11 @@ input PlayerUpdateWithWhereUniqueWithoutTeamInput {
 input PlayerUpsertWithoutNotiListInput {
   update: PlayerUpdateWithoutNotiListDataInput!
   create: PlayerCreateWithoutNotiListInput!
+}
+
+input PlayerUpsertWithoutTeamCreateInput {
+  update: PlayerUpdateWithoutTeamCreateDataInput!
+  create: PlayerCreateWithoutTeamCreateInput!
 }
 
 input PlayerUpsertWithoutUploadMatchListInput {
@@ -1471,12 +1569,19 @@ input PlayerWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
+  authProvider: Auth
+  authProvider_not: Auth
+  authProvider_in: [Auth!]
+  authProvider_not_in: [Auth!]
   notiList_every: NotifierWhereInput
   notiList_some: NotifierWhereInput
   notiList_none: NotifierWhereInput
   uploadMatchList_every: MatchWhereInput
   uploadMatchList_some: MatchWhereInput
   uploadMatchList_none: MatchWhereInput
+  teamCreate_every: TeamWhereInput
+  teamCreate_some: TeamWhereInput
+  teamCreate_none: TeamWhereInput
   AND: [PlayerWhereInput!]
   OR: [PlayerWhereInput!]
   NOT: [PlayerWhereInput!]
@@ -1627,6 +1732,11 @@ input StadiumWhereUniqueInput {
   seq: Int
 }
 
+enum Status {
+  OPEN
+  CLOSED
+}
+
 type Subscription {
   apply(where: ApplySubscriptionWhereInput): ApplySubscriptionPayload
   match(where: MatchSubscriptionWhereInput): MatchSubscriptionPayload
@@ -1647,6 +1757,7 @@ type Team {
   lose: Int!
   rating: Int!
   teamUniqueId: String!
+  owner: Player
   members(where: PlayerWhereInput, orderBy: PlayerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Player!]
   uploadMatchList(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
   matchingDoneList(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
@@ -1670,10 +1781,16 @@ input TeamCreateInput {
   lose: Int
   rating: Int
   teamUniqueId: String!
+  owner: PlayerCreateOneWithoutTeamCreateInput
   members: PlayerCreateManyWithoutTeamInput
   uploadMatchList: MatchCreateManyWithoutHostInput
   matchingDoneList: MatchCreateManyWithoutGuestInput
   onApplyingList: ApplyCreateManyWithoutTeamInput
+}
+
+input TeamCreateManyWithoutOwnerInput {
+  create: [TeamCreateWithoutOwnerInput!]
+  connect: [TeamWhereUniqueInput!]
 }
 
 input TeamCreateOneWithoutMatchingDoneListInput {
@@ -1707,6 +1824,7 @@ input TeamCreateWithoutMatchingDoneListInput {
   lose: Int
   rating: Int
   teamUniqueId: String!
+  owner: PlayerCreateOneWithoutTeamCreateInput
   members: PlayerCreateManyWithoutTeamInput
   uploadMatchList: MatchCreateManyWithoutHostInput
   onApplyingList: ApplyCreateManyWithoutTeamInput
@@ -1723,6 +1841,7 @@ input TeamCreateWithoutMembersInput {
   lose: Int
   rating: Int
   teamUniqueId: String!
+  owner: PlayerCreateOneWithoutTeamCreateInput
   uploadMatchList: MatchCreateManyWithoutHostInput
   matchingDoneList: MatchCreateManyWithoutGuestInput
   onApplyingList: ApplyCreateManyWithoutTeamInput
@@ -1739,9 +1858,27 @@ input TeamCreateWithoutOnApplyingListInput {
   lose: Int
   rating: Int
   teamUniqueId: String!
+  owner: PlayerCreateOneWithoutTeamCreateInput
   members: PlayerCreateManyWithoutTeamInput
   uploadMatchList: MatchCreateManyWithoutHostInput
   matchingDoneList: MatchCreateManyWithoutGuestInput
+}
+
+input TeamCreateWithoutOwnerInput {
+  seq: Int
+  name: String!
+  logo: String
+  homeArea: Area
+  introduction: String
+  win: Int
+  draw: Int
+  lose: Int
+  rating: Int
+  teamUniqueId: String!
+  members: PlayerCreateManyWithoutTeamInput
+  uploadMatchList: MatchCreateManyWithoutHostInput
+  matchingDoneList: MatchCreateManyWithoutGuestInput
+  onApplyingList: ApplyCreateManyWithoutTeamInput
 }
 
 input TeamCreateWithoutUploadMatchListInput {
@@ -1755,6 +1892,7 @@ input TeamCreateWithoutUploadMatchListInput {
   lose: Int
   rating: Int
   teamUniqueId: String!
+  owner: PlayerCreateOneWithoutTeamCreateInput
   members: PlayerCreateManyWithoutTeamInput
   matchingDoneList: MatchCreateManyWithoutGuestInput
   onApplyingList: ApplyCreateManyWithoutTeamInput
@@ -1801,6 +1939,112 @@ type TeamPreviousValues {
   teamUniqueId: String!
 }
 
+input TeamScalarWhereInput {
+  seq: Int
+  seq_not: Int
+  seq_in: [Int!]
+  seq_not_in: [Int!]
+  seq_lt: Int
+  seq_lte: Int
+  seq_gt: Int
+  seq_gte: Int
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  logo: String
+  logo_not: String
+  logo_in: [String!]
+  logo_not_in: [String!]
+  logo_lt: String
+  logo_lte: String
+  logo_gt: String
+  logo_gte: String
+  logo_contains: String
+  logo_not_contains: String
+  logo_starts_with: String
+  logo_not_starts_with: String
+  logo_ends_with: String
+  logo_not_ends_with: String
+  homeArea: Area
+  homeArea_not: Area
+  homeArea_in: [Area!]
+  homeArea_not_in: [Area!]
+  introduction: String
+  introduction_not: String
+  introduction_in: [String!]
+  introduction_not_in: [String!]
+  introduction_lt: String
+  introduction_lte: String
+  introduction_gt: String
+  introduction_gte: String
+  introduction_contains: String
+  introduction_not_contains: String
+  introduction_starts_with: String
+  introduction_not_starts_with: String
+  introduction_ends_with: String
+  introduction_not_ends_with: String
+  win: Int
+  win_not: Int
+  win_in: [Int!]
+  win_not_in: [Int!]
+  win_lt: Int
+  win_lte: Int
+  win_gt: Int
+  win_gte: Int
+  draw: Int
+  draw_not: Int
+  draw_in: [Int!]
+  draw_not_in: [Int!]
+  draw_lt: Int
+  draw_lte: Int
+  draw_gt: Int
+  draw_gte: Int
+  lose: Int
+  lose_not: Int
+  lose_in: [Int!]
+  lose_not_in: [Int!]
+  lose_lt: Int
+  lose_lte: Int
+  lose_gt: Int
+  lose_gte: Int
+  rating: Int
+  rating_not: Int
+  rating_in: [Int!]
+  rating_not_in: [Int!]
+  rating_lt: Int
+  rating_lte: Int
+  rating_gt: Int
+  rating_gte: Int
+  teamUniqueId: String
+  teamUniqueId_not: String
+  teamUniqueId_in: [String!]
+  teamUniqueId_not_in: [String!]
+  teamUniqueId_lt: String
+  teamUniqueId_lte: String
+  teamUniqueId_gt: String
+  teamUniqueId_gte: String
+  teamUniqueId_contains: String
+  teamUniqueId_not_contains: String
+  teamUniqueId_starts_with: String
+  teamUniqueId_not_starts_with: String
+  teamUniqueId_ends_with: String
+  teamUniqueId_not_ends_with: String
+  AND: [TeamScalarWhereInput!]
+  OR: [TeamScalarWhereInput!]
+  NOT: [TeamScalarWhereInput!]
+}
+
 type TeamSubscriptionPayload {
   mutation: MutationType!
   node: Team
@@ -1829,10 +2073,23 @@ input TeamUpdateInput {
   lose: Int
   rating: Int
   teamUniqueId: String
+  owner: PlayerUpdateOneWithoutTeamCreateInput
   members: PlayerUpdateManyWithoutTeamInput
   uploadMatchList: MatchUpdateManyWithoutHostInput
   matchingDoneList: MatchUpdateManyWithoutGuestInput
   onApplyingList: ApplyUpdateManyWithoutTeamInput
+}
+
+input TeamUpdateManyDataInput {
+  name: String
+  logo: String
+  homeArea: Area
+  introduction: String
+  win: Int
+  draw: Int
+  lose: Int
+  rating: Int
+  teamUniqueId: String
 }
 
 input TeamUpdateManyMutationInput {
@@ -1845,6 +2102,23 @@ input TeamUpdateManyMutationInput {
   lose: Int
   rating: Int
   teamUniqueId: String
+}
+
+input TeamUpdateManyWithoutOwnerInput {
+  create: [TeamCreateWithoutOwnerInput!]
+  delete: [TeamWhereUniqueInput!]
+  connect: [TeamWhereUniqueInput!]
+  set: [TeamWhereUniqueInput!]
+  disconnect: [TeamWhereUniqueInput!]
+  update: [TeamUpdateWithWhereUniqueWithoutOwnerInput!]
+  upsert: [TeamUpsertWithWhereUniqueWithoutOwnerInput!]
+  deleteMany: [TeamScalarWhereInput!]
+  updateMany: [TeamUpdateManyWithWhereNestedInput!]
+}
+
+input TeamUpdateManyWithWhereNestedInput {
+  where: TeamScalarWhereInput!
+  data: TeamUpdateManyDataInput!
 }
 
 input TeamUpdateOneRequiredWithoutUploadMatchListInput {
@@ -1891,6 +2165,7 @@ input TeamUpdateWithoutMatchingDoneListDataInput {
   lose: Int
   rating: Int
   teamUniqueId: String
+  owner: PlayerUpdateOneWithoutTeamCreateInput
   members: PlayerUpdateManyWithoutTeamInput
   uploadMatchList: MatchUpdateManyWithoutHostInput
   onApplyingList: ApplyUpdateManyWithoutTeamInput
@@ -1906,6 +2181,7 @@ input TeamUpdateWithoutMembersDataInput {
   lose: Int
   rating: Int
   teamUniqueId: String
+  owner: PlayerUpdateOneWithoutTeamCreateInput
   uploadMatchList: MatchUpdateManyWithoutHostInput
   matchingDoneList: MatchUpdateManyWithoutGuestInput
   onApplyingList: ApplyUpdateManyWithoutTeamInput
@@ -1921,9 +2197,26 @@ input TeamUpdateWithoutOnApplyingListDataInput {
   lose: Int
   rating: Int
   teamUniqueId: String
+  owner: PlayerUpdateOneWithoutTeamCreateInput
   members: PlayerUpdateManyWithoutTeamInput
   uploadMatchList: MatchUpdateManyWithoutHostInput
   matchingDoneList: MatchUpdateManyWithoutGuestInput
+}
+
+input TeamUpdateWithoutOwnerDataInput {
+  name: String
+  logo: String
+  homeArea: Area
+  introduction: String
+  win: Int
+  draw: Int
+  lose: Int
+  rating: Int
+  teamUniqueId: String
+  members: PlayerUpdateManyWithoutTeamInput
+  uploadMatchList: MatchUpdateManyWithoutHostInput
+  matchingDoneList: MatchUpdateManyWithoutGuestInput
+  onApplyingList: ApplyUpdateManyWithoutTeamInput
 }
 
 input TeamUpdateWithoutUploadMatchListDataInput {
@@ -1936,9 +2229,15 @@ input TeamUpdateWithoutUploadMatchListDataInput {
   lose: Int
   rating: Int
   teamUniqueId: String
+  owner: PlayerUpdateOneWithoutTeamCreateInput
   members: PlayerUpdateManyWithoutTeamInput
   matchingDoneList: MatchUpdateManyWithoutGuestInput
   onApplyingList: ApplyUpdateManyWithoutTeamInput
+}
+
+input TeamUpdateWithWhereUniqueWithoutOwnerInput {
+  where: TeamWhereUniqueInput!
+  data: TeamUpdateWithoutOwnerDataInput!
 }
 
 input TeamUpsertWithoutMatchingDoneListInput {
@@ -1959,6 +2258,12 @@ input TeamUpsertWithoutOnApplyingListInput {
 input TeamUpsertWithoutUploadMatchListInput {
   update: TeamUpdateWithoutUploadMatchListDataInput!
   create: TeamCreateWithoutUploadMatchListInput!
+}
+
+input TeamUpsertWithWhereUniqueWithoutOwnerInput {
+  where: TeamWhereUniqueInput!
+  update: TeamUpdateWithoutOwnerDataInput!
+  create: TeamCreateWithoutOwnerInput!
 }
 
 input TeamWhereInput {
@@ -2062,6 +2367,7 @@ input TeamWhereInput {
   teamUniqueId_not_starts_with: String
   teamUniqueId_ends_with: String
   teamUniqueId_not_ends_with: String
+  owner: PlayerWhereInput
   members_every: PlayerWhereInput
   members_some: PlayerWhereInput
   members_none: PlayerWhereInput
