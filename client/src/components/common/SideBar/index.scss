@@ -11,18 +11,29 @@ img {
 .noti-toggle-btn {
   position: absolute;
   top: 25px;
-  width: 100px;
+  width: fit-content;
+
+  font-size: 13px;
   height: 30px;
-  border: 1px solid crimson;
+  padding: 0 10px;
   border-radius: 5px;
   box-shadow: none;
-  background-color: crimson;
   color: white;
-  margin-left: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  &--on {
+    background-color: green;
+  }
+  &--off {
+    background-color: transparent;
+    border: 1px solid crimson;
+    color: crimson;
+  }
 }
 .side-bar {
   // padding: 80px 30px 10px;

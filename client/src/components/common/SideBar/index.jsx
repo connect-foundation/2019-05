@@ -13,8 +13,8 @@ import { UserContext, UserActionCreator } from '../../../contexts/User';
 import './index.scss';
 import useAsync from '../../../hooks/useAsync';
 import classNames from 'classnames';
-import { TEAM_INFO_FETCH_QUERY } from '../../../util/query';
 import { Link } from 'react-router-dom';
+import updatePlayerInfo from '../../../util/functions';
 
 const authenticateUser = async (token) => {
   if (!token) return null;
@@ -55,28 +55,11 @@ const SideBar = () => {
     'side-bar__inner-layer--loggedin': !!playerId,
   });
 
-  const fetchBody = {
-    query: TEAM_INFO_FETCH_QUERY,
-    variables: {
-      playerId: playerId,
-    },
-  };
   useEffect(() => {
-    const getPlayerInfo = async () => {
-      const { data } = await axios.post(
-        process.env.REACT_APP_GRAPHQL_ENDPOINT,
-        JSON.stringify(fetchBody),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      const realInfo = data.data.Players;
-      console.log(realInfo);
-      setPlayerInfo(realInfo[0]);
-    };
-    getPlayerInfo();
+    (async () => {
+      const data = await updatePlayerInfo(playerId);
+      setPlayerInfo(data);
+    })();
   }, [playerId]);
 
   return (
@@ -97,6 +80,7 @@ const SideBar = () => {
 const InnerLayerWhenLoggedIn = ({ playerInfo }) => {
   return (
     <>
+      <NotiToggleButton />
       <TeamInfo playerInfo={playerInfo} />
       <ContentButton>
         <span role="img" aria-label="rocket">
@@ -200,11 +184,22 @@ const CloseBtn = ({ activated, setActivated }) => (
   </div>
 );
 
-const NotiToggleButton = () => (
-  <>
-    <div className="noti-toggle-btn">🔔</div>
-  </>
-);
+const NotiToggleButton = () => {
+  const [toggle, setToggle] = useState(true);
+  const toggleClass = classNames({
+    'noti-toggle-btn': true,
+    'noti-toggle-btn--on': toggle,
+    'noti-toggle-btn--off': !toggle,
+  });
+  const handleClick = () => {
+    setToggle(!toggle);
+  };
+  return (
+    <div className={toggleClass} onClick={handleClick}>
+      알림 &nbsp; {toggle ? 'ON' : 'OFF'}
+    </div>
+  );
+};
 
 const TeamInfo = ({ playerInfo }) => {
   const { _, sideBarDispatch } = useContext(SideBarContext);
