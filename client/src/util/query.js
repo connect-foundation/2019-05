@@ -1,6 +1,6 @@
 const TEAM_INFO_FETCH_QUERY = `
-  query {
-    Players {
+  query($playerId: String) {
+    Players(playerId: $playerId) {
       seq
       playerId
       name 
@@ -15,8 +15,6 @@ const TEAM_INFO_FETCH_QUERY = `
         logo
         seq
         name
-        win
-        lose
       }
     }
   }`;
