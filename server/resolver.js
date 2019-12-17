@@ -200,11 +200,14 @@ const resolvers = {
     onApplyingList: ({ seq }, _, { prisma }) => {
       return prisma.team({ seq }).onApplyingList();
     },
+    owner: ({ seq }, _, { prisma }) => {
+      return prisma.team({ seq }).owner();
+    },
   },
 
   Player: {
     team: ({ seq }, _, { prisma }) => {
-      return prisma.team({ seq });
+      return prisma.player({ seq }).team();
     },
     notiList: ({ seq }, _, { prisma }) => {
       return prisma.player({ seq }).notiList();
