@@ -23,7 +23,7 @@ const getVapPublicId = (req, res) => {
   if (!keyMap[userId]) {
     setUpVapIdKey(userId);
   }
-  res.status(201).json({ publicKey: keyMap[userId] });
+  res.status(201).json({ publicKey: keyMap[userId].publicKey });
 };
 
 const sendPushNotification = (req, res) => {

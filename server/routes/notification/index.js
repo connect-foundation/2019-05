@@ -8,7 +8,7 @@ const {
 
 notification.post('/sendNotification', sendPushNotification);
 
-notification.get('/vapidPublicKey', getVapPublicId);
+notification.post('/vapidPublicKey', getVapPublicId);
 
 notification.get('/subscription', getSubscription);
 
