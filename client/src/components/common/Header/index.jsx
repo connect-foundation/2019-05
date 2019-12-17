@@ -20,12 +20,20 @@ const Header = () => (
   </div>
 );
 
-const ServiceLogo = () => (
-  <Link to="/">
-    <span className="pointChar">Q</span>uick<span className="pointChar">K</span>
-    ick
-  </Link>
-);
+const ServiceLogo = () => {
+  const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
+  const handleCloseSideBar = () => {
+    if (sideBarState.activated)
+      sideBarDispatch(SideBarActionCreator.toggleActivated());
+  };
+  return (
+    <Link to="/" onClick={handleCloseSideBar}>
+      <span className="pointChar">Q</span>uick
+      <span className="pointChar">K</span>
+      ick
+    </Link>
+  );
+};
 
 export const HamburgerBtn = () => {
   const [openState, setOpenState] = useState('');
