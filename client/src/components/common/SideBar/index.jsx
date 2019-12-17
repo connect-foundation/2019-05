@@ -72,9 +72,8 @@ const SideBar = () => {
           },
         }
       );
-      const realInfo = data.data.Players;
-      console.log(realInfo);
-      setPlayerInfo(realInfo[0]);
+      const [realInfo] = data.data.Players;
+      setPlayerInfo(realInfo);
     };
     getPlayerInfo();
   }, [playerId]);
