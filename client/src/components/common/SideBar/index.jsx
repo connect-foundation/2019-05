@@ -10,10 +10,11 @@ import {
   SideBarContext,
 } from '../../../contexts/SideBar';
 import { UserContext, UserActionCreator } from '../../../contexts/User';
-import barcaLogo from '../../../assets/images/fc-barcelona-logo.png';
 import './index.scss';
 import useAsync from '../../../hooks/useAsync';
 import classNames from 'classnames';
+import { TEAM_INFO_FETCH_QUERY } from '../../../util/query';
+import { Link } from 'react-router-dom';
 
 const authenticateUser = async (token) => {
   if (!token) return null;
@@ -29,9 +30,9 @@ const authenticateUser = async (token) => {
 const SideBar = () => {
   const [cookies] = useCookies();
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
-  const openState = sideBarState.activated ? 'side-bar--open' : '';
-  const { userState, userDispatch } = useContext(UserContext);
+  const { userDispatch } = useContext(UserContext);
   const [loginState] = useAsync(authenticateUser.bind(null, cookies.jwt), []);
+  const [playerInfo, setPlayerInfo] = useState(null);
   const { data: playerId } = loginState;
 
   const handleActivated = () => {
@@ -39,29 +40,70 @@ const SideBar = () => {
   };
 
   useEffect(() => {
-    if (!playerId) return;
-    userDispatch(UserActionCreator.login(playerId));
-  }, [playerId]);
+    if (!playerId || !playerInfo) return;
+    userDispatch(
+      UserActionCreator.login(
+        playerId,
+        playerInfo.team ? playerInfo.team.seq : null
+      )
+    );
+  }, [playerId, playerInfo]);
+
   const sideBarClass = classNames({
     'side-bar': true,
     'side-bar--open': sideBarState.activated,
-    'side-bar__inner-layer--loggedin': playerId,
+    'side-bar__inner-layer--loggedin': !!playerId,
   });
+
+  const fetchBody = {
+    query: TEAM_INFO_FETCH_QUERY,
+    variables: {
+      playerId: playerId,
+    },
+  };
+  useEffect(() => {
+    const getPlayerInfo = async () => {
+      const { data } = await axios.post(
+        process.env.REACT_APP_GRAPHQL_ENDPOINT,
+        JSON.stringify(fetchBody),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const realInfo = data.data.Players;
+      console.log(realInfo);
+      setPlayerInfo(realInfo[0]);
+    };
+    getPlayerInfo();
+  }, [playerId]);
+
   return (
     <nav className={sideBarClass}>
       <CloseBtn
         activated={sideBarState.activated}
         setActivated={handleActivated}
       />
-      {playerId ? <InnerLayerWhenLoggedIn /> : <InnerLayerWhenLoggedOut />}
+      {playerId ? (
+        <InnerLayerWhenLoggedIn playerInfo={playerInfo} />
+      ) : (
+        <InnerLayerWhenLoggedOut />
+      )}
     </nav>
   );
 };
-const InnerLayerWhenLoggedIn = () => {
+
+const InnerLayerWhenLoggedIn = ({ playerInfo }) => {
   return (
     <>
-      <TeamInfo />
-      <ContentButton>🚀예시 버튼</ContentButton>
+      <TeamInfo playerInfo={playerInfo} />
+      <ContentButton>
+        <span role="img" aria-label="rocket">
+          🚀
+        </span>
+        예시 버튼
+      </ContentButton>
       <Notifications />
       <EmptySpace />
       <LogoutButton />
@@ -69,15 +111,18 @@ const InnerLayerWhenLoggedIn = () => {
   );
 };
 
-const InnerLayerWhenLoggedOut = () => {
-  const message = '지금 바로 퀵킥의 멤버가 되어 보세요!';
-  return (
-    <div className="side-bar__inner-layer--loggedout">
-      <h1>{message}</h1>
-      <LoginButtons />
-    </div>
-  );
-};
+const InnerLayerWhenLoggedOut = () => (
+  <div className="side-bar__inner-layer--loggedout">
+    <h1>
+      지금 바로
+      <br />
+      퀵킥의 멤버가
+      <br />
+      되어 보세요!
+    </h1>
+    <LoginButtons />
+  </div>
+);
 
 const LogoutButton = () => {
   const LOGOUT_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/logout`;
@@ -124,7 +169,15 @@ const Notifications = () => {
     <>
       <ContentButton className={btnClass} onClick={handleBtnClick}>
         🛎 알림 신청 내역 &nbsp;{' '}
-        {open ? <span role="img">🙉</span> : <span role="img">🙈</span>}
+        {open ? (
+          <span role="img" aria-label="monkey_with_open_eyes">
+            🙉
+          </span>
+        ) : (
+          <span role="img" aria-label="monkey_with_closed_eyes">
+            🙈
+          </span>
+        )}
         {open ? <NotiList matches={matches} /> : null}
       </ContentButton>
     </>
@@ -147,12 +200,30 @@ const CloseBtn = ({ activated, setActivated }) => (
   </div>
 );
 
-const TeamInfo = () => (
-  <div>
-    <Emblem />
-    <ContentButton>⚙️팀 페이지</ContentButton>
-  </div>
+const NotiToggleButton = () => (
+  <>
+    <div className="noti-toggle-btn">🔔</div>
+  </>
 );
+
+const TeamInfo = ({ playerInfo }) => {
+  const { _, sideBarDispatch } = useContext(SideBarContext);
+  const handleCloseSideBar = () => {
+    sideBarDispatch(SideBarActionCreator.toggleActivated());
+  };
+  return (
+    <div>
+      <Emblem playerInfo={playerInfo} />
+      <Link to="/myteam" onClick={handleCloseSideBar}>
+        <ContentButton>
+          <span role="img" aria-label="config">
+            ⚙️팀 페이지
+          </span>
+        </ContentButton>
+      </Link>
+    </div>
+  );
+};
 
 const ContentButton = ({ className = '', children, onClick }) => {
   return (
@@ -162,25 +233,35 @@ const ContentButton = ({ className = '', children, onClick }) => {
   );
 };
 
-const Emblem = () => {
+const Emblem = ({ playerInfo }) => {
+  const userId = playerInfo ? playerInfo.playerId : null;
+  const userSeq = playerInfo ? playerInfo.seq : null;
+  const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
+  const teamName =
+    playerInfo && playerInfo.team ? playerInfo.team.name : '팀 정보 없음';
+  const logoSrc = logo
+    ? `https://kr.object.ncloudstorage.com/quickkick-emblem/${logo}`
+    : '/default_logo.png';
   return (
     <>
       <div className="side-bar__emblem-wrapper">
         <div className="side-bar__emblem">
-          <img src={barcaLogo} alt="" />
+          <img src={logoSrc} alt="" />
         </div>
       </div>
       <div className="side-bar__team-name-wrapper">
         <div className="side-bar__team-name">
-          <h2>FC Barcelona</h2>
+          <h2>{teamName}</h2>
         </div>
       </div>
+      <div>userId: {userId}</div>
+      <div>user seq: {userSeq}</div>
     </>
   );
 };
 
 const AuthButton = ({ provider }) => {
-  const message = `${provider === 'naver' ? '네이버 ' : '카카오'} 로그인`;
+  const message = `${provider === 'naver' ? '네이버' : '카카오'} 로그인`;
   return (
     <>
       <div className={`new-auth-button new-auth-button--${provider}`}>
