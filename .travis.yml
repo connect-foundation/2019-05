@@ -54,7 +54,7 @@ jobs:
       install:
         - yarn install
       before_script:
-        - openssl aes-256-cbc -K $encrypted_a1542a79f8e3_key -iv $encrypted_a1542a79f8e3_iv -in env.tar.enc -out ./env.tar -d
+        - openssl aes-256-cbc -K $encrypted_09a4eca9209d_key -iv $encrypted_09a4eca9209d_iv -in env.tar.enc -out ./env.tar -d
         - tar xvf env.tar
       script:
         - yarn test
