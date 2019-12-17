@@ -27,6 +27,7 @@ type Player {
     notiList: [Notifier!] @relation(name: "NotiPlayer")
     uploadMatchList: [Match!] @relation(name: "MatchAuthor")
     teamCreate: [Team] @relation(name: "TeamOwner")
+    applyingList: [Apply] @relation(name: "ApplyingPlayer")
 }
 enum Auth {
     KAKAO
@@ -90,6 +91,7 @@ enum Status {
 type Apply{
     seq: Int! @id
     team: Team @relation(link:INLINE, name: "ApplyingTeam")
+    player: Player @relation(link:INLINE, name: "ApplyingPlayer")
     match: Match @relation(link:INLINE, name: "AppliedMatch")
 }
 

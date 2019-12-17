@@ -8,7 +8,6 @@ import {
 } from '../../components/myteam';
 import { Redirect } from 'react-router-dom';
 import { UserContext } from '../../contexts/User';
-import ReactSwitch from 'react-switch';
 
 const gql = `
 query ($seq: Int){

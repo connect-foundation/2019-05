@@ -30,6 +30,7 @@ type AggregateTeam {
 type Apply {
   seq: Int!
   team: Team
+  player: Player
   match: Match
 }
 
@@ -42,11 +43,17 @@ type ApplyConnection {
 input ApplyCreateInput {
   seq: Int
   team: TeamCreateOneWithoutOnApplyingListInput
+  player: PlayerCreateOneWithoutApplyingListInput
   match: MatchCreateOneWithoutAppliedListsInput
 }
 
 input ApplyCreateManyWithoutMatchInput {
   create: [ApplyCreateWithoutMatchInput!]
+  connect: [ApplyWhereUniqueInput!]
+}
+
+input ApplyCreateManyWithoutPlayerInput {
+  create: [ApplyCreateWithoutPlayerInput!]
   connect: [ApplyWhereUniqueInput!]
 }
 
@@ -58,10 +65,18 @@ input ApplyCreateManyWithoutTeamInput {
 input ApplyCreateWithoutMatchInput {
   seq: Int
   team: TeamCreateOneWithoutOnApplyingListInput
+  player: PlayerCreateOneWithoutApplyingListInput
+}
+
+input ApplyCreateWithoutPlayerInput {
+  seq: Int
+  team: TeamCreateOneWithoutOnApplyingListInput
+  match: MatchCreateOneWithoutAppliedListsInput
 }
 
 input ApplyCreateWithoutTeamInput {
   seq: Int
+  player: PlayerCreateOneWithoutApplyingListInput
   match: MatchCreateOneWithoutAppliedListsInput
 }
 
@@ -113,6 +128,7 @@ input ApplySubscriptionWhereInput {
 
 input ApplyUpdateInput {
   team: TeamUpdateOneWithoutOnApplyingListInput
+  player: PlayerUpdateOneWithoutApplyingListInput
   match: MatchUpdateOneWithoutAppliedListsInput
 }
 
@@ -124,6 +140,17 @@ input ApplyUpdateManyWithoutMatchInput {
   disconnect: [ApplyWhereUniqueInput!]
   update: [ApplyUpdateWithWhereUniqueWithoutMatchInput!]
   upsert: [ApplyUpsertWithWhereUniqueWithoutMatchInput!]
+  deleteMany: [ApplyScalarWhereInput!]
+}
+
+input ApplyUpdateManyWithoutPlayerInput {
+  create: [ApplyCreateWithoutPlayerInput!]
+  delete: [ApplyWhereUniqueInput!]
+  connect: [ApplyWhereUniqueInput!]
+  set: [ApplyWhereUniqueInput!]
+  disconnect: [ApplyWhereUniqueInput!]
+  update: [ApplyUpdateWithWhereUniqueWithoutPlayerInput!]
+  upsert: [ApplyUpsertWithWhereUniqueWithoutPlayerInput!]
   deleteMany: [ApplyScalarWhereInput!]
 }
 
@@ -140,15 +167,27 @@ input ApplyUpdateManyWithoutTeamInput {
 
 input ApplyUpdateWithoutMatchDataInput {
   team: TeamUpdateOneWithoutOnApplyingListInput
+  player: PlayerUpdateOneWithoutApplyingListInput
+}
+
+input ApplyUpdateWithoutPlayerDataInput {
+  team: TeamUpdateOneWithoutOnApplyingListInput
+  match: MatchUpdateOneWithoutAppliedListsInput
 }
 
 input ApplyUpdateWithoutTeamDataInput {
+  player: PlayerUpdateOneWithoutApplyingListInput
   match: MatchUpdateOneWithoutAppliedListsInput
 }
 
 input ApplyUpdateWithWhereUniqueWithoutMatchInput {
   where: ApplyWhereUniqueInput!
   data: ApplyUpdateWithoutMatchDataInput!
+}
+
+input ApplyUpdateWithWhereUniqueWithoutPlayerInput {
+  where: ApplyWhereUniqueInput!
+  data: ApplyUpdateWithoutPlayerDataInput!
 }
 
 input ApplyUpdateWithWhereUniqueWithoutTeamInput {
@@ -160,6 +199,12 @@ input ApplyUpsertWithWhereUniqueWithoutMatchInput {
   where: ApplyWhereUniqueInput!
   update: ApplyUpdateWithoutMatchDataInput!
   create: ApplyCreateWithoutMatchInput!
+}
+
+input ApplyUpsertWithWhereUniqueWithoutPlayerInput {
+  where: ApplyWhereUniqueInput!
+  update: ApplyUpdateWithoutPlayerDataInput!
+  create: ApplyCreateWithoutPlayerInput!
 }
 
 input ApplyUpsertWithWhereUniqueWithoutTeamInput {
@@ -178,6 +223,7 @@ input ApplyWhereInput {
   seq_gt: Int
   seq_gte: Int
   team: TeamWhereInput
+  player: PlayerWhereInput
   match: MatchWhereInput
   AND: [ApplyWhereInput!]
   OR: [ApplyWhereInput!]
@@ -1155,6 +1201,7 @@ type Player {
   notiList(where: NotifierWhereInput, orderBy: NotifierOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notifier!]
   uploadMatchList(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
   teamCreate(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team!]
+  applyingList(where: ApplyWhereInput, orderBy: ApplyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Apply!]
 }
 
 type PlayerConnection {
@@ -1174,11 +1221,17 @@ input PlayerCreateInput {
   notiList: NotifierCreateManyWithoutPlayerInput
   uploadMatchList: MatchCreateManyWithoutAuthorInput
   teamCreate: TeamCreateManyWithoutOwnerInput
+  applyingList: ApplyCreateManyWithoutPlayerInput
 }
 
 input PlayerCreateManyWithoutTeamInput {
   create: [PlayerCreateWithoutTeamInput!]
   connect: [PlayerWhereUniqueInput!]
+}
+
+input PlayerCreateOneWithoutApplyingListInput {
+  create: PlayerCreateWithoutApplyingListInput
+  connect: PlayerWhereUniqueInput
 }
 
 input PlayerCreateOneWithoutNotiListInput {
@@ -1196,6 +1249,19 @@ input PlayerCreateOneWithoutUploadMatchListInput {
   connect: PlayerWhereUniqueInput
 }
 
+input PlayerCreateWithoutApplyingListInput {
+  seq: Int
+  playerId: String!
+  team: TeamCreateOneWithoutMembersInput
+  name: String
+  phone: String
+  email: String
+  authProvider: Auth!
+  notiList: NotifierCreateManyWithoutPlayerInput
+  uploadMatchList: MatchCreateManyWithoutAuthorInput
+  teamCreate: TeamCreateManyWithoutOwnerInput
+}
+
 input PlayerCreateWithoutNotiListInput {
   seq: Int
   playerId: String!
@@ -1206,6 +1272,7 @@ input PlayerCreateWithoutNotiListInput {
   authProvider: Auth!
   uploadMatchList: MatchCreateManyWithoutAuthorInput
   teamCreate: TeamCreateManyWithoutOwnerInput
+  applyingList: ApplyCreateManyWithoutPlayerInput
 }
 
 input PlayerCreateWithoutTeamCreateInput {
@@ -1218,6 +1285,7 @@ input PlayerCreateWithoutTeamCreateInput {
   authProvider: Auth!
   notiList: NotifierCreateManyWithoutPlayerInput
   uploadMatchList: MatchCreateManyWithoutAuthorInput
+  applyingList: ApplyCreateManyWithoutPlayerInput
 }
 
 input PlayerCreateWithoutTeamInput {
@@ -1230,6 +1298,7 @@ input PlayerCreateWithoutTeamInput {
   notiList: NotifierCreateManyWithoutPlayerInput
   uploadMatchList: MatchCreateManyWithoutAuthorInput
   teamCreate: TeamCreateManyWithoutOwnerInput
+  applyingList: ApplyCreateManyWithoutPlayerInput
 }
 
 input PlayerCreateWithoutUploadMatchListInput {
@@ -1242,6 +1311,7 @@ input PlayerCreateWithoutUploadMatchListInput {
   authProvider: Auth!
   notiList: NotifierCreateManyWithoutPlayerInput
   teamCreate: TeamCreateManyWithoutOwnerInput
+  applyingList: ApplyCreateManyWithoutPlayerInput
 }
 
 type PlayerEdge {
@@ -1375,6 +1445,7 @@ input PlayerUpdateInput {
   notiList: NotifierUpdateManyWithoutPlayerInput
   uploadMatchList: MatchUpdateManyWithoutAuthorInput
   teamCreate: TeamUpdateManyWithoutOwnerInput
+  applyingList: ApplyUpdateManyWithoutPlayerInput
 }
 
 input PlayerUpdateManyDataInput {
@@ -1424,6 +1495,15 @@ input PlayerUpdateOneRequiredWithoutUploadMatchListInput {
   connect: PlayerWhereUniqueInput
 }
 
+input PlayerUpdateOneWithoutApplyingListInput {
+  create: PlayerCreateWithoutApplyingListInput
+  update: PlayerUpdateWithoutApplyingListDataInput
+  upsert: PlayerUpsertWithoutApplyingListInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PlayerWhereUniqueInput
+}
+
 input PlayerUpdateOneWithoutTeamCreateInput {
   create: PlayerCreateWithoutTeamCreateInput
   update: PlayerUpdateWithoutTeamCreateDataInput
@@ -1431,6 +1511,18 @@ input PlayerUpdateOneWithoutTeamCreateInput {
   delete: Boolean
   disconnect: Boolean
   connect: PlayerWhereUniqueInput
+}
+
+input PlayerUpdateWithoutApplyingListDataInput {
+  playerId: String
+  team: TeamUpdateOneWithoutMembersInput
+  name: String
+  phone: String
+  email: String
+  authProvider: Auth
+  notiList: NotifierUpdateManyWithoutPlayerInput
+  uploadMatchList: MatchUpdateManyWithoutAuthorInput
+  teamCreate: TeamUpdateManyWithoutOwnerInput
 }
 
 input PlayerUpdateWithoutNotiListDataInput {
@@ -1442,6 +1534,7 @@ input PlayerUpdateWithoutNotiListDataInput {
   authProvider: Auth
   uploadMatchList: MatchUpdateManyWithoutAuthorInput
   teamCreate: TeamUpdateManyWithoutOwnerInput
+  applyingList: ApplyUpdateManyWithoutPlayerInput
 }
 
 input PlayerUpdateWithoutTeamCreateDataInput {
@@ -1453,6 +1546,7 @@ input PlayerUpdateWithoutTeamCreateDataInput {
   authProvider: Auth
   notiList: NotifierUpdateManyWithoutPlayerInput
   uploadMatchList: MatchUpdateManyWithoutAuthorInput
+  applyingList: ApplyUpdateManyWithoutPlayerInput
 }
 
 input PlayerUpdateWithoutTeamDataInput {
@@ -1464,6 +1558,7 @@ input PlayerUpdateWithoutTeamDataInput {
   notiList: NotifierUpdateManyWithoutPlayerInput
   uploadMatchList: MatchUpdateManyWithoutAuthorInput
   teamCreate: TeamUpdateManyWithoutOwnerInput
+  applyingList: ApplyUpdateManyWithoutPlayerInput
 }
 
 input PlayerUpdateWithoutUploadMatchListDataInput {
@@ -1475,11 +1570,17 @@ input PlayerUpdateWithoutUploadMatchListDataInput {
   authProvider: Auth
   notiList: NotifierUpdateManyWithoutPlayerInput
   teamCreate: TeamUpdateManyWithoutOwnerInput
+  applyingList: ApplyUpdateManyWithoutPlayerInput
 }
 
 input PlayerUpdateWithWhereUniqueWithoutTeamInput {
   where: PlayerWhereUniqueInput!
   data: PlayerUpdateWithoutTeamDataInput!
+}
+
+input PlayerUpsertWithoutApplyingListInput {
+  update: PlayerUpdateWithoutApplyingListDataInput!
+  create: PlayerCreateWithoutApplyingListInput!
 }
 
 input PlayerUpsertWithoutNotiListInput {
@@ -1582,6 +1683,9 @@ input PlayerWhereInput {
   teamCreate_every: TeamWhereInput
   teamCreate_some: TeamWhereInput
   teamCreate_none: TeamWhereInput
+  applyingList_every: ApplyWhereInput
+  applyingList_some: ApplyWhereInput
+  applyingList_none: ApplyWhereInput
   AND: [PlayerWhereInput!]
   OR: [PlayerWhereInput!]
   NOT: [PlayerWhereInput!]
