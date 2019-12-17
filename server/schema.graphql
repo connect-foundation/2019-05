@@ -9,6 +9,7 @@ type Team {
     lose: Int!
     rating: Int!
     teamUniqueId: String!
+    owner: Player
     members: [Player!]
     uploadMatchList: [Match!]
     matchingDoneList: [Match!]
@@ -22,10 +23,14 @@ type Player {
     name: String
     phone: String
     email: String
+    authProvider: Auth!
     notiList: [Notifier!]
     uploadMatchList: [Match!]
 }
-
+enum Auth {
+    KAKAO
+    NAVER
+}
 enum Result {
     HOST
     GUEST
@@ -64,6 +69,7 @@ type Match {
     author: Player!
     host: Team!
     guest: Team
+    status: Status!
     stadium: String!
     address: String
     area: Area!
@@ -73,6 +79,11 @@ type Match {
     description: String
     result: Result
     appliedLists: [Apply!]
+}
+
+enum Status {
+    OPEN
+    CLOSED
 }
 
 type Apply{
@@ -111,7 +122,7 @@ type Query {
 type Mutation {
     CreateTeam(name: String, logo:String, homeArea: Area, introduction: String ): Team
     CreatePlayer(playerId:String, team:Int, name: String, phone: String, email:String): Player
-    CreateMatch(host: Int, stadium: String, area:Area, date:String, startTime: String, endTime: String, description: String): Match
+    CreateMatch(host: Int, author:String, stadium: String, area:Area, date:String, startTime: String, endTime: String, description: String, address: String): Match
     MatchGuest(seq: Int, guest: Int): Match
     CreateNotifier(player:Int, area:[Area], date:String, startTime: String, endTime: String): Notifier
     UpdateTeamInfo(seq: Int, name: String, logo: String, homeArea: Area, introduction: String): Team

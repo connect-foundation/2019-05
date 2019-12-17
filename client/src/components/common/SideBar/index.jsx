@@ -10,14 +10,11 @@ import {
   SideBarContext,
 } from '../../../contexts/SideBar';
 import { UserContext, UserActionCreator } from '../../../contexts/User';
-
-import naverLoginPng from '../../../assets/images/naver_auth_btn/naver_login_green_long.PNG';
-import naverLogoutPng from '../../../assets/images/naver_auth_btn/naver_logout_green_mid.PNG';
-import kakaoLoginPng from '../../../assets/images/kakao_auth_btn/kakao_login.png';
-import barcaLogo from '../../../assets/images/fc-barcelona-logo.png';
 import './index.scss';
 import useAsync from '../../../hooks/useAsync';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
+import updatePlayerInfo from '../../../util/functions';
 
 const authenticateUser = async (token) => {
   if (!token) return null;
@@ -33,9 +30,9 @@ const authenticateUser = async (token) => {
 const SideBar = () => {
   const [cookies] = useCookies();
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
-  const openState = sideBarState.activated ? 'side-bar--open' : '';
-  const { userState, userDispatch } = useContext(UserContext);
+  const { userDispatch } = useContext(UserContext);
   const [loginState] = useAsync(authenticateUser.bind(null, cookies.jwt), []);
+  const [playerInfo, setPlayerInfo] = useState(null);
   const { data: playerId } = loginState;
 
   const handleActivated = () => {
@@ -43,40 +40,73 @@ const SideBar = () => {
   };
 
   useEffect(() => {
-    if (!playerId) return;
-    userDispatch(UserActionCreator.login(playerId));
+    if (!playerId || !playerInfo) return;
+    userDispatch(
+      UserActionCreator.login(
+        playerId,
+        playerInfo.team ? playerInfo.team.seq : null
+      )
+    );
+  }, [playerId, playerInfo]);
+
+  const sideBarClass = classNames({
+    'side-bar': true,
+    'side-bar--open': sideBarState.activated,
+    'side-bar__inner-layer--loggedin': !!playerId,
+  });
+
+  useEffect(() => {
+    (async () => {
+      const data = await updatePlayerInfo(playerId);
+      setPlayerInfo(data);
+    })();
   }, [playerId]);
 
   return (
-    <nav className={`side-bar ${openState}`}>
+    <nav className={sideBarClass}>
       <CloseBtn
         activated={sideBarState.activated}
         setActivated={handleActivated}
       />
-      {playerId ? <InnerLayerWhenLoggedIn /> : <InnerLayerWhenLoggedOut />}
+      {playerId ? (
+        <InnerLayerWhenLoggedIn playerInfo={playerInfo} />
+      ) : (
+        <InnerLayerWhenLoggedOut />
+      )}
     </nav>
   );
 };
-const InnerLayerWhenLoggedIn = () => (
-  <>
-    <TeamInfo />
-    <ContentButton>🚀예시 버튼</ContentButton>
-    <Notifications />
-    <div className="empty"></div>
-    <LogoutButton />
-  </>
-);
-const InnerLayerWhenLoggedOut = () => {
-  const message = '지금 바로 퀵킥의 멤버가 되어 보세요!';
+
+const InnerLayerWhenLoggedIn = ({ playerInfo }) => {
   return (
     <>
-      <div className="side-bar__inner-layer--loggedout">
-        <h1>{message}</h1>
-        <LoginButton />
-      </div>
+      <NotiToggleButton />
+      <TeamInfo playerInfo={playerInfo} />
+      <ContentButton>
+        <span role="img" aria-label="rocket">
+          🚀
+        </span>
+        예시 버튼
+      </ContentButton>
+      <Notifications />
+      <EmptySpace />
+      <LogoutButton />
     </>
   );
 };
+
+const InnerLayerWhenLoggedOut = () => (
+  <div className="side-bar__inner-layer--loggedout">
+    <h1>
+      지금 바로
+      <br />
+      퀵킥의 멤버가
+      <br />
+      되어 보세요!
+    </h1>
+    <LoginButtons />
+  </div>
+);
 
 const LogoutButton = () => {
   const LOGOUT_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/logout`;
@@ -88,19 +118,18 @@ const LogoutButton = () => {
     </div>
   );
 };
-const LoginButton = () => {
-  const classes = 'auth-button__img';
+
+const LoginButtons = () => {
   const NAVER_LOGIN_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/naver`;
   const KAKAO_LOGIN_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/kakao`;
 
   return (
     <div className="auth-button">
       <a href={NAVER_LOGIN_ADDR}>
-        <img className={classes} src={naverLoginPng} alt="naver login" />
+        <AuthButton provider="naver" />
       </a>
-
       <a href={KAKAO_LOGIN_ADDR}>
-        <img className={classes} src={kakaoLoginPng} alt="kakao login" />
+        <AuthButton provider="kakao" />
       </a>
     </div>
   );
@@ -108,6 +137,7 @@ const LoginButton = () => {
 
 const Notifications = () => {
   const [open, setOpen] = useState(false);
+
   const matches = [
     { seq: 1, content: 'match 1' },
     { seq: 2, content: 'match 2' },
@@ -122,12 +152,22 @@ const Notifications = () => {
   return (
     <>
       <ContentButton className={btnClass} onClick={handleBtnClick}>
-        🛎 알림 신청 내역 &nbsp; {open ? '🙉' : '🙈'}
+        🛎 알림 신청 내역 &nbsp;{' '}
+        {open ? (
+          <span role="img" aria-label="monkey_with_open_eyes">
+            🙉
+          </span>
+        ) : (
+          <span role="img" aria-label="monkey_with_closed_eyes">
+            🙈
+          </span>
+        )}
         {open ? <NotiList matches={matches} /> : null}
       </ContentButton>
     </>
   );
 };
+
 const NotiList = ({ matches }) => (
   <ul>
     {matches.map((match) => (
@@ -135,6 +175,7 @@ const NotiList = ({ matches }) => (
     ))}
   </ul>
 );
+
 const CloseBtn = ({ activated, setActivated }) => (
   <div className="close-btn">
     <button type="button" onClick={() => setActivated(!activated)}>
@@ -142,14 +183,44 @@ const CloseBtn = ({ activated, setActivated }) => (
     </button>
   </div>
 );
-const TeamInfo = () => (
-  <div>
-    <Emblem />
-    <ContentButton>⚙️팀 페이지</ContentButton>
-  </div>
-);
 
-const ContentButton = ({ className, children, onClick }) => {
+const NotiToggleButton = () => {
+  const [toggle, setToggle] = useState(true);
+  const toggleClass = classNames({
+    'noti-toggle-btn': true,
+    'noti-toggle-btn--on': toggle,
+    'noti-toggle-btn--off': !toggle,
+  });
+  const handleClick = () => {
+    setToggle(!toggle);
+  };
+  return (
+    <div className={toggleClass} onClick={handleClick}>
+      알림 &nbsp; {toggle ? 'ON' : 'OFF'}
+    </div>
+  );
+};
+
+const TeamInfo = ({ playerInfo }) => {
+  const { _, sideBarDispatch } = useContext(SideBarContext);
+  const handleCloseSideBar = () => {
+    sideBarDispatch(SideBarActionCreator.toggleActivated());
+  };
+  return (
+    <div>
+      <Emblem playerInfo={playerInfo} />
+      <Link to="/myteam" onClick={handleCloseSideBar}>
+        <ContentButton>
+          <span role="img" aria-label="config">
+            ⚙️팀 페이지
+          </span>
+        </ContentButton>
+      </Link>
+    </div>
+  );
+};
+
+const ContentButton = ({ className = '', children, onClick }) => {
   return (
     <div className={`${className} side-bar__content-button`} onClick={onClick}>
       {children}
@@ -157,21 +228,45 @@ const ContentButton = ({ className, children, onClick }) => {
   );
 };
 
-const Emblem = () => {
+const Emblem = ({ playerInfo }) => {
+  const userId = playerInfo ? playerInfo.playerId : null;
+  const userSeq = playerInfo ? playerInfo.seq : null;
+  const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
+  const teamName =
+    playerInfo && playerInfo.team ? playerInfo.team.name : '팀 정보 없음';
+  const logoSrc = logo
+    ? `https://kr.object.ncloudstorage.com/quickkick-emblem/${logo}`
+    : '/default_logo.png';
   return (
     <>
       <div className="side-bar__emblem-wrapper">
         <div className="side-bar__emblem">
-          <img src={barcaLogo} alt="" />
+          <img src={logoSrc} alt="" />
         </div>
       </div>
       <div className="side-bar__team-name-wrapper">
         <div className="side-bar__team-name">
-          <h2>FC Barcelona</h2>
+          <h2>{teamName}</h2>
         </div>
+      </div>
+      <div>userId: {userId}</div>
+      <div>user seq: {userSeq}</div>
+    </>
+  );
+};
+
+const AuthButton = ({ provider }) => {
+  const message = `${provider === 'naver' ? '네이버' : '카카오'} 로그인`;
+  return (
+    <>
+      <div className={`new-auth-button new-auth-button--${provider}`}>
+        <img className="auth-logo" src={`${provider}.svg`} alt="" />
+        <span className="auth-message">{message}</span>
       </div>
     </>
   );
 };
+
+const EmptySpace = () => <div className="empty"></div>;
 
 export default SideBar;

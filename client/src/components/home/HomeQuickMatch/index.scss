@@ -3,7 +3,7 @@
 .home-quick-match {
   height: calc(100vh - #{$header-height});
   min-height: 550px;
-  background: $quick_background url('../../../assets/images/background2.png')
+  background: $quick_background url('../../../assets/images/background.png')
     right bottom no-repeat;
   background-size: 50%;
   .grid-container {

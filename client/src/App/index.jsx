@@ -6,8 +6,8 @@ const App = () => (
   <div className="App">
     <Switch>
       <Route exact path="/" component={home} />
-      <Route path="/match" component={match} />
-      <Route path="/myteam" component={myteam} />
+      <Route exact path="/match" component={match} />
+      <Route exact path="/myteam" component={myteam} />
       <Route component={error} />
     </Switch>
   </div>

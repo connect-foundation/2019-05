@@ -5,9 +5,11 @@ const resolvers = {
         where: {
           seq,
           area,
-          host: {
-            seq: host,
-          },
+          host: host
+            ? {
+                seq: host,
+              }
+            : undefined,
         },
       });
     },
@@ -25,7 +27,7 @@ const resolvers = {
           date,
         },
         first,
-        orderBy: 'date_ASC',
+        orderBy: 'startTime_ASC',
       });
     },
     Match: (_, { seq }, { prisma }) => {
@@ -46,9 +48,11 @@ const resolvers = {
         where: {
           seq,
           playerId,
-          team: {
-            seq: team,
-          },
+          team: team
+            ? {
+                seq: team,
+              }
+            : undefined,
         },
       });
     },
@@ -61,9 +65,11 @@ const resolvers = {
     Notifiers: (_, { seq, player }, { prisma }) => {
       return prisma.notifiers({
         seq,
-        player: {
-          seq: player,
-        },
+        player: player
+          ? {
+              seq: player,
+            }
+          : undefined,
       });
     },
     Notifier: (_, { seq }, { prisma }) => {
@@ -82,11 +88,13 @@ const resolvers = {
     CreatePlayer: (_, { playerId, team, name, phone, email }, { prisma }) => {
       return prisma.createPlayer({
         playerId,
-        team: {
-          connect: {
-            seq: team,
-          },
-        },
+        team: team
+          ? {
+              connect: {
+                seq: team,
+              },
+            }
+          : null,
         name,
         phone,
         email,
@@ -94,7 +102,17 @@ const resolvers = {
     },
     CreateMatch: (
       _,
-      { host, stadium, address, area, date, startTime, endTime, description },
+      {
+        host,
+        author,
+        stadium,
+        address,
+        area,
+        date,
+        startTime,
+        endTime,
+        description,
+      },
       { prisma }
     ) => {
       return prisma.createMatch({
@@ -103,6 +121,12 @@ const resolvers = {
             seq: host,
           },
         },
+        author: {
+          connect: {
+            playerId: author,
+          },
+        },
+        status: 'OPEN',
         stadium,
         address,
         area,
@@ -192,11 +216,14 @@ const resolvers = {
     onApplyingList: ({ seq }, _, { prisma }) => {
       return prisma.team({ seq }).onApplyingList();
     },
+    owner: ({ seq }, _, { prisma }) => {
+      return prisma.team({ seq }).owner();
+    },
   },
 
   Player: {
     team: ({ seq }, _, { prisma }) => {
-      return prisma.team({ seq });
+      return prisma.player({ seq }).team();
     },
     notiList: ({ seq }, _, { prisma }) => {
       return prisma.player({ seq }).notiList();

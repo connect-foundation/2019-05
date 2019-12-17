@@ -1,8 +1,9 @@
 @import '../../../commonStyle';
 
 .team-introduction {
-  padding: 80px;
-  box-sizing: border-box;
+  .grid-container {
+    padding: 80px 80px 40px;
+  }
   .team-info__title {
     margin-bottom: 50px;
     h2 {
@@ -32,7 +33,7 @@
   .emblem__container {
     margin-right: 50px;
     .emblem__image {
-      width: 100x;
+      width: 150px;
       margin-bottom: 15px;
       img {
         display: block;
