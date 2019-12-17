@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-
+import classNames from 'classnames';
 import {
   SideBarActionCreator,
   SideBarContext,
@@ -12,17 +12,15 @@ import {
 import { UserContext, UserActionCreator } from '../../../contexts/User';
 
 import naverLoginPng from '../../../assets/images/naver_auth_btn/naver_login_green_long.PNG';
-import naverLogoutPng from '../../../assets/images/naver_auth_btn/naver_logout_green_mid.PNG';
 import kakaoLoginPng from '../../../assets/images/kakao_auth_btn/kakao_login.png';
 import barcaLogo from '../../../assets/images/fc-barcelona-logo.png';
 import './index.scss';
 import useAsync from '../../../hooks/useAsync';
-import classNames from 'classnames';
 
 const authenticateUser = async (token) => {
   if (!token) return null;
   const response = await axios(
-    process.env.REACT_APP_API_SERVER_ADDRESS + '/user',
+    `${process.env.REACT_APP_API_SERVER_ADDRESS}/user`,
     {
       headers: { Authorization: token },
     }

@@ -1,46 +1,46 @@
 const webpush = require('web-push');
 
-let subscription;
+const keyMap = []; // 객체 키 => id, 속성 => publickey, privateKey
 
-const setUpVapIdKey = () => {
-  if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
-    const keys = webpush.generateVAPIDKeys();
-    process.env.VAPID_PUBLIC_KEY = keys.publicKey;
-    process.env.VAPID_PRIVATE_KEY = keys.privateKey;
-  }
+const createVapIdKey = () => {
+  return webpush.generateVAPIDKeys();
+};
+
+const setUpVapIdKey = (id) => {
+  keyMap[id] = { ...createVapIdKey() };
   webpush.setVapidDetails(
-    'http://127.0.0.1:4000',
-    process.env.VAPID_PUBLIC_KEY,
-    process.env.VAPID_PRIVATE_KEY
+    `${process.env.DOMAIN}`,
+    keyMap[id].publicKey,
+    keyMap[id].privateKey
   );
+};
+
+const getVapPublicId = (req, res) => {
+  const userId = req.body.userId;
+  if (!userId) {
+    res.sendStatus(400);
+  }
+  if (!keyMap[userId]) {
+    setUpVapIdKey(userId);
+  }
+  res.status(201).json({ publicKey: keyMap[userId] });
 };
 
 const sendPushNotification = (req, res) => {
   const sub = req.body.subscription;
-  console.log(sub);
   webpush
     .sendNotification(sub)
     .then(() => {
-      res.sendStatus(201);
+      res.sendStatus(200);
     })
     .catch((err) => {
       res.status(500).json({ errorMsg: err });
     });
 };
 
-const getVapPublicId = (req, res) => {
-  setUpVapIdKey();
-  res.json({ publicKey: process.env.VAPID_PUBLIC_KEY });
-};
-
-const registSubscription = (req, res) => {
-  subscription = req.body.subscription;
-  res.status(201).json({ success: true });
-};
-
 const getSubscription = (req, res) => {
   if (!subscription) {
-    res.status(201).json({ subscription: undefined });
+    res.sendStatus(400);
   }
   res.status(201).json({ subscription });
 };
@@ -48,6 +48,5 @@ const getSubscription = (req, res) => {
 module.exports = {
   sendPushNotification,
   getVapPublicId,
-  registSubscription,
   getSubscription,
 };
