@@ -6,5 +6,7 @@ import * as workerSetup from './util/workerSetup';
 
 ReactDOM.render(<Root />, document.getElementById('root'));
 
-workerSetup.unregister();
+if (workerSetup.isExistRegistration()) {
+  workerSetup.unregister();
+}
 workerSetup.register();

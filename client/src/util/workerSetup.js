@@ -59,6 +59,7 @@ const register = async () => {
     serviceWorkerRegistCnt = 0;
   } catch (error) {
     if (serviceWorkerRegistCnt >= 5) {
+      console.log('Page refresh...plz...');
       return;
     }
     serviceWorkerRegistCnt += 1;
@@ -82,4 +83,12 @@ const updater = async () => {
   await registration.update();
 };
 
-export { register, unregister, updater };
+const isExistRegistration = async () => {
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (registration) {
+    return true;
+  }
+  return false;
+};
+
+export { register, unregister, updater, isExistRegistration };
