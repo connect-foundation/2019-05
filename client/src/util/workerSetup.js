@@ -13,7 +13,7 @@ const urlBase64ToUint8Array = (base64String) => {
   return outputArray;
 };
 
-export default async () => {
+const register = async () => {
   const isPossibleBrowser =
     process.browser && 'serviceWorker' in navigator && 'PushManager' in window;
   if (!isPossibleBrowser) {
@@ -53,26 +53,26 @@ export default async () => {
             }),
           }
         );
-        const sub = await axios(
-          `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/subscription`
-        );
-        console.log(sub);
-        document.querySelector('.push').addEventListener('click', async () => {
-          await axios(
-            `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/sendNotification`,
-            {
-              method: 'post',
-              headers: {
-                'Content-type': 'application/json',
-              },
-              data: JSON.stringify({
-                subscription: sub.data.subscription,
-              }),
-            }
-          );
-        });
       });
   } catch (error) {
     console.log(error);
   }
 };
+
+const unregister = async () => {
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (!registration) {
+    return;
+  }
+  await registration.unregister();
+};
+
+const updater = async () => {
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (!registration) {
+    return;
+  }
+  await registration.update();
+};
+
+export { register, unregister, updater };
