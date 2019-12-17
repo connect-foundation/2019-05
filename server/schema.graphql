@@ -122,7 +122,7 @@ type Query {
 type Mutation {
     CreateTeam(name: String, logo:String, homeArea: Area, introduction: String ): Team
     CreatePlayer(playerId:String, team:Int, name: String, phone: String, email:String): Player
-    CreateMatch(host: Int, stadium: String, area:Area, date:String, startTime: String, endTime: String, description: String): Match
+    CreateMatch(host: Int, author:String, stadium: String, area:Area, date:String, startTime: String, endTime: String, description: String, address: String): Match
     MatchGuest(seq: Int, guest: Int): Match
     CreateNotifier(player:Int, area:[Area], date:String, startTime: String, endTime: String): Notifier
     UpdateTeamInfo(seq: Int, name: String, logo: String, homeArea: Area, introduction: String): Team

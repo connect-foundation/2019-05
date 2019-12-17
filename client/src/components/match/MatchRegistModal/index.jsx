@@ -1,5 +1,6 @@
-import React, { useContext, useState, useRef, forwardRef } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
+import sanitizeHtml from 'sanitize-html';
 import moment from 'moment';
 import 'react-dates/initialize';
 import { SingleDatePicker } from 'react-dates';
@@ -11,13 +12,35 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { getDistrict } from '../../../util';
 
 import { MatchContext, MatchActionCreator } from '../../../contexts/Match';
+import { UserContext } from '../../../contexts/User';
+
 import './index.scss';
 
 const SEOUL_DISTRICT = getDistrict();
 
+const gql = `
+mutation ($host: Int, $author: String, $stadium: String, $area: Area, $date: String, $startTime: String, $endTime: String, $address: String, $etc: String){
+  CreateMatch(host: $host, author: $author, stadium: $stadium, area: $area, date: $date, startTime: $startTime, endTime: $endTime, description: $etc, address: $address){
+    seq
+    host{
+      name
+    }
+    author {
+      name
+    }
+    stadium
+    area
+    date
+    startTime
+    endTime
+    address
+    description
+  }
+}
+`;
+
 const MatchRegistModal = () => {
   const { matchState } = useContext(MatchContext);
-
   const toggleModalVisible = () => {
     return matchState.isViewRegistModal ? 'visible' : '';
   };
@@ -54,18 +77,63 @@ const ModalHeader = () => {
 };
 
 const ModalForm = () => {
+  const { matchDispatch } = useContext(MatchContext);
+  const { userState } = useContext(UserContext);
   const [matchDate, setMatchDate] = useState(moment());
-  const matchInputRef = {
-    area: useRef(),
-    startTime: useRef(),
-    endTime: useRef(),
-    stadium: useRef(),
-    address: useRef(),
-    etcRef: useRef(),
+  const formRef = useRef();
+
+  const makeFormData = () => {
+    return new FormData(formRef.current);
+  };
+  const validateFormData = (formdata) => {
+    const startTime = formdata.get('matchRegistStartTime');
+    const endTime = formdata.get('matchRegistEndTime');
+    if (startTime >= endTime)
+      return '시작 시간이 끝나는 시간보다 늦을 수 없습니다.';
+    return false;
+  };
+  const fetchToCreateMatch = async () => {
+    const registerData = makeFormData();
+    const validationMessage = validateFormData(registerData);
+    if (validationMessage) return alert(validationMessage);
+    const fetchBody = {
+      query: gql,
+      variables: {
+        host: userState.playerTeam,
+        author: userState.playerId,
+        stadium: sanitizeHtml(registerData.get('matchStadium')),
+        area: sanitizeHtml(registerData.get('matchRegistDistrict')),
+        date: sanitizeHtml(registerData.get('matchRegistDate')),
+        startTime: sanitizeHtml(registerData.get('matchRegistStartTime')),
+        endTime: sanitizeHtml(registerData.get('matchRegistEndTime')),
+        address: sanitizeHtml(registerData.get('matchAddress')),
+        etc: sanitizeHtml(registerData.get('matchEtc')),
+      },
+    };
+    const fetchOption = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(fetchBody),
+    };
+    const data = await fetch(
+      process.env.REACT_APP_GRAPHQL_ENDPOINT,
+      fetchOption
+    );
+    const result = await data.json();
+
+    if (result.error) return false;
+    return result.data.CreateMatch;
   };
 
-  const submitEventHandler = (e) => {
+  const submitEventHandler = async (e) => {
     e.preventDefault();
+    const result = await fetchToCreateMatch();
+    if (!result) return alert('업로드가 실패하였습니다.');
+
+    alert('신규 매치를 등록하였습니다.');
+    matchDispatch(MatchActionCreator.toggleViewMatchRegistModal());
   };
   return (
     <form
@@ -73,30 +141,28 @@ const ModalForm = () => {
       onSubmit={submitEventHandler}
       name="matchRegisterForm"
       id="matchRegisterForm"
+      ref={formRef}
     >
       <div className="input-container">
-        <DistrictSection ref={matchInputRef.area} />
+        <DistrictSection />
         <DateSection matchDate={matchDate} setMatchDate={setMatchDate} />
       </div>
-      <TimeSection ref={matchInputRef} />
+      <TimeSection />
       <TextInputSection
         title="구장"
         idText="matchStadium"
         required={Boolean(true)}
-        ref={matchInputRef.stadium}
       />
       <TextInputSection
         title="주소"
         idText="matchAddress"
         required={Boolean(false)}
-        ref={matchInputRef.address}
       />
       <TextInputSection
         title="비고"
         idText="matchEtc"
         required={Boolean(false)}
         maxlen="50"
-        ref={matchInputRef.etcRef}
       />
       <button type="submit" className="submit-btn">
         등록하기
@@ -105,18 +171,17 @@ const ModalForm = () => {
   );
 };
 
-const DistrictSection = forwardRef((props, ref) => {
+const DistrictSection = (props) => {
   return (
     <div className="district-section input-box">
       <select
         id="matchRegistDistrict"
         name="matchRegistDistrict"
         className="match-register__select match-register__input"
-        ref={ref}
       >
         {Object.entries(SEOUL_DISTRICT).map(([code, district]) => {
           return (
-            <option key={code} value={district.KOR_NAME}>
+            <option key={code} value={code}>
               {district.KOR_NAME}
             </option>
           );
@@ -130,7 +195,7 @@ const DistrictSection = forwardRef((props, ref) => {
       </label>
     </div>
   );
-});
+};
 
 const DateSection = ({ matchDate, setMatchDate }) => {
   const [focused, setFocused] = useState(false);
@@ -159,7 +224,7 @@ const DateSection = ({ matchDate, setMatchDate }) => {
   );
 };
 
-const TimeSection = forwardRef((prop, ref) => {
+const TimeSection = (prop) => {
   const [startTime, setStartTime] = useState('10:00');
   const [endTime, setEndTime] = useState('12:00');
   const handleTimeChange = (time, fn) => {
@@ -178,8 +243,8 @@ const TimeSection = forwardRef((prop, ref) => {
         <input
           type="hidden"
           id="matchRegistStartTime"
+          name="matchRegistStartTime"
           value={startTime}
-          ref={ref.startTime}
         />
       </div>
       <div className="time-section end-time">
@@ -194,41 +259,37 @@ const TimeSection = forwardRef((prop, ref) => {
           id="matchRegistEndTime"
           name="matchRegistEndTime"
           value={endTime}
-          ref={ref.endTime}
         />
       </div>
     </div>
   );
-});
-const TextInputSection = forwardRef(
-  ({ title, idText, maxlen, required }, ref) => {
-    const [label, setLabel] = useState('');
-    const [value, setValue] = useState('');
-    const handleBlurEvent = () => {
-      return value !== '' ? setLabel('active') : setLabel('');
-    };
-    return (
-      <div className="input-box">
-        <input
-          type="text"
-          id={idText}
-          name={idText}
-          maxLength={maxlen === undefined ? 255 : maxlen}
-          className="match-register__input"
-          onInput={(e) => setValue(e.target.value)}
-          onFocus={() => setLabel('active')}
-          onBlur={() => handleBlurEvent()}
-          autoComplete="off"
-          required={required}
-          ref={ref}
-        />
-        <label htmlFor={idText} className={`match-register__label ${label}`}>
-          {title}
-        </label>
-      </div>
-    );
-  }
-);
+};
+const TextInputSection = ({ title, idText, maxlen, required }) => {
+  const [label, setLabel] = useState('');
+  const [value, setValue] = useState('');
+  const handleBlurEvent = () => {
+    return value !== '' ? setLabel('active') : setLabel('');
+  };
+  return (
+    <div className="input-box">
+      <input
+        type="text"
+        id={idText}
+        name={idText}
+        maxLength={maxlen === undefined ? 255 : maxlen}
+        className="match-register__input"
+        onInput={(e) => setValue(e.target.value)}
+        onFocus={() => setLabel('active')}
+        onBlur={() => handleBlurEvent()}
+        autoComplete="off"
+        required={required}
+      />
+      <label htmlFor={idText} className={`match-register__label ${label}`}>
+        {title}
+      </label>
+    </div>
+  );
+};
 
 TextInputSection.propTypes = {
   title: PropTypes.string.isRequired,
