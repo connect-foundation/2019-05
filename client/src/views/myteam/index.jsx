@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import useAsync from '../../hooks/useAsync';
 import { Header, SideBar } from '../../components/common';
 import {
@@ -6,6 +6,9 @@ import {
   TeamMembers,
   TeamMatchList,
 } from '../../components/myteam';
+import { Redirect } from 'react-router-dom';
+import { UserContext } from '../../contexts/User';
+import ReactSwitch from 'react-switch';
 
 const gql = `
 query ($seq: Int){
@@ -53,11 +56,11 @@ query ($seq: Int){
   }
 }`;
 
-const getTeamData = async () => {
+const getTeamData = async (teamSeq) => {
   const fetchBody = {
     query: gql,
     variables: {
-      seq: 5,
+      seq: teamSeq,
     },
   };
   const fetchOption = {
@@ -73,7 +76,11 @@ const getTeamData = async () => {
 };
 
 const Myteam = () => {
-  const [teamFetchData, reFetchTeamData] = useAsync(getTeamData, []);
+  const { userState } = useContext(UserContext);
+  const [teamFetchData, reFetchTeamData] = useAsync(
+    getTeamData.bind(null, userState.playerTeam),
+    []
+  );
   const {
     loading: teamDataLoading,
     data: teamData,
@@ -81,9 +88,13 @@ const Myteam = () => {
   } = teamFetchData;
   const [teamInfo, setTeamInfo] = useState();
   useEffect(() => {
+    if (!userState.playerTeam) return;
     if (!teamData) return;
     setTeamInfo(teamData.Team);
   }, [teamData]);
+  if (!userState.playerTeam) return <Redirect to="/" />;
+  if (teamDataLoading) return <div>로딩중</div>;
+  if (teamError) return <div>에러</div>;
   if (teamDataLoading || teamError || !teamInfo) return null;
   return (
     <>
