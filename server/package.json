@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=development node ./app.js",
+    "start": "cross-env NODE_ENV=development nodemon ./app.js",
     "start-prod": "cross-env NODE_ENV=production node ./app.js",
     "test": "jest --forceExit",
     "test-all": "jest --verbose --coverage --watchAll"

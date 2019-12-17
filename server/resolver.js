@@ -27,7 +27,7 @@ const resolvers = {
           date,
         },
         first,
-        orderBy: 'date_ASC',
+        orderBy: 'startTime_ASC',
       });
     },
     Match: (_, { seq }, { prisma }) => {
@@ -102,7 +102,17 @@ const resolvers = {
     },
     CreateMatch: (
       _,
-      { host, stadium, address, area, date, startTime, endTime, description },
+      {
+        host,
+        author,
+        stadium,
+        address,
+        area,
+        date,
+        startTime,
+        endTime,
+        description,
+      },
       { prisma }
     ) => {
       return prisma.createMatch({
@@ -111,6 +121,12 @@ const resolvers = {
             seq: host,
           },
         },
+        author: {
+          connect: {
+            playerId: author,
+          },
+        },
+        status: 'OPEN',
         stadium,
         address,
         area,
