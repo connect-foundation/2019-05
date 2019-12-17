@@ -41,9 +41,9 @@ const publishToken = (req, res, next) => {
   const authProvider = req.user.provider.toUpperCase();
   const playerId = convertToString(req.user.id);
   const payload = { authProvider, playerId };
-  const expiresIn = { expiresIn: '5m' };
-  const token = jwt.sign(payload, env.JWT_SECRET, expiresIn);
-  res.cookie('jwt', token);
+  const token = jwt.sign(payload, env.JWT_SECRET);
+  const httpOnly = { httpOnly: true };
+  res.cookie('jwt', token, httpOnly);
   next();
 };
 
