@@ -53,7 +53,7 @@ const getSubscription = async () => {
   return subscription.data.subscription;
 };
 
-const ApplyButton = () => {
+const ApplyButton = ({ matchInfo }) => {
   const handleApplyBtn = async () => {
     const subscription = await getSubscription();
     await axios(
@@ -64,6 +64,7 @@ const ApplyButton = () => {
           'Content-type': 'application/json',
         },
         data: JSON.stringify({
+          matchInfo,
           subscription,
         }),
       }
@@ -88,7 +89,7 @@ const MatchApplyModal = () => {
       <div className="modal-container">
         <ModalHeader />
         <MatchTeamInfoSection />
-        <ApplyButton />
+        <ApplyButton matchInfo={matchState.selectedMatchInfo} />
       </div>
       <div className="modal-background" />
     </div>
