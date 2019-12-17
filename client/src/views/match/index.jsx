@@ -5,15 +5,16 @@ import {
   ViewTitle,
   DateTimeFilter,
   AreaFilter,
+  SideBar,
 } from '../../components/common';
 import {
   MatchList,
   MatchMap,
   MatchRegist,
   MatchRegistModal,
+  MatchApplyModal,
 } from '../../components/match';
 import { MatchProvider } from '../../contexts/Match';
-import { SideBar } from '../../components/common/';
 import './index.scss';
 
 const match = () => (
@@ -33,6 +34,7 @@ const match = () => (
         </div>
       </div>
       <MatchRegistModal />
+      <MatchApplyModal />
     </div>
   </MatchProvider>
 );

@@ -13,6 +13,19 @@ const Reducer = (state, action) => {
         ...state,
         isViewRegistModal: !state.isViewRegistModal,
       };
+    case actions.TOGGLE_VIEW_MATCH_APPLY_MODAL:
+      return {
+        ...state,
+        isViewApplyModal: !state.isViewApplyModal,
+      };
+    case actions.SELECT_MATCH_INFO:
+    case actions.DESELECT_MATCH_INFO: {
+      const { selectedMatchInfo } = action.payload;
+      return {
+        ...state,
+        selectedMatchInfo,
+      };
+    }
     case actions.CLICK_DISTRICT: {
       const { clickedDName } = action.payload;
       const selected = { ...findDistrictToName(clickedDName) };
