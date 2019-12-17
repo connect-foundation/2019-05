@@ -4,7 +4,8 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-
+import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 import {
   SideBarActionCreator,
   SideBarContext,
@@ -12,14 +13,12 @@ import {
 import { UserContext, UserActionCreator } from '../../../contexts/User';
 import './index.scss';
 import useAsync from '../../../hooks/useAsync';
-import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 import updatePlayerInfo from '../../../util/functions';
 
 const authenticateUser = async (token) => {
   if (!token) return null;
   const response = await axios(
-    process.env.REACT_APP_API_SERVER_ADDRESS + '/user',
+    `${process.env.REACT_APP_API_SERVER_ADDRESS}/user`,
     {
       headers: { Authorization: token },
     }

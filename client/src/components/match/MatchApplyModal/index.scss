@@ -1,0 +1,59 @@
+@import '../../../commonStyle';
+
+.match-apply-modal {
+  display: none;
+
+  &.visible {
+    display: block;
+  }
+
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 900;
+  .modal-container {
+    position: relative;
+    z-index: 930;
+    width: 530px;
+    top: 50px;
+    margin: 0 auto;
+    box-sizing: content-box;
+    background-color: white;
+    border-radius: 10px;
+
+    .modal-header {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      padding: 40px 50px;
+      .title {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      .close-btn {
+        position: absolute;
+        right: 25px;
+        top: 25px;
+        button {
+          appearance: none;
+          border: 0 none;
+          background: none;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .modal-background {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: black;
+    opacity: 0.5;
+    z-index: 920;
+  }
+}
