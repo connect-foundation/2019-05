@@ -11,6 +11,13 @@ const MATCH_LIST_FETCH_QUERY = `
 query ($startTime: String, $endTime: String, $date: String, $area: [Area]){
   PendingMatches(first:20, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
     seq
+    author {
+      seq
+      playerId
+      name
+      phone
+      email
+    }
     host{
       seq
       name
