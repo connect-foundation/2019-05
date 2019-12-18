@@ -4,6 +4,7 @@ const {
   sendPushNotification,
   getVapPublicId,
   getSubscription,
+  setSubscription,
   sendEmailNotification,
   sendSMSNotification,
 } = require('./controller');
@@ -15,8 +16,10 @@ notification.post(
   sendPushNotification
 );
 
-notification.get('/vapidPublicKey', getVapPublicId);
+notification.post('/vapidPublicKey', getVapPublicId);
 
-notification.get('/subscription', getSubscription);
+notification.post('/findSubscription', getSubscription);
+
+notification.post('/registSubscription', setSubscription);
 
 module.exports = notification;
