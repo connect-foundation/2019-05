@@ -1,6 +1,5 @@
 const initialState = {
-  playerId: null,
-  playerTeam: null,
+  playerInfo: null,
   subscription: null,
 };
 

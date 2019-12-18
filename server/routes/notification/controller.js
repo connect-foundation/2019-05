@@ -1,8 +1,10 @@
 const { env } = process;
 const webpush = require('web-push');
+
+const keyMap = {}; // 객체 키 => id, 속성 => publickey, privateKey
+const subscriptionMap = {};
 const axios = require('axios');
 const mailSender = require('../../utils/nodemailer');
-const keyMap = []; // 객체 키 => id, 속성 => publickey, privateKey
 const makeMsgContent = require('../../utils/makeMsgContent');
 const makeMailContent = require('../../utils/makeMailContent');
 
@@ -27,7 +29,7 @@ const getVapPublicId = (req, res) => {
   if (!keyMap[userId]) {
     setUpVapIdKey(userId);
   }
-  res.status(201).json({ publicKey: keyMap[userId] });
+  res.status(201).json({ publicKey: keyMap[userId].publicKey });
 };
 
 const sendPushNotification = (req, res) => {
@@ -43,10 +45,24 @@ const sendPushNotification = (req, res) => {
 };
 
 const getSubscription = (req, res) => {
-  if (!subscription) {
-    return res.sendStatus(400);
+  const foundId = req.body.userId;
+  if (!foundId) {
+    res.sendStatus(400);
   }
-  res.status(201).json({ subscription });
+  res.status(200).json({ subscription: subscriptionMap[foundId] });
+};
+
+const setSubscription = (req, res) => {
+  const myId = req.body.userId;
+  if (!myId) {
+    res.sendStatus(400);
+  }
+  subscriptionMap[myId] = req.body.subscription;
+  Object.keys(subscriptionMap).forEach((k) => {
+    console.log(k);
+    console.log(subscriptionMap[k]);
+  });
+  res.sendStatus(201);
 };
 
 const sendEmailNotification = (req, res, next) => {
@@ -88,6 +104,7 @@ module.exports = {
   sendPushNotification,
   getVapPublicId,
   getSubscription,
+  setSubscription,
   sendEmailNotification,
   sendSMSNotification,
 };
