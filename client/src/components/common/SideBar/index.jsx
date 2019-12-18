@@ -1,65 +1,29 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useContext, useEffect } from 'react';
-import { useCookies } from 'react-cookie';
-import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import useAsync from '../../../hooks/useAsync';
 import {
   SideBarActionCreator,
   SideBarContext,
 } from '../../../contexts/SideBar';
-import { UserContext, UserActionCreator } from '../../../contexts/User';
+import { UserContext } from '../../../contexts/User';
 import './index.scss';
-import updatePlayerInfo from '../../../util/functions';
-
-const authenticateUser = async (token) => {
-  if (!token) return null;
-  const response = await axios(
-    `${process.env.REACT_APP_API_SERVER_ADDRESS}/user`,
-    {
-      headers: { Authorization: token },
-    }
-  );
-  return response.data.userInfo.playerId;
-};
 
 const SideBar = () => {
-  const [cookies] = useCookies();
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
-  const { userState, userDispatch } = useContext(UserContext);
-  const [loginState] = useAsync(authenticateUser.bind(null, cookies.jwt), []);
-  const [playerInfo, setPlayerInfo] = useState(null);
-  const { data: playerId } = loginState;
+  const { userState } = useContext(UserContext);
 
   const handleActivated = () => {
     sideBarDispatch(SideBarActionCreator.toggleActivated());
   };
 
-  useEffect(() => {
-    if (!playerId || !playerInfo) return;
-    userDispatch(
-      UserActionCreator.login(
-        playerId,
-        playerInfo.team ? playerInfo.team.seq : null
-      )
-    );
-  }, [playerId, playerInfo]);
-
   const sideBarClass = classNames({
     'side-bar': true,
     'side-bar--open': sideBarState.activated,
-    'side-bar__inner-layer--loggedin': !!playerId,
+    'side-bar__inner-layer--loggedin': !!userState.playerInfo,
   });
-
-  useEffect(() => {
-    (async () => {
-      const data = await updatePlayerInfo(playerId);
-      setPlayerInfo(data);
-    })();
-  }, [playerId]);
 
   return (
     <nav className={sideBarClass}>
@@ -68,28 +32,37 @@ const SideBar = () => {
         activated={sideBarState.activated}
         setActivated={handleActivated}
       />
-      <InnerLayer playerInfo={playerInfo} userState={userState} />
+      <InnerLayer />
     </nav>
   );
 };
 
-const InnerLayer = ({ playerInfo, userState }) => {
-  const { playerId, playerTeam } = userState;
-
-  const NowInnerLayer = () => {
-    if (!playerId) return <WhenLoggedOut />;
-    if (!playerTeam) return <WhenLoggedInWithoutTeam />;
-    return <WhenLoggedInWithTeam playerInfo={playerInfo} />;
-  };
-
-  return <>{NowInnerLayer()}</>;
+const NowInnerLayer = (id, team) => {
+  if (!id) return <WhenLoggedOut />;
+  if (!team) return <WhenLoggedInWithoutTeam />;
+  return <WhenLoggedInWithTeam />;
 };
 
-const WhenLoggedInWithTeam = ({ playerInfo }) => {
+const InnerLayer = () => {
+  const { userState } = useContext(UserContext);
+  const { playerInfo } = userState;
+  const [id, setId] = useState(null);
+  const [team, setTeam] = useState(null);
+
+  useEffect(() => {
+    if (!playerInfo) return;
+    setId(playerInfo.playerId);
+    setTeam(playerInfo.team);
+  }, [playerInfo]);
+
+  return <>{NowInnerLayer(id, team)}</>;
+};
+
+const WhenLoggedInWithTeam = () => {
   return (
     <>
       <NotiToggleButton />
-      <TeamInfo playerInfo={playerInfo} />
+      <TeamInfo />
       <ContentButton>
         <span role="img" aria-label="rocket">
           🚀
@@ -261,14 +234,14 @@ const NotiToggleButton = () => {
   );
 };
 
-const TeamInfo = ({ playerInfo }) => {
-  const { _, sideBarDispatch } = useContext(SideBarContext);
+const TeamInfo = () => {
+  const { sideBarDispatch } = useContext(SideBarContext);
   const handleCloseSideBar = () => {
     sideBarDispatch(SideBarActionCreator.toggleActivated());
   };
   return (
     <div>
-      <Emblem playerInfo={playerInfo} />
+      <Emblem />
       <Link to="/myteam" onClick={handleCloseSideBar}>
         <ContentButton>
           <span role="img" aria-label="config">
@@ -288,7 +261,13 @@ const ContentButton = ({ className = '', children, onClick }) => {
   );
 };
 
+<<<<<<< HEAD
 const Emblem = ({ playerInfo }) => {
+=======
+const Emblem = () => {
+  const { userState } = useContext(UserContext);
+  const { playerInfo } = userState;
+>>>>>>> 802e8d281af8b337722c86daa56c95aad7bc6555
   const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
   const teamName =
     playerInfo && playerInfo.team ? playerInfo.team.name : '팀 정보 없음';
@@ -307,6 +286,11 @@ const Emblem = ({ playerInfo }) => {
           <h2>{teamName}</h2>
         </div>
       </div>
+<<<<<<< HEAD
+=======
+      <div>userId: {playerInfo.playerId}</div>
+      <div>user seq: {playerInfo.seq}</div>
+>>>>>>> 802e8d281af8b337722c86daa56c95aad7bc6555
     </>
   );
 };
@@ -323,6 +307,10 @@ const AuthButton = ({ provider }) => {
   );
 };
 
+<<<<<<< HEAD
 const EmptySpace = () => <div className="empty"></div>;
+=======
+const EmptySpace = () => <div className="empty" />;
+>>>>>>> 802e8d281af8b337722c86daa56c95aad7bc6555
 
 export default SideBar;
