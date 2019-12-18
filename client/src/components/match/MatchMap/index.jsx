@@ -285,7 +285,9 @@ const NaverMap = (props) => {
     if (curMarker.length === 0) {
       return;
     }
-    registMarkerEvent(curMarker[0]);
+    curMarker.forEach((marker) => {
+      registMarkerEvent(marker);
+    });
   }, [curMarker]);
 
   // 모든 지역구 옵션 해제
@@ -315,7 +317,6 @@ const NaverMap = (props) => {
       if (!info.isSelected) {
         return;
       }
-      console.log(info);
       const target = getClickedDistrict(info.KOR_NAME);
       target.setStyle(setDistrictOption('click'));
       const marker = createNameMarker(info, target);
@@ -371,10 +372,9 @@ const NaverMap = (props) => {
   };
 
   useEffect(() => {
-    console.log('start');
     matchDispatch(MatchActionCreator.initializeDistrict());
-    console.log(matchState.districtInfo, selectedMarkers);
   }, []);
+
   useEffect(() => {
     if (!naverMap) return;
     unregistDistrictEvent(naverMap);
@@ -383,7 +383,6 @@ const NaverMap = (props) => {
 
   useEffect(() => {
     if (!naverMap) return;
-    console.log('manage');
     countSelectedDistrict(matchState.districtInfo);
     manageSelectedDistrict(matchState.districtInfo);
   }, [matchState.districtInfo]);
