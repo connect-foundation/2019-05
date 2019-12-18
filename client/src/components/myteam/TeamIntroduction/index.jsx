@@ -1,5 +1,4 @@
 import React, { useState, useRef, forwardRef, useContext } from 'react';
-import PropTypes from 'prop-types';
 import sanitizeHtml from 'sanitize-html';
 import { getDistrict, convertDistrictCode } from '../../../util';
 import { UserContext } from '../../../contexts/User';
