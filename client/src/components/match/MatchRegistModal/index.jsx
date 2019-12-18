@@ -14,7 +14,7 @@ import { getDistrict } from '../../../util';
 import { MatchContext, MatchActionCreator } from '../../../contexts/Match';
 import { UserContext } from '../../../contexts/User';
 
-import TextInputSection from '../../mypage/TextInputSection';
+import TextInputSection from '../../sidebar/TextInputSection';
 
 import './index.scss';
 
