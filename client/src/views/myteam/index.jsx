@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Redirect } from 'react-router-dom';
 import useAsync from '../../hooks/useAsync';
 import { Header, SideBar } from '../../components/common';
 import {
@@ -6,9 +7,7 @@ import {
   TeamMembers,
   TeamMatchList,
 } from '../../components/myteam';
-import { Redirect } from 'react-router-dom';
 import { UserContext } from '../../contexts/User';
-import ReactSwitch from 'react-switch';
 
 const gql = `
 query ($seq: Int){
@@ -77,7 +76,7 @@ const getTeamData = async (teamSeq) => {
 
 const Myteam = () => {
   const { userState } = useContext(UserContext);
-  const [teamFetchData, reFetchTeamData] = useAsync(
+  const [teamFetchData] = useAsync(
     getTeamData.bind(null, userState.playerTeam),
     []
   );
