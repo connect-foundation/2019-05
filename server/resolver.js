@@ -205,7 +205,7 @@ const resolvers = {
         },
       });
     },
-    UpdatePlayerInfo: (_, { seq, name, phone, email}, {prisma}) => {
+    UpdatePlayerInfo: (_, { seq, name, phone, email }, { prisma }) => {
       return prisma.updatePlayer({
         data: {
           name,
