@@ -115,7 +115,7 @@ type Query {
     PendingMatches(first: Int, area: [Area], startTime: String, endTime: String, date: String): [Match!]
     Match(seq:Int): Match
     Teams(seq: Int): [Team]
-    Team(seq:Int): Team
+    Team(seq:Int, teamUniqueId:String): Team
     Players(seq:Int, playerId:String, team:Int): [Player]
     Player(seq: Int, playerId: String): Player
     Notifiers(seq:Int, player:Int): [Notifier]
@@ -131,4 +131,5 @@ type Mutation {
     UpdateTeamInfo(seq: Int, name: String, logo: String, homeArea: Area, introduction: String): Team
     ApplyMatch(team: Int, player:String, match: Int): Apply
     UpdatePlayerInfo(seq: Int, name: String, phone: String, email: String): Player
+    UpdatePlayersTeamInfo(seq: Int, teamUniqueId: String): Player
 }
