@@ -186,6 +186,25 @@ const resolvers = {
         },
       });
     },
+    ApplyMatch: (_, { team, player, match }, { prisma }) => {
+      return prisma.createApply({
+        team: {
+          connect: {
+            seq: team,
+          },
+        },
+        match: {
+          connect: {
+            seq: match,
+          },
+        },
+        player: {
+          connect: {
+            playerId: player,
+          },
+        },
+      });
+    },
   }, // mutation
   Match: {
     author: ({ seq }, _, { prisma }) => {
@@ -232,6 +251,17 @@ const resolvers = {
   Notifier: {
     player: ({ seq }, _, { prisma }) => {
       return prisma.player({ seq });
+    },
+  },
+  Apply: {
+    team: ({ seq }, _, { prisma }) => {
+      return prisma.apply({ seq }).team();
+    },
+    player: ({ seq }, _, { prisma }) => {
+      return prisma.apply({ seq }).player();
+    },
+    match: ({ seq }, _, { prisma }) => {
+      return prisma.apply({ seq }).match();
     },
   },
 };

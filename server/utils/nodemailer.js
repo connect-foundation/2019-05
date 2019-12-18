@@ -1,19 +1,19 @@
 const nodemailer = require('nodemailer');
 const smtpPool = require('nodemailer-smtp-pool');
-
+const { env } = process;
 const TRANSPORT_CONFIG = {
   service: 'Gmail',
   host: 'localhost',
-  port: process.env.EMAIL_PORT,
+  port: env.EMAIL_PORT,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PW,
+    user: env.EMAIL_USER,
+    pass: env.EMAIL_PW,
   },
   tls: {
     rejectUnauthorize: false,
   },
-  maxConnections: 5,
-  maxMessages: 10,
+  maxConnections: 20,
+  maxMessages: 20,
 };
 
 const mailSender = {

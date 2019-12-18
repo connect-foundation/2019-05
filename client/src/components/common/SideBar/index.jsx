@@ -27,6 +27,7 @@ const SideBar = () => {
 
   return (
     <nav className={sideBarClass}>
+      {/* <SMSButton /> */}
       <CloseBtn
         activated={sideBarState.activated}
         setActivated={handleActivated}
@@ -78,7 +79,9 @@ const WhenLoggedInWithTeam = () => {
 const WhenLoggedInWithoutTeam = () => {
   return (
     <>
-      <button>팀 정보 입력하러 가기 !!</button>
+      <Link to="/mypage">
+        <button>팀 정보 입력하러 가기 !!</button>
+      </Link>
       <LogoutButton />
     </>
   );

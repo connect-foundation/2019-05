@@ -45,11 +45,19 @@ const TimeRangePicker = () => {
   const handleStartTimeChange = (time) => {
     const { hour, minute } = time;
     const newStartTime = `${hour}:${minute}`;
+    if (newStartTime >= endTime) {
+      alert('시작 시간이 종료 시간보다 클 수 없습니다.');
+      return;
+    }
     filterDispatch(FilterActionCreator.setStartTime(newStartTime));
   };
   const handleEndTimeChange = (time) => {
     const { hour, minute } = time;
     const newEndTime = `${hour}:${minute}`;
+    if (newEndTime <= startTime) {
+      alert('시작 시간이 종료 시간보다 클 수 없습니다.');
+      return;
+    }
     filterDispatch(FilterActionCreator.setEndTime(newEndTime));
   };
 
