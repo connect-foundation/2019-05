@@ -3,6 +3,7 @@ import {
   findDistrictToName,
   changeDistrictInfo,
   getDistrict,
+  initializeDistrict,
 } from '../../util';
 
 const Reducer = (state, action) => {
@@ -34,6 +35,12 @@ const Reducer = (state, action) => {
       return {
         ...state,
         districtInfo: getDistrict(),
+      };
+    }
+    case actions.INITIALIZE_STATE: {
+      return {
+        ...state,
+        districtInfo: initializeDistrict(),
       };
     }
     default:

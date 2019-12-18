@@ -157,6 +157,21 @@ const changeDistrictInfo = (changedInfo) => {
   setDistrict(nextInfos);
 };
 
+const initializeDistrict = () => {
+  const newList = Object.entries(DISTRICT).reduce((acc, [key, value]) => {
+    const newValue = {
+      ...value,
+      isSelected: false,
+    };
+    return {
+      ...acc,
+      [key]: newValue,
+    };
+  }, {});
+  setDistrict(newList);
+  return newList;
+};
+
 export {
   convertDistrictCode,
   convertDistrictName,
@@ -164,4 +179,5 @@ export {
   getDistrict,
   findDistrictToName,
   changeDistrictInfo,
+  initializeDistrict,
 };

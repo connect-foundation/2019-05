@@ -5,6 +5,7 @@ import {
   getDistrict,
   findDistrictToName,
   changeDistrictInfo,
+  initializeDistrict,
 } from './district';
 
 export {
@@ -14,4 +15,5 @@ export {
   getDistrict,
   findDistrictToName,
   changeDistrictInfo,
+  initializeDistrict,
 };

@@ -315,6 +315,7 @@ const NaverMap = (props) => {
       if (!info.isSelected) {
         return;
       }
+      console.log(info);
       const target = getClickedDistrict(info.KOR_NAME);
       target.setStyle(setDistrictOption('click'));
       const marker = createNameMarker(info, target);
@@ -370,12 +371,19 @@ const NaverMap = (props) => {
   };
 
   useEffect(() => {
+    console.log('start');
+    matchDispatch(MatchActionCreator.initializeDistrict());
+    console.log(matchState.districtInfo, selectedMarkers);
+  }, []);
+  useEffect(() => {
     if (!naverMap) return;
     unregistDistrictEvent(naverMap);
     registDistrictEvent(naverMap);
   }, [selectedNum]);
 
   useEffect(() => {
+    if (!naverMap) return;
+    console.log('manage');
     countSelectedDistrict(matchState.districtInfo);
     manageSelectedDistrict(matchState.districtInfo);
   }, [matchState.districtInfo]);
