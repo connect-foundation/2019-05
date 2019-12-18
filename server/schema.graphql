@@ -130,5 +130,5 @@ type Mutation {
     CreateNotifier(player:Int, area:[Area], date:String, startTime: String, endTime: String): Notifier
     UpdateTeamInfo(seq: Int, name: String, logo: String, homeArea: Area, introduction: String): Team
     ApplyMatch(team: Int, player:String, match: Int): Apply
-
+    UpdatePlayerInfo(seq: Int, name: String, phone: String, email: String): Player
 }
