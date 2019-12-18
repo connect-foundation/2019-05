@@ -99,8 +99,8 @@ const ModalForm = () => {
     const fetchBody = {
       query: gql,
       variables: {
-        host: userState.playerTeam,
-        author: userState.playerId,
+        host: userState.playerInfo.team.seq,
+        author: userState.playerInfo.playerId,
         stadium: sanitizeHtml(registerData.get('matchStadium')),
         area: sanitizeHtml(registerData.get('matchRegistDistrict')),
         date: sanitizeHtml(registerData.get('matchRegistDate')),
