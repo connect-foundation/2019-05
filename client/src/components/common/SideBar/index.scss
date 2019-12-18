@@ -34,6 +34,19 @@ img {
     color: crimson;
   }
 }
+.noti-item {
+  position: relative;
+
+  &__cancel-btn {
+    position: absolute;
+    top: 0;
+    right: 2px;
+    font-size: 20px;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+}
 
 .side-bar {
   // padding: 80px 30px 10px;
@@ -60,7 +73,7 @@ img {
       text-align: center;
     }
     &--loggedin {
-      padding: 70px 30px 10px;
+      padding: 100px 30px 10px;
     }
   }
   &--open {
@@ -95,6 +108,9 @@ img {
   &__emblem {
     width: 80%;
     display: flex;
+    img {
+      border-radius: 5%;
+    }
   }
   &__team-name-wrapper {
     display: flex;
