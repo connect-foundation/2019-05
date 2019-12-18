@@ -40,8 +40,8 @@ const resolvers = {
         },
       });
     },
-    Team: (_, { seq }, { prisma }) => {
-      return prisma.team({ seq });
+    Team: (_, { seq, teamUniqueId }, { prisma }) => {
+      return prisma.team({ seq, teamUniqueId });
     },
     Players: (_, { seq, playerId, team }, { prisma }) => {
       return prisma.players({
@@ -205,6 +205,32 @@ const resolvers = {
         },
       });
     },
+    UpdatePlayerInfo: (_, { seq, name, phone, email }, { prisma }) => {
+      return prisma.updatePlayer({
+        data: {
+          name,
+          phone,
+          email,
+        },
+        where: {
+          seq,
+        },
+      });
+    },
+    UpdatePlayersTeamInfo: (_, { seq, teamUniqueId }, { prisma }) => {
+      return prisma.updatePlayer({
+        data: {
+          team:{
+            connect: {
+              teamUniqueId
+            }
+          },
+        },
+        where: {
+          seq,
+        },
+      });
+    }
   }, // mutation
   Match: {
     author: ({ seq }, _, { prisma }) => {

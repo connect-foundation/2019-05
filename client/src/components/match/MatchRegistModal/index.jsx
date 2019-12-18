@@ -14,6 +14,8 @@ import { getDistrict } from '../../../util';
 import { MatchContext, MatchActionCreator } from '../../../contexts/Match';
 import { UserContext } from '../../../contexts/User';
 
+import TextInputSection from '../../sidebar/TextInputSection';
+
 import './index.scss';
 
 const SEOUL_DISTRICT = getDistrict();
@@ -81,7 +83,6 @@ const ModalForm = () => {
   const { userState } = useContext(UserContext);
   const [matchDate, setMatchDate] = useState(moment());
   const formRef = useRef();
-
   const makeFormData = () => {
     return new FormData(formRef.current);
   };
@@ -264,43 +265,7 @@ const TimeSection = (prop) => {
     </div>
   );
 };
-const TextInputSection = ({ title, idText, maxlen, required }) => {
-  const [label, setLabel] = useState('');
-  const [value, setValue] = useState('');
-  const handleBlurEvent = () => {
-    return value !== '' ? setLabel('active') : setLabel('');
-  };
-  return (
-    <div className="input-box">
-      <input
-        type="text"
-        id={idText}
-        name={idText}
-        maxLength={maxlen === undefined ? 255 : maxlen}
-        className="match-register__input"
-        onInput={(e) => setValue(e.target.value)}
-        onFocus={() => setLabel('active')}
-        onBlur={() => handleBlurEvent()}
-        autoComplete="off"
-        required={required}
-      />
-      <label htmlFor={idText} className={`match-register__label ${label}`}>
-        {title}
-      </label>
-    </div>
-  );
-};
 
-TextInputSection.propTypes = {
-  title: PropTypes.string.isRequired,
-  idText: PropTypes.string.isRequired,
-  maxlen: PropTypes.string,
-  required: PropTypes.bool,
-};
-TextInputSection.defaultProps = {
-  maxlen: undefined,
-  required: false,
-};
 DateSection.propTypes = {
   matchDate: PropTypes.object.isRequired,
   setMatchDate: PropTypes.func.isRequired,
