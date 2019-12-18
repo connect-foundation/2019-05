@@ -1,16 +1,12 @@
 const { env } = process;
 const webpush = require('web-push');
-<<<<<<< HEAD
 
 const keyMap = {}; // 객체 키 => id, 속성 => publickey, privateKey
 const subscriptionMap = {};
-=======
 const axios = require('axios');
 const mailSender = require('../../utils/nodemailer');
-const keyMap = []; // 객체 키 => id, 속성 => publickey, privateKey
 const makeMsgContent = require('../../utils/makeMsgContent');
 const makeMailContent = require('../../utils/makeMailContent');
->>>>>>> 6927d0d9d2b6b027355b55c724a20d2e55d4d3d4
 
 const createVapIdKey = () => {
   return webpush.generateVAPIDKeys();
@@ -108,10 +104,7 @@ module.exports = {
   sendPushNotification,
   getVapPublicId,
   getSubscription,
-<<<<<<< HEAD
   setSubscription,
-=======
   sendEmailNotification,
   sendSMSNotification,
->>>>>>> 6927d0d9d2b6b027355b55c724a20d2e55d4d3d4
 };
