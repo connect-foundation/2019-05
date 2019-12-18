@@ -1,3 +1,4 @@
+const findNotifier = require('./middlewares/matchNotification');
 const resolvers = {
   Query: {
     Matches: (_, { seq, area, host }, { prisma }) => {
@@ -100,7 +101,7 @@ const resolvers = {
         email,
       });
     },
-    CreateMatch: (
+    CreateMatch: async (
       _,
       {
         host,
@@ -115,6 +116,7 @@ const resolvers = {
       },
       { prisma }
     ) => {
+      const notiList = await findNotifier(date, startTime, endTime, area);
       return prisma.createMatch({
         host: {
           connect: {
