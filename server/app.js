@@ -12,7 +12,6 @@ const passport = require('./middlewares/passport');
 const authRouter = require('./routes/auth');
 const errorRouter = require('./routes/error');
 const createError = require('./middlewares/createError');
-const mailRouter = require('./routes/mail');
 const userRouter = require('./routes/user');
 const myteamRouter = require('./routes/myteam');
 const mapRouter = require('./routes/map');
@@ -37,7 +36,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 
 app.use('/auth', authRouter);
-app.use('/mail', mailRouter);
 app.use('/user', userRouter);
 app.use('/myteam', myteamRouter);
 app.use('/map', mapRouter);
