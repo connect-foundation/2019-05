@@ -6,12 +6,11 @@ const Reducer = (state, action) => {
     case actions.LOGIN:
       return {
         ...state,
-        playerId: action.payload.playerId,
-        playerTeam: action.payload.playerTeam,
+        playerInfo: action.payload.playerInfo,
         subscription: action.payload.subscription,
       };
     case actions.LOGOUT:
-      return { ...state, playerId: null, playerTeam: null, subscription: null };
+      return { ...state, playerInfo: null, subscription: null };
     default:
       throw new Error('Unhandled action!');
   }

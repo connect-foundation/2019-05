@@ -1,10 +1,10 @@
 import actions from './Actions';
 
 const actionCreator = {
-  login: (playerId, playerTeam, subscription) => {
+  login: (playerInfo, subscription) => {
     return {
       type: actions.LOGIN,
-      payload: { playerId, playerTeam, subscription },
+      payload: { playerInfo, subscription },
     };
   },
   logout: () => {

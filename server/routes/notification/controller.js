@@ -1,6 +1,7 @@
 const webpush = require('web-push');
 
-const keyMap = []; // 객체 키 => id, 속성 => publickey, privateKey
+const keyMap = {}; // 객체 키 => id, 속성 => publickey, privateKey
+const subscriptionMap = {};
 
 const createVapIdKey = () => {
   return webpush.generateVAPIDKeys();
@@ -39,14 +40,29 @@ const sendPushNotification = (req, res) => {
 };
 
 const getSubscription = (req, res) => {
-  if (!subscription) {
+  const foundId = req.body.userId;
+  if (!foundId) {
     res.sendStatus(400);
   }
-  res.status(201).json({ subscription });
+  res.status(200).json({ subscription: subscriptionMap[foundId] });
+};
+
+const setSubscription = (req, res) => {
+  const myId = req.body.userId;
+  if (!myId) {
+    res.sendStatus(400);
+  }
+  subscriptionMap[myId] = req.body.subscription;
+  Object.keys(subscriptionMap).forEach((k) => {
+    console.log(k);
+    console.log(subscriptionMap[k]);
+  });
+  res.sendStatus(201);
 };
 
 module.exports = {
   sendPushNotification,
   getVapPublicId,
   getSubscription,
+  setSubscription,
 };
