@@ -21,13 +21,7 @@ const setUpVapIdKey = (id) => {
 };
 
 const getVapPublicId = (req, res) => {
-  if (!req.body) {
-    res.sendStatus(500);
-  }
   const userId = req.body.userId;
-  if (!userId) {
-    res.sendStatus(400);
-  }
   if (!keyMap[userId]) {
     setUpVapIdKey(userId);
   }
@@ -48,22 +42,12 @@ const sendPushNotification = (req, res) => {
 
 const getSubscription = (req, res) => {
   const foundId = req.body.userId;
-  if (!foundId) {
-    res.sendStatus(400);
-  }
   res.status(200).json({ subscription: subscriptionMap[foundId] });
 };
 
 const setSubscription = (req, res) => {
   const myId = req.body.userId;
-  if (!myId) {
-    res.sendStatus(400);
-  }
   subscriptionMap[myId] = req.body.subscription;
-  Object.keys(subscriptionMap).forEach((k) => {
-    console.log(k);
-    console.log(subscriptionMap[k]);
-  });
   res.sendStatus(201);
 };
 

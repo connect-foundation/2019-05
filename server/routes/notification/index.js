@@ -8,18 +8,20 @@ const {
   sendEmailNotification,
   sendSMSNotification,
 } = require('./controller');
+const bodyChecker = require('../../middlewares/bodyChecker');
 
 notification.post(
   '/sendNotification',
+  bodyChecker,
   sendEmailNotification,
   sendSMSNotification,
   sendPushNotification
 );
 
-notification.post('/vapidPublicKey', getVapPublicId);
+notification.post('/vapidPublicKey', bodyChecker, getVapPublicId);
 
-notification.post('/findSubscription', getSubscription);
+notification.post('/findSubscription', bodyChecker, getSubscription);
 
-notification.post('/registSubscription', setSubscription);
+notification.post('/registSubscription', bodyChecker, setSubscription);
 
 module.exports = notification;
