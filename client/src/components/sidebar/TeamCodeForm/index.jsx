@@ -50,9 +50,10 @@ const TeamCodeForm = () => {
     e.preventDefault();
     const result = await fetchToUpdatePlayersTeamInfo();
     if (!result) return alert('존재하지 않는 팀코드입니다.');
-
     alert('내 팀 등록이 완료 되었습니다.');
+    window.location.reload();
   };
+
   return (
     <form
       className="team-code-form"
