@@ -380,12 +380,6 @@ const NaverMap = (props) => {
   };
 
   useEffect(() => {
-    return () => {
-      matchDispatch(MatchActionCreator.initializeDistrict());
-    };
-  }, []);
-
-  useEffect(() => {
     if (!naverMap) return;
     unregistDistrictEvent(naverMap);
     registDistrictEvent(naverMap);

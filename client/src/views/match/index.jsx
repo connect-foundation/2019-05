@@ -21,7 +21,6 @@ const match = () => (
     <div className="match">
       <Header />
       <div className="grid-container">
-        <ViewTitle title="match" />
         <DateTimeFilter where="match" />
         <div className="match-container">
           <div className="match-board">

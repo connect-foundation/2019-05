@@ -49,7 +49,6 @@ const ListView = (matchList) => {
 };
 
 const renderingMatchListView = (listState, reFetchList, currentList) => {
-  console.log('rendering');
   const { loading, data: matchList, error } = listState;
   if (loading) return FetchLoadingView();
   if (error) return FetchErrorView(reFetchList, LIST_FETCH_ERROR_MSG);
@@ -83,7 +82,6 @@ const createQueryBaseOnState = (filter, districtInfo, page) => {
 };
 
 const getMatchList = async (fetchQuery) => {
-  console.log(fetchQuery);
   if (!fetchQuery) return null;
   const response = await axios({
     method: 'post',

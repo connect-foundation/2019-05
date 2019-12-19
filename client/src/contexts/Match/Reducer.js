@@ -4,7 +4,6 @@ import {
   changeDistrictInfo,
   initializeDistrict,
   getDistrict,
-  initializeDistrict,
 } from '../../util';
 
 const Reducer = (state, action) => {
