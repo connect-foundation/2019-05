@@ -158,18 +158,12 @@ const changeDistrictInfo = (changedInfo) => {
 };
 
 const initializeDistrict = () => {
-  const newList = Object.entries(DISTRICT).reduce((acc, [key, value]) => {
-    const newValue = {
-      ...value,
-      isSelected: false,
-    };
-    return {
-      ...acc,
-      [key]: newValue,
-    };
-  }, {});
-  setDistrict(newList);
-  return newList;
+  const newDistricts = getDistrict();
+  Object.values(newDistricts).forEach((district) => {
+    // eslint-disable-next-line no-param-reassign
+    district.isSelected = false;
+  });
+  setDistrict(newDistricts);
 };
 
 export {

@@ -25,10 +25,8 @@ const actionCreator = {
       payload: { clickedDName },
     };
   },
-  initializeDistrict: () => {
-    return {
-      type: actions.INITIALIZE_STATE,
-    };
+  initialDistrict: () => {
+    return { type: actions.INITIALIZE_DISTRICT };
   },
 };
 
