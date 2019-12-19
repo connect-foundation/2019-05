@@ -112,7 +112,7 @@ type Stadium {
 
 type Query {
     Matches(seq:Int, area:Area, host:Int): [Match!]
-    PendingMatches(first: Int, area: [Area], startTime: String, endTime: String, date: String): [Match!]
+    PendingMatches(first: Int, skip: Int, area: [Area], startTime: String, endTime: String, date: String): [Match!]
     Match(seq:Int): Match
     Teams(seq: Int): [Team]
     Team(seq:Int, teamUniqueId:String): Team

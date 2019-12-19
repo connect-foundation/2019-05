@@ -7,9 +7,10 @@ import { MatchContext } from '../../../contexts/Match';
 import { FetchLoadingView, FetchErrorView } from '../../../template';
 import './index.scss';
 
+const MATCH_LIST_COUNT_PER_PAGE = 5;
 const MATCH_LIST_FETCH_QUERY = `
-query ($startTime: String, $endTime: String, $date: String, $area: [Area]){
-  PendingMatches(first:20, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
+query ($first: Int, $skip: Int, $startTime: String, $endTime: String, $date: String, $area: [Area]){
+  PendingMatches(first: $first, skip: $skip, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
     seq
     author {
       seq
@@ -47,13 +48,15 @@ const ListView = (matchList) => {
   );
 };
 
-const renderingMatchListView = (listState, reFetchList) => {
+const renderingMatchListView = (listState, reFetchList, currentList) => {
+  console.log('rendering');
   const { loading, data: matchList, error } = listState;
   if (loading) return FetchLoadingView();
   if (error) return FetchErrorView(reFetchList, LIST_FETCH_ERROR_MSG);
   if (!matchList) return [];
-  if (matchList.length === 0) return NoListView();
-  return ListView(matchList);
+  //const newList = [...currentList, ...matchList];
+  if (currentList.length === 0) return NoListView();
+  return ListView(currentList);
 };
 
 const getSelectedDistrictArray = (districtInfo) => {
@@ -64,19 +67,23 @@ const getSelectedDistrictArray = (districtInfo) => {
   return newArr;
 };
 
-const createQueryBaseOnState = (filter, districtInfo) => {
-  return {
+const createQueryBaseOnState = (filter, districtInfo, page) => {
+  const queryValue = {
     query: MATCH_LIST_FETCH_QUERY,
     variables: {
       startTime: filter.startTime,
       endTime: filter.endTime,
       date: filter.matchDay.format('YYYY[-]MM[-]DD'),
       area: getSelectedDistrictArray(districtInfo),
+      skip: page * MATCH_LIST_COUNT_PER_PAGE,
+      first: MATCH_LIST_COUNT_PER_PAGE,
     },
   };
+  return queryValue;
 };
 
 const getMatchList = async (fetchQuery) => {
+  console.log(fetchQuery);
   if (!fetchQuery) return null;
   const response = await axios({
     method: 'post',
@@ -93,9 +100,14 @@ const MatchList = () => {
   const { filterState } = useContext(FilterContext);
   const { matchState } = useContext(MatchContext);
   const [fetchQuery, setFetchQuery] = useState(null);
+  const [currentPage, setPage] = useState(0);
+  const [currentList, setMatchList] = useState([]);
+  const [pageEnd, setPageEnd] = useState(false);
 
   useEffect(() => {
-    setFetchQuery(createQueryBaseOnState(filterState, matchState.districtInfo));
+    setPage(0);
+    setPageEnd(false);
+    setMatchList([]);
   }, [filterState, matchState.districtInfo]);
 
   const [listState, reFetchList] = useAsync(
@@ -103,10 +115,35 @@ const MatchList = () => {
     [fetchQuery]
   );
 
+  useEffect(() => {
+    if (!matchState.districtInfo) return null;
+    setFetchQuery(
+      createQueryBaseOnState(filterState, matchState.districtInfo, currentPage)
+    );
+  }, [filterState, matchState.districtInfo, currentPage]);
+
+  useEffect(() => {
+    if (!listState.data) return;
+    if (listState.data.length < MATCH_LIST_COUNT_PER_PAGE) setPageEnd(true);
+    setMatchList([...currentList, ...listState.data]);
+  }, [listState.data]);
+
+  const handleFetchMore = () => {
+    setPage(currentPage + 1);
+  };
+
+  const moreButton = pageEnd ? null : (
+    <button type="button" className="fetch-more__btn" onClick={handleFetchMore}>
+      더 불러오기
+    </button>
+  );
   return (
-    <div className="match-list">
-      {renderingMatchListView(listState, reFetchList)}
-    </div>
+    <>
+      <div className="match-list">
+        {renderingMatchListView(listState, reFetchList, currentList)}
+      </div>
+      <div className="fetch-more">{moreButton}</div>
+    </>
   );
 };
 

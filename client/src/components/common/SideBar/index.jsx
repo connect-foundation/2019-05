@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, {useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
@@ -90,7 +90,13 @@ const WhenLoggedInWithoutInfo = () => {
     };
     return (
       <>
-        {formToggle ? <TeamCodeForm /> : <button type="button" onClick={handleOnClick}>팀 정보 입력하러 가기 !!</button>}
+        {formToggle ? (
+          <TeamCodeForm />
+        ) : (
+          <button type="button" onClick={handleOnClick}>
+            팀 정보 입력하러 가기 !!
+          </button>
+        )}
       </>
     );
   };
@@ -101,7 +107,13 @@ const WhenLoggedInWithoutInfo = () => {
     };
     return (
       <>
-        {formToggle ? <UserInfoForm /> : <button type="button" onClick={handleOnClick}>유저 정보 입력하러 가기 !!</button>}
+        {formToggle ? (
+          <UserInfoForm />
+        ) : (
+          <button type="button" onClick={handleOnClick}>
+            유저 정보 입력하러 가기 !!
+          </button>
+        )}
       </>
     );
   };
@@ -290,7 +302,9 @@ const ContentButton = ({ className = '', children, onClick }) => {
   );
 };
 
-const Emblem = ({ playerInfo }) => {
+const Emblem = () => {
+  const { userState } = useContext(UserContext);
+  const { playerInfo } = userState;
   const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
   const teamName =
     playerInfo && playerInfo.team ? playerInfo.team.name : '팀 정보 없음';

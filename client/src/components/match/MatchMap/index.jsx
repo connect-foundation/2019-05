@@ -372,7 +372,9 @@ const NaverMap = (props) => {
   };
 
   useEffect(() => {
-    matchDispatch(MatchActionCreator.initializeDistrict());
+    return () => {
+      matchDispatch(MatchActionCreator.initializeDistrict());
+    };
   }, []);
 
   useEffect(() => {
