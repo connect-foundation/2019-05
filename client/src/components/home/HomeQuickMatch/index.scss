@@ -2,7 +2,7 @@
 
 .home-quick-match {
   height: calc(100vh - #{$header-height});
-  min-height: 550px;
+  min-height: 700px;
   background: $quick_background url('../../../assets/images/background.png')
     right bottom no-repeat;
   background-size: 50%;
@@ -12,7 +12,7 @@
     position: relative;
   }
   .home__section-title {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     font-size: 36px;
     color: #fff;
     word-break: keep-all;
@@ -20,22 +20,27 @@
   .home--left {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     width: 40%;
     height: calc(100vh - #{$header-height});
-    padding: 0 0 0 60px;
+    padding: 19% 0 0 60px;
     box-sizing: border-box;
   }
   .go-match-btn {
     display: block;
     padding: 0 20px;
     height: 54px;
-    margin: 20px auto 0;
+    margin: 10px auto 0;
     background-color: $quick_navy;
     border-radius: 27px;
     font-size: 24px;
     font-weight: bold;
     color: $quick_white;
     line-height: 54px;
+    transition: all 1s ease;
   }
+}
+
+.home-wrapper {
+  display: flex;
+  width: 100%;
 }
