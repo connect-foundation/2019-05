@@ -23,12 +23,15 @@ query ($first: Int, $skip: Int, $startTime: String, $endTime: String, $date: Str
       seq
       name
       logo
+      introduction
     }
+    address
     area
     stadium
     date
     startTime
     endTime
+    description
   }
 }`;
 

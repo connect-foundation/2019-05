@@ -42,10 +42,21 @@ const MatchTeamInfoSection = () => {
     setHostInfo(matchState.selectedMatchInfo.host);
   }, [matchState.selectedMatchInfo]);
 
+  if (!hostInfo) return null;
   return (
     <div className="modal-main-section">
       <div className="host-name-container">
-        <span className="host-name">{hostInfo ? hostInfo.name : ''}</span>
+        <div className="modal-host-info">
+          <span className="host-info__title">간단한 소개</span>
+          <h3 className="host-name">{hostInfo.name}</h3>
+          <p className="host-info__txt">{hostInfo.introduction}</p>
+        </div>
+        <div className="modal-match-information">
+          <span className="modal-info__title">매치 정보</span>
+          <p className="match-info__datetime">{`${matchInfo.date}, ${matchInfo.startTime} - ${matchInfo.endTime}`}</p>
+          <p className="match-info__location">{`${matchInfo.address} ${matchInfo.stadium}`}</p>
+          <p className="modal-info__txt">{matchInfo.description}</p>
+        </div>
       </div>
     </div>
   );
@@ -74,7 +85,7 @@ const ApplyButton = (props) => {
       }
 
       if (!userState.playerInfo.team) {
-        alert('팀이 등록되야 신청을 할 수 있습니다!');
+        alert('팀에 등록이 되어있어야 신청을 할 수 있습니다!');
         return;
       }
       const applicantId = userState.playerInfo.playerId;
