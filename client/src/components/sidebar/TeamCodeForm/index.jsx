@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import sanitizeHtml from 'sanitize-html';
 import TextInputSection from '../TextInputSection';
-import { UserContext } from '../../../contexts/User';
+import { UserActionCreator, UserContext } from '../../../contexts/User';
 
 const gql = `
 mutation ($seq: Int, $teamUniqueId: String){
@@ -15,7 +15,7 @@ mutation ($seq: Int, $teamUniqueId: String){
 `;
 
 const TeamCodeForm = () => {
-  const { userState } = useContext(UserContext);
+  const { userState, userDispatch } = useContext(UserContext);
   const formRef = useRef();
   const makeFormData = () => {
     return new FormData(formRef.current);
@@ -51,7 +51,7 @@ const TeamCodeForm = () => {
     const result = await fetchToUpdatePlayersTeamInfo();
     if (!result) return alert('존재하지 않는 팀코드입니다.');
     alert('내 팀 등록이 완료 되었습니다.');
-    window.location.reload();
+    userDispatch(UserActionCreator.setIsUpdateTeamCode());
   };
 
   return (
