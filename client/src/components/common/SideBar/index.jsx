@@ -10,6 +10,7 @@ import {
 } from '../../../contexts/SideBar';
 import { UserContext } from '../../../contexts/User';
 import './index.scss';
+import { UserInfoForm, TeamCodeForm } from '../../sidebar/';
 
 const SideBar = () => {
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
@@ -79,9 +80,10 @@ const WhenLoggedInWithTeam = () => {
 const WhenLoggedInWithoutTeam = () => {
   return (
     <>
-      <Link to="/mypage">
-        <button>팀 정보 입력하러 가기 !!</button>
-      </Link>
+      <UserInfoForm />
+      <button>유저 정보 입력하러 가기 !!</button>
+      <TeamCodeForm />
+      <button>팀 정보 입력하러 가기 !!</button>
       <LogoutButton />
     </>
   );
