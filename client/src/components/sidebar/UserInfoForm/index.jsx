@@ -52,8 +52,8 @@ const UserInfoForm = () => {
     e.preventDefault();
     const result = await fetchToUpdatePlayerInfo();
     if (!result) return alert('유자 정보 등록에 실패하였습니다.');
-
     alert('유저 정보를 등록하였습니다.');
+    window.location.reload();
   };
   return (
     <form

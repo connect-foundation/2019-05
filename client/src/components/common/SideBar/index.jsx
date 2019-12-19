@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, {useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
@@ -9,8 +9,8 @@ import {
   SideBarContext,
 } from '../../../contexts/SideBar';
 import { UserContext } from '../../../contexts/User';
-import './index.scss';
 import { UserInfoForm, TeamCodeForm } from '../../sidebar';
+import './index.scss';
 
 const SideBar = () => {
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
@@ -28,7 +28,6 @@ const SideBar = () => {
 
   return (
     <nav className={sideBarClass}>
-      {/* <SMSButton /> */}
       <CloseBtn
         activated={sideBarState.activated}
         setActivated={handleActivated}
@@ -88,22 +87,27 @@ const WhenLoggedInWithoutInfo = () => {
     const handleOnClick = () => {
       setFormToggle(!formToggle);
     };
-    return (
-      <>
-        {formToggle ? <TeamCodeForm /> : <button type="button" onClick={handleOnClick}>팀 정보 입력하러 가기 !!</button>}
-      </>
+    const TeamCodeBtn = () => (
+      <button type="button" onClick={handleOnClick}>
+        팀 정보 입력하러 가기 !!
+      </button>
     );
+
+    return <>{formToggle ? <TeamCodeForm /> : <TeamCodeBtn />}</>;
   };
+
   const UserInfoLayer = () => {
     const [formToggle, setFormToggle] = useState(false);
     const handleOnClick = () => {
       setFormToggle(!formToggle);
     };
-    return (
-      <>
-        {formToggle ? <UserInfoForm /> : <button type="button" onClick={handleOnClick}>유저 정보 입력하러 가기 !!</button>}
-      </>
+    const UserInfoBtn = () => (
+      <button type="button" onClick={handleOnClick}>
+        유저 정보 입력하러 가기 !!
+      </button>
     );
+
+    return <>{formToggle ? <UserInfoForm /> : <UserInfoBtn />}</>;
   };
 
   return (
@@ -131,6 +135,7 @@ const WhenLoggedOut = () => (
 
 const LogoutButton = () => {
   const LOGOUT_ADDR = `${process.env.REACT_APP_API_SERVER_ADDRESS}/auth/logout`;
+
   return (
     <div className="auth-button">
       <a href={LOGOUT_ADDR}>
@@ -188,6 +193,7 @@ const Notifications = () => {
   const btnClass = classNames({
     pressed: open,
   });
+
   return (
     <>
       <ContentButton className={btnClass} onClick={handleBtnClick}>
@@ -213,6 +219,7 @@ const NotiList = ({ matches }) => {
     e.stopPropagation();
     alert('알림을 취소하였습니다. ');
   };
+
   return (
     <ul>
       {matches.map((match) => (
@@ -256,6 +263,7 @@ const NotiToggleButton = () => {
   const handleClick = () => {
     setToggle(!toggle);
   };
+
   return (
     <div className={toggleClass} onClick={handleClick}>
       PUSH:&nbsp; {toggle ? 'ON' : 'OFF'}
@@ -268,6 +276,7 @@ const TeamInfo = () => {
   const handleCloseSideBar = () => {
     sideBarDispatch(SideBarActionCreator.toggleActivated());
   };
+
   return (
     <div>
       <Emblem />
@@ -282,21 +291,22 @@ const TeamInfo = () => {
   );
 };
 
-const ContentButton = ({ className = '', children, onClick }) => {
-  return (
-    <div className={`${className} side-bar__content-button`} onClick={onClick}>
-      {children}
-    </div>
-  );
-};
+const ContentButton = ({ className = '', children, onClick }) => (
+  <div className={`${className} side-bar__content-button`} onClick={onClick}>
+    {children}
+  </div>
+);
 
-const Emblem = ({ playerInfo }) => {
+const Emblem = () => {
+  const { userState } = useContext(UserContext);
+  const { playerInfo } = userState;
   const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
   const teamName =
     playerInfo && playerInfo.team ? playerInfo.team.name : '팀 정보 없음';
   const logoSrc = logo
     ? `https://kr.object.ncloudstorage.com/quickkick-emblem/${logo}`
     : '/default_logo.png';
+
   return (
     <>
       <div className="side-bar__emblem-wrapper">
@@ -315,6 +325,7 @@ const Emblem = ({ playerInfo }) => {
 
 const AuthButton = ({ provider }) => {
   const message = `${provider === 'naver' ? '네이버' : '카카오'}  로그인`;
+
   return (
     <>
       <div className={`new-auth-button new-auth-button--${provider}`}>
@@ -326,4 +337,5 @@ const AuthButton = ({ provider }) => {
 };
 
 const EmptySpace = () => <div className="empty" />;
+
 export default SideBar;

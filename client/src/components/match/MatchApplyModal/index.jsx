@@ -61,6 +61,8 @@ const getSubscription = async (userId) => {
 };
 
 const ApplyButton = (props) => {
+  const { userState } = useContext(UserContext);
+  const { playerInfo } = userState;
   // eslint-disable-next-line react/prop-types
   const { matchInfo } = props;
   const { userState } = useContext(UserContext);
@@ -92,6 +94,7 @@ const ApplyButton = (props) => {
         post(SEND_NOTIFICATION_REQUEST_URL, {
           matchInfo,
           subscription: hostSub,
+          playerInfo,
         })
       );
     } catch (error) {

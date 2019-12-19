@@ -1,14 +1,19 @@
+@import '../../../commonStyle';
+
 $date_filter_width: 110px;
-$time_filter_width: 70px;
+$time_filter_width: 110px;
 $filter_height: 30px;
 $border_radius: 10px;
+$box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.15);
 .match-filter {
   display: flex;
-  border: 1px;
+  padding: 30px 0;
   margin-left: 75px;
 }
 .date-picker {
   margin-right: 10px;
+  box-shadow: $box-shadow;
+  border-radius: $border_radius;
 }
 .DateInput {
   width: $date_filter_width;
@@ -65,4 +70,21 @@ $border_radius: 10px;
 
 .react_times_button {
   border-radius: $border_radius;
+}
+
+.notification-btn {
+  button {
+    width: 70px;
+    height: 30px;
+    border-radius: $border-radius;
+    background: $quick_mint;
+    border: 0 none;
+    appearance: none;
+    box-shadow: $box-shadow;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+  }
 }
