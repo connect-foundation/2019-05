@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useContext, useEffect } from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
@@ -10,7 +10,7 @@ import {
 } from '../../../contexts/SideBar';
 import { UserContext } from '../../../contexts/User';
 import './index.scss';
-import { UserInfoForm, TeamCodeForm } from '../../sidebar/';
+import { UserInfoForm, TeamCodeForm } from '../../sidebar';
 
 const SideBar = () => {
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
@@ -38,28 +38,30 @@ const SideBar = () => {
   );
 };
 
-const NowInnerLayer = (id, team) => {
-  if (!id) return <WhenLoggedOut />;
-  if (!team) return <WhenLoggedInWithoutTeam />;
-  return <WhenLoggedInWithTeam />;
-};
-
 const InnerLayer = () => {
   const { userState } = useContext(UserContext);
-  const { playerInfo } = userState;
-  const [id, setId] = useState(null);
+  const [playerId, setPlayerId] = useState(null);
   const [team, setTeam] = useState(null);
+  const [name, setName] = useState(null);
 
   useEffect(() => {
+    const { playerInfo } = userState;
     if (!playerInfo) return;
-    setId(playerInfo.playerId);
+    setPlayerId(playerInfo.playerId);
     setTeam(playerInfo.team);
-  }, [playerInfo]);
+    setName(playerInfo.name);
+  }, [userState]);
 
-  return <>{NowInnerLayer(id, team)}</>;
+  const NowInnerLayer = () => {
+    if (!playerId) return <WhenLoggedOut />;
+    if (!team || !name) return <WhenLoggedInWithoutInfo />;
+    return <WhenLoggedInWithInfo />;
+  };
+
+  return <>{NowInnerLayer()}</>;
 };
 
-const WhenLoggedInWithTeam = () => {
+const WhenLoggedInWithInfo = () => {
   return (
     <>
       <NotiToggleButton />
@@ -77,13 +79,38 @@ const WhenLoggedInWithTeam = () => {
   );
 };
 
-const WhenLoggedInWithoutTeam = () => {
+const WhenLoggedInWithoutInfo = () => {
+  const { userState } = useContext(UserContext);
+  const { name, team } = userState.playerInfo;
+
+  const TeamCodeLayer = () => {
+    const [formToggle, setFormToggle] = useState(false);
+    const handleOnClick = () => {
+      setFormToggle(!formToggle);
+    };
+    return (
+      <>
+        {formToggle ? <TeamCodeForm /> : <button type="button" onClick={handleOnClick}>팀 정보 입력하러 가기 !!</button>}
+      </>
+    );
+  };
+  const UserInfoLayer = () => {
+    const [formToggle, setFormToggle] = useState(false);
+    const handleOnClick = () => {
+      setFormToggle(!formToggle);
+    };
+    return (
+      <>
+        {formToggle ? <UserInfoForm /> : <button type="button" onClick={handleOnClick}>유저 정보 입력하러 가기 !!</button>}
+      </>
+    );
+  };
+
   return (
     <>
-      <UserInfoForm />
-      <button>유저 정보 입력하러 가기 !!</button>
-      <TeamCodeForm />
-      <button>팀 정보 입력하러 가기 !!</button>
+      {team ? <TeamInfo /> : <TeamCodeLayer />}
+      {!name && <UserInfoLayer />}
+      <EmptySpace />
       <LogoutButton />
     </>
   );
