@@ -63,7 +63,7 @@ const TeamIntroduction = ({ teamInfo, setTeamInfo }) => {
     const fetchBody = {
       query: gql,
       variables: {
-        seq: userState.playerTeam,
+        seq: userState.playerInfo.team.seq,
         name: teamInfoForm.get('teamName'),
         logo: imgUploadResult ? imgUploadResult.name : undefined,
         homeArea: teamInfoForm.get('homeArea'),
