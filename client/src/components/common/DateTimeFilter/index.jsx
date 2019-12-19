@@ -8,6 +8,7 @@ import 'react-dates/lib/css/_datepicker.css';
 import { FilterContext, FilterActionCreator } from '../../../contexts/Filter';
 import { MatchContext } from '../../../contexts/Match';
 import { UserContext } from '../../../contexts/User';
+import { convertDistrictCode } from '../../../util';
 import './index.scss';
 
 const DateTimeFilter = ({ where }) => {
@@ -108,6 +109,10 @@ const NotificationBtn = () => {
 
   const setNotifier = async () => {
     const selectedArea = getSelectedDistrictArray(matchState.districtInfo);
+    if (!selectedArea)
+      return alert(
+        '알림 신청을 하시려면 최소 한 개 이상의 지역구를 선택하셔야 합니다.'
+      );
     const { seq } = userState.playerInfo;
     if (!seq) {
       alert('로그인한 회원만 알림 신청을 사용할 수 있습니다.');
@@ -132,10 +137,16 @@ const NotificationBtn = () => {
       },
       data: JSON.stringify(requestBody),
     });
-
-    console.log(response);
     const result = response.data.data.CreateNotifier;
-    const alertMsg = `알림 신청이 정상 등록 되었습니다. 신청하신 조건(${result.date}, ${result.startTime} - ${result.endTime})에 맞는 경기가 올라오면 알려드립니다. :)`;
+    if (!result) alert('등록이 처리되지 않았습니다. 재시도를 부탁드립니다.');
+    const areaInKorean = selectedArea.map((val) => {
+      return convertDistrictCode(val);
+    });
+    const alertMsg = `알림 신청이 정상 등록 되었습니다. 신청하신 날(${
+      result.date
+    }, ${result.startTime} - ${result.endTime})와 지역(${areaInKorean.join(
+      ', '
+    )})에 맞는 경기가 올라오면 알려드립니다!  :)`;
     alert(alertMsg);
   };
   return (
