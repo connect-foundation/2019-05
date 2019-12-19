@@ -1,11 +1,15 @@
 const post = (url, body) => {
+  const payloadList = Object.keys(body).reduce((acc, key) => {
+    acc.push(key);
+    return acc;
+  }, []);
   return {
     url,
     method: 'post',
     headers: {
       'Content-type': 'application/json',
     },
-    data: JSON.stringify(body),
+    data: JSON.stringify({ ...body, payloadList }),
   };
 };
 
