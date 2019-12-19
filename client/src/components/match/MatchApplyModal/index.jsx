@@ -67,42 +67,31 @@ const ApplyButton = (props) => {
   const { matchInfo } = props;
 
   const handleApplyBtn = async () => {
-    try {
-      if (!userState.playerInfo) {
-        alert('로그인을 해야 신청을 할 수 있습니다!');
-        return;
-      }
-
-      if (!userState.playerInfo.team) {
-        alert('팀이 등록되야 신청을 할 수 있습니다!');
-        return;
-      }
-      const applicantId = userState.playerInfo.playerId;
-      const applicantSub = await getSubscription(applicantId);
-      // eslint-disable-next-line react/prop-types
-      const hostId = matchInfo.author.playerId;
-      const hostSub = await getSubscription(hostId);
-      if (applicantSub.endpoint === hostSub.endpoint) {
-        alert('자기 자신의 매치를 신청할 수는 없어요... :(');
-        return;
-      }
-      if (!applicantSub || !hostSub) {
-        alert(
-          '푸시 알람을 보내는데 있어 에러가 났습니다. 새로고침을 해주세요 :('
-        );
-        return;
-      }
-
-      await axios(
-        post(SEND_NOTIFICATION_REQUEST_URL, {
-          matchInfo,
-          subscription: hostSub,
-          playerInfo,
-        })
-      );
-    } catch (error) {
-      console.log(error);
+    if (!userState.playerInfo) {
+      alert('로그인을 해야 신청을 할 수 있습니다!');
+      return;
     }
+
+    if (!userState.playerInfo.team) {
+      alert('팀이 등록되야 신청을 할 수 있습니다!');
+      return;
+    }
+    const applicantId = playerInfo.playerId;
+    // eslint-disable-next-line react/prop-types
+    const hostId = matchInfo.author.playerId;
+    const hostSub = await getSubscription(hostId);
+    if (applicantId === hostId) {
+      alert('자기 자신의 매치를 신청할 수는 없어요... :(');
+      return;
+    }
+
+    await axios(
+      post(SEND_NOTIFICATION_REQUEST_URL, {
+        matchInfo,
+        subscription: hostSub,
+        playerInfo,
+      })
+    );
   };
 
   return (
