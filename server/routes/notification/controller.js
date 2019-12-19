@@ -22,6 +22,9 @@ const setUpVapIdKey = (id) => {
 };
 
 const getVapPublicId = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  }
   const userId = req.body.userId;
   if (!userId) {
     res.sendStatus(400);
