@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import sanitizeHtml from 'sanitize-html';
 import TextInputSection from '../TextInputSection';
-import { UserContext } from '../../../contexts/User';
+import { UserActionCreator, UserContext } from '../../../contexts/User';
 
 const gql = `
 mutation ($seq: Int, $name: String, $phone: String, $email: String){
@@ -15,7 +15,7 @@ mutation ($seq: Int, $name: String, $phone: String, $email: String){
 `;
 
 const UserInfoForm = () => {
-  const { userState } = useContext(UserContext);
+  const { userState, userDispatch } = useContext(UserContext);
   const formRef = useRef();
   const makeFormData = () => {
     return new FormData(formRef.current);
@@ -53,8 +53,9 @@ const UserInfoForm = () => {
     const result = await fetchToUpdatePlayerInfo();
     if (!result) return alert('유자 정보 등록에 실패하였습니다.');
     alert('유저 정보를 등록하였습니다.');
-    window.location.reload();
+    userDispatch(UserActionCreator.setIsUpdateUserInfo());
   };
+
   return (
     <form
       className="user-info-form"

@@ -11,6 +11,12 @@ const Reducer = (state, action) => {
       };
     case actions.LOGOUT:
       return { ...state, playerInfo: null, subscription: null };
+    case actions.SET_IS_UPDATE_TEAM_CODE:
+      return { ...state, isUpdateTeamCode: true };
+    case actions.SET_IS_UPDATE_USER_INFO:
+      return { ...state, isUpdateUserInfo: true };
+    case actions.UPDATE_PLAYER_INFO:
+      return { ...state, playerInfo: action.payload };
     default:
       throw new Error('Unhandled action!');
   }
