@@ -287,7 +287,7 @@ const Emblem = ({ playerInfo }) => {
 };
 
 const AuthButton = ({ provider }) => {
-  const message = `${provider === 'naver' ? '네이버' : '카카오'} 로그인`;
+  const message = `${provider === 'naver' ? '네이버' : '카카오'}  로그인`;
   return (
     <>
       <div className={`new-auth-button new-auth-button--${provider}`}>
@@ -299,5 +299,4 @@ const AuthButton = ({ provider }) => {
 };
 
 const EmptySpace = () => <div className="empty" />;
-
 export default SideBar;
