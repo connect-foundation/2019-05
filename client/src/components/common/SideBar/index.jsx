@@ -133,9 +133,27 @@ const Notifications = () => {
   const [open, setOpen] = useState(false);
 
   const matches = [
-    { seq: 1, content: 'match 1' },
-    { seq: 2, content: 'match 2' },
-    { seq: 3, content: 'match 3' },
+    {
+      seq: 1,
+      content: 'match 1',
+      startTime: '08:00',
+      endTime: '10:00',
+      area: ['강동구', '강남구', '중구'],
+    },
+    {
+      seq: 2,
+      content: 'match 2',
+      startTime: '12:00',
+      endTime: '14:00',
+      area: ['서대문구', '강남구', '중구', '종로구', '용산구'],
+    },
+    {
+      seq: 3,
+      content: 'match 3',
+      startTime: '15:00',
+      endTime: '17:00',
+      area: ['서초구', '중구'],
+    },
   ];
   const handleBtnClick = () => {
     setOpen(!open);
@@ -146,29 +164,52 @@ const Notifications = () => {
   return (
     <>
       <ContentButton className={btnClass} onClick={handleBtnClick}>
-        🛎 알림 신청 내역 &nbsp;{' '}
-        {open ? (
-          <span role="img" aria-label="monkey_with_open_eyes">
-            🙉
-          </span>
-        ) : (
-          <span role="img" aria-label="monkey_with_closed_eyes">
-            🙈
-          </span>
-        )}
-        {open ? <NotiList matches={matches} /> : null}
+        <div className="noti-pane">
+          {open ? (
+            <span role="img" aria-label="monkey_with_open_eyes">
+              🙉
+            </span>
+          ) : (
+            <span role="img" aria-label="monkey_with_closed_eyes">
+              🙈
+            </span>
+          )}
+          내가 신청한 알림 &nbsp; {open ? <NotiList matches={matches} /> : null}
+        </div>
       </ContentButton>
     </>
   );
 };
 
-const NotiList = ({ matches }) => (
-  <ul>
-    {matches.map((match) => (
-      <li key={match.seq}>{match.content}</li>
-    ))}
-  </ul>
-);
+const NotiList = ({ matches }) => {
+  const handleCancelBtnClick = (e) => {
+    e.stopPropagation();
+    alert('알림을 취소하였습니다. ');
+  };
+  return (
+    <ul>
+      {matches.map((match) => (
+        <>
+          <li key={match.seq}>
+            <hr />
+            <div className="noti-item">
+              <div>
+                {match.startTime} - {match.endTime}
+              </div>
+              <div>@{`${match.area[0]} 외 ${match.area.length - 1}개 구`}</div>
+              <button
+                className="noti-item__cancel-btn"
+                onClick={handleCancelBtnClick}
+              >
+                🔕
+              </button>
+            </div>
+          </li>
+        </>
+      ))}
+    </ul>
+  );
+};
 
 const CloseBtn = ({ activated, setActivated }) => (
   <div className="close-btn">
@@ -190,7 +231,7 @@ const NotiToggleButton = () => {
   };
   return (
     <div className={toggleClass} onClick={handleClick}>
-      알림 &nbsp; {toggle ? 'ON' : 'OFF'}
+      PUSH:&nbsp; {toggle ? 'ON' : 'OFF'}
     </div>
   );
 };
@@ -222,9 +263,7 @@ const ContentButton = ({ className = '', children, onClick }) => {
   );
 };
 
-const Emblem = () => {
-  const { userState } = useContext(UserContext);
-  const { playerInfo } = userState;
+const Emblem = ({ playerInfo }) => {
   const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
   const teamName =
     playerInfo && playerInfo.team ? playerInfo.team.name : '팀 정보 없음';
@@ -243,8 +282,6 @@ const Emblem = () => {
           <h2>{teamName}</h2>
         </div>
       </div>
-      <div>userId: {playerInfo.playerId}</div>
-      <div>user seq: {playerInfo.seq}</div>
     </>
   );
 };

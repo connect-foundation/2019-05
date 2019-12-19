@@ -23,7 +23,7 @@ self.addEventListener('push', (event) => {
   const payload = event.data ? event.data.text() : NO_MSG;
   event.waitUntil(
     self.clients.matchAll().then((clientList) => {
-      console.log(clientList);
+      // console.log(clientList);
       const focused = clientList.some((client) => {
         return client.focused;
       });
