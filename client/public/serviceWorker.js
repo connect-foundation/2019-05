@@ -34,7 +34,6 @@ self.addEventListener('push', (event) => {
           body: notificationMsg,
           icon: 'quick_48.png',
           badge: 'quick_48.png',
-          image: './quick_144.png',
         }
       );
     })

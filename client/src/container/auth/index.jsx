@@ -6,48 +6,27 @@ import useAsync from '../../hooks/useAsync';
 import { UserContext, UserActionCreator } from '../../contexts/User';
 import urlBase64ToUint8Array from '../../util/convertBase64';
 import updatePlayerInfo from '../../util/functions';
+import { post, cookie } from '../../util/requestOptionCreator';
+
+const REGIST_SUBSCRIPTION_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/registSubscription`;
+const GET_VAPID_PUBLIC_KEY_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/vapidPublicKey`;
+const AUTHENTICATE_USER_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/user`;
 
 const authenticateUser = async (token) => {
   if (!token) return null;
-  const response = await axios(
-    `${process.env.REACT_APP_API_SERVER_ADDRESS}/user`,
-    {
-      headers: { Authorization: token },
-    }
-  );
+  const response = await axios(cookie(AUTHENTICATE_USER_REQUEST_URL, token));
   return response.data.userInfo.playerId;
 };
 
 const getVapidPublicKey = async (userId) => {
   // eslint-disable-next-line no-return-await
-  return await axios(
-    `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/vapidPublicKey`,
-    {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      data: JSON.stringify({
-        userId,
-      }),
-    }
-  );
+  return await axios(post(GET_VAPID_PUBLIC_KEY_REQUEST_URL, { userId }));
 };
 
-const setLoginUserSubscription = async (myId, subscription) => {
+const setLoginUserSubscription = async (userId, subscription) => {
   // eslint-disable-next-line no-return-await
   return await axios(
-    `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/registSubscription`,
-    {
-      method: 'post',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      data: JSON.stringify({
-        userId: myId,
-        subscription,
-      }),
-    }
+    post(REGIST_SUBSCRIPTION_REQUEST_URL, { userId, subscription })
   );
 };
 
@@ -62,7 +41,6 @@ const settingSubscription = async (userId) => {
     applicationServerKey: convertedVapidKey,
   });
   await setLoginUserSubscription(userId, subscription);
-  console.log(subscription);
   return subscription;
 };
 
