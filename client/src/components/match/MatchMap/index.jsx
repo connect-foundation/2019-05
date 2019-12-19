@@ -89,9 +89,15 @@ const NaverMap = (props) => {
   const { mapData, districtData } = props;
   const { matchState, matchDispatch } = useContext(MatchContext);
   const [naverMap, setNaverMap] = useState(undefined);
-  const [curMarker, setCurMarker] = useState([]);
+  const [curMarker, setCurMarker] = useState(null);
   const [selectedMarkers, setSelectedMarkers] = useState([]);
   const [selectedNum, setSelectedNum] = useState(0);
+
+  useEffect(() => {
+    return () => {
+      matchDispatch(MatchActionCreator.initialDistrict());
+    };
+  }, []);
 
   const createMapTitleMarker = () => {
     return new mapData.Marker({
@@ -190,7 +196,7 @@ const NaverMap = (props) => {
     }
   };
 
-  const addEvent = (isGlobal, target, action, handler) => {
+  const addEvent = (target, action, handler, isGlobal = false) => {
     if (isGlobal) {
       if (!window.naver) {
         return;
@@ -216,14 +222,56 @@ const NaverMap = (props) => {
     return findDistrictInfo(target).isSelected;
   };
 
+  // 마커 생성
+  const createNameMarker = (districtInfo, target) => {
+    const name = target.property_sig_kor_nm;
+    return new mapData.Marker({
+      position: new mapData.LatLng(
+        districtInfo.namePosition.y,
+        districtInfo.namePosition.x
+      ),
+      icon: {
+        content: markerElement.districtName(name),
+      },
+      map: naverMap,
+      district: target,
+    });
+  };
+
+  // 지역구 이름 마커 지정 함수
+  const setDistrictNameMarker = (district) => {
+    const districtInfo = findDistrictInfo(district);
+    setCurMarker((prev) => {
+      if (prev) {
+        const prevInfo = findDistrictInfo(prev.district);
+        if (!prevInfo.isSelected) {
+          prev.district.setStyle(setDistrictOption());
+        }
+        prev.setMap(null);
+      }
+      if (districtInfo.isSelected) {
+        return null;
+      }
+      const newMarker = createNameMarker(districtInfo, district);
+      return newMarker;
+    });
+  };
+
   // 마우스 이벤트
   const mouseoverEvent = (target) => {
-    if (checkingIsClicked(target)) return;
+    setDistrictNameMarker(target);
+    if (checkingIsClicked(target)) {
+      target.setStyle(setDistrictOption('click'));
+      return;
+    }
     target.setStyle(setDistrictOption('mouseover'));
   };
 
   const mouseoutEvent = (target) => {
-    if (checkingIsClicked(target)) return;
+    if (checkingIsClicked(target)) {
+      target.setStyle(setDistrictOption('click'));
+      return;
+    }
     target.setStyle(setDistrictOption());
   };
 
@@ -245,47 +293,17 @@ const NaverMap = (props) => {
   const registMarkerEvent = (marker) => {
     const target = marker.district;
     const _ = null;
-    addEvent(true, marker, 'mouseover', mouseoverEvent.bind(_, target));
-    addEvent(true, marker, 'mouseout', mouseoutEvent.bind(_, target));
-    addEvent(true, marker, 'click', clickEvent.bind(_, target));
-  };
-
-  // 마커 생성
-  const createNameMarker = (districtInfo, target) => {
-    const name = target.property_sig_kor_nm;
-    return new mapData.Marker({
-      position: new mapData.LatLng(
-        districtInfo.namePosition.y,
-        districtInfo.namePosition.x
-      ),
-      icon: {
-        content: markerElement.districtName(name),
-      },
-      map: naverMap,
-      district: target,
-    });
-  };
-
-  // 지역구 이름 마커 지정 함수
-  const setDistrictNameMarker = (district) => {
-    const districtInfo = findDistrictInfo(district);
-    setCurMarker((prev) => {
-      if (prev.length > 0) {
-        prev[0].setMap(null);
-      }
-      if (districtInfo.isSelected) {
-        return [];
-      }
-      const newMaker = createNameMarker(districtInfo, district);
-      return [newMaker];
-    });
+    addEvent(marker, 'mouseover', mouseoverEvent.bind(_, target), true);
+    addEvent(marker, 'mouseout', mouseoutEvent.bind(_, target), true);
+    addEvent(marker, 'click', clickEvent.bind(_, target), true);
   };
 
   useEffect(() => {
-    if (curMarker.length === 0) {
+    if (!curMarker) {
       return;
     }
-    registMarkerEvent(curMarker[0]);
+    registMarkerEvent(curMarker);
+    curMarker.district.setStyle(setDistrictOption('mouseover'));
   }, [curMarker]);
 
   // 모든 지역구 옵션 해제
@@ -319,45 +337,37 @@ const NaverMap = (props) => {
       target.setStyle(setDistrictOption('click'));
       const marker = createNameMarker(info, target);
       newSelectedMarker.push(marker);
+      registMarkerEvent(marker);
     });
     setSelectedMarkers(newSelectedMarker);
   };
 
-  useEffect(() => {
-    selectedMarkers.forEach((marker) => {
-      registMarkerEvent(marker);
-    });
-  }, [selectedMarkers]);
-
   // 지역구 이벤트
-  const handleDistrictMouseoverEvent = (e) => {
-    mouseoverEvent(e.feature);
-    setDistrictNameMarker(e.feature);
+
+  const convertEvent = (cb, e) => {
+    cb(e.feature);
   };
 
-  const handleDistrictMouseoutEvent = (e) => {
-    mouseoutEvent(e.feature);
-  };
-
-  const handleDistrictClickEvent = (e) => {
-    clickEvent(e.feature);
-  };
-
-  const handleDistrictOutEvent = () => {
+  const districtOutEvent = () => {
     setCurMarker((prev) => {
-      if (prev.length > 0) {
-        prev[0].setMap(null);
+      if (prev) {
+        const prevInfo = findDistrictInfo(prev.district);
+        if (!prevInfo.isSelected) {
+          prev.district.setStyle(setDistrictOption());
+        }
+        prev.setMap(null);
       }
-      return [];
+      return null;
     });
   };
 
   const registDistrictEvent = (map) => {
-    addEvent(false, map.data, 'mouseover', handleDistrictMouseoverEvent);
-    addEvent(false, map.data, 'mouseout', handleDistrictMouseoutEvent);
-    addEvent(false, map.data, 'click', handleDistrictClickEvent);
-    addEvent(true, map, 'mousemove', handleDistrictOutEvent);
-    addEvent(true, map, 'mouseout', handleDistrictOutEvent);
+    const _ = null;
+    addEvent(map.data, 'mouseover', convertEvent.bind(_, mouseoverEvent));
+    addEvent(map.data, 'mouseout', convertEvent.bind(_, mouseoutEvent));
+    addEvent(map.data, 'click', convertEvent.bind(_, clickEvent));
+    addEvent(map, 'mousemove', districtOutEvent, true);
+    addEvent(map, 'mouseout', districtOutEvent, true);
   };
 
   const unregistDistrictEvent = (map) => {
@@ -376,21 +386,22 @@ const NaverMap = (props) => {
   }, [selectedNum]);
 
   useEffect(() => {
+    if (!naverMap) return;
     countSelectedDistrict(matchState.districtInfo);
     manageSelectedDistrict(matchState.districtInfo);
   }, [matchState.districtInfo]);
 
   useEffect(() => {
-    if (naverMap === undefined) {
+    if (!naverMap) {
       setNaverMap(new mapData.Map('map', mapInitOptions));
-    } else {
-      createMapTitleMarker();
-      districtData.forEach((district) => {
-        naverMap.data.addGeoJson(district);
-      });
-      naverMap.data.setStyle(setDistrictOption());
-      registDistrictEvent(naverMap);
+      return;
     }
+    createMapTitleMarker();
+    districtData.forEach((district) => {
+      naverMap.data.addGeoJson(district);
+    });
+    naverMap.data.setStyle(setDistrictOption());
+    registDistrictEvent(naverMap);
     /* eslint react-hooks/exhaustive-deps: 0 */
   }, [naverMap]);
 

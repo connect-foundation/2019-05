@@ -157,6 +157,15 @@ const changeDistrictInfo = (changedInfo) => {
   setDistrict(nextInfos);
 };
 
+const initializeDistrict = () => {
+  const newDistricts = getDistrict();
+  Object.values(newDistricts).forEach((district) => {
+    // eslint-disable-next-line no-param-reassign
+    district.isSelected = false;
+  });
+  setDistrict(newDistricts);
+};
+
 export {
   convertDistrictCode,
   convertDistrictName,
@@ -164,4 +173,5 @@ export {
   getDistrict,
   findDistrictToName,
   changeDistrictInfo,
+  initializeDistrict,
 };
