@@ -82,6 +82,10 @@ const ApplyButton = (props) => {
       // eslint-disable-next-line react/prop-types
       const hostId = matchInfo.author.playerId;
       const hostSub = await getSubscription(hostId);
+      if (applicantSub.endpoint === hostSub.endpoint) {
+        alert('자기 자신의 매치를 신청할 수는 없어요... :(');
+        return;
+      }
       if (!applicantSub || !hostSub) {
         alert(
           '푸시 알람을 보내는데 있어 에러가 났습니다. 새로고침을 해주세요 :('
