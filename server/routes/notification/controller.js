@@ -1,6 +1,5 @@
 const { env } = process;
 const webpush = require('web-push');
-
 const keyMap = {}; // 객체 키 => id, 속성 => publickey, privateKey
 const subscriptionMap = {};
 const axios = require('axios');
@@ -68,19 +67,23 @@ const setSubscription = (req, res) => {
   res.sendStatus(201);
 };
 
-const sendEmailNotification = (req, res, next) => {
-  console.log('email middleware !');
-  const { host } = req.body.matchInfo;
-  const to = ['seungnam2@gmail.com'];
-  const subject = `${host.name}팀으로부터 대결 신청이 왔습니다. `;
-  const html = makeMailContent(req.body.matchInfo);
+const sendEmailNotification = async (req, _, next) => {
+  console.log('---email---');
+  const { playerInfo } = req.body;
+  const { author } = req.body.matchInfo;
+  const to = author.email;
+  const subject = makeMailContent(playerInfo).subject;
+  const html = makeMailContent(playerInfo).content;
   const emailOption = { to, subject, html };
-  mailSender.fireMail(emailOption);
+  await mailSender.fireMail(emailOption);
   next();
 };
 
 const sendSMSNotification = async (req, _, next) => {
-  const content = makeMsgContent(req.body.matchInfo);
+  console.log('---sms---');
+  const { playerInfo, matchInfo } = req.body;
+  console.log(matchInfo);
+  const content = makeMsgContent(matchInfo, playerInfo);
   const serviceId = env.NAVER_SMS_API_ID;
   const headerOp = {
     headers: {
@@ -92,12 +95,13 @@ const sendSMSNotification = async (req, _, next) => {
   const URL = `https://api-sens.ncloud.com/v1/sms/services/${serviceId}/messages`;
   const requestBody = {
     type: 'SMS',
-    from: '01051141777',
-    to: ['01051141777'],
+    from: env.UNDERDOGGS_PHONE,
+    to: [matchInfo.author.phone],
     content,
   };
   try {
-    //const result = await axios.post(URL, JSON.stringify(requestBody), headerOp);
+    // const result = await axios.post(URL, JSON.stringify(requestBody), headerOp);
+    // console.log(result);
   } catch (e) {
     console.error(e);
   }

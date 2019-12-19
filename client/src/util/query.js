@@ -15,6 +15,7 @@ const TEAM_INFO_FETCH_QUERY = `
         logo
         seq
         name
+        introduction
       }
     }
   }`;
