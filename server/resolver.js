@@ -67,12 +67,14 @@ const resolvers = {
     },
     Notifiers: (_, { seq, player }, { prisma }) => {
       return prisma.notifiers({
-        seq,
-        player: player
-          ? {
-              seq: player,
-            }
-          : undefined,
+        where: {
+          seq,
+          player: player
+            ? {
+                seq: player,
+              }
+            : undefined,
+        },
       });
     },
     Notifier: (_, { seq }, { prisma }) => {
@@ -280,7 +282,7 @@ const resolvers = {
   },
   Notifier: {
     player: ({ seq }, _, { prisma }) => {
-      return prisma.player({ seq });
+      return prisma.notifier({ seq }).player();
     },
   },
   Apply: {
