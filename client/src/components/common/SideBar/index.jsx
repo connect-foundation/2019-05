@@ -88,7 +88,9 @@ const WhenLoggedInWithoutInfo = () => {
       setFormToggle(!formToggle);
     };
     const TeamCodeBtn = () => (
-      <button type="button" onClick={handleOnClick}>팀 정보 입력하러 가기 !!</button>
+      <button type="button" onClick={handleOnClick}>
+        팀 정보 입력하러 가기 !!
+      </button>
     );
 
     return <>{formToggle ? <TeamCodeForm /> : <TeamCodeBtn />}</>;
@@ -100,7 +102,9 @@ const WhenLoggedInWithoutInfo = () => {
       setFormToggle(!formToggle);
     };
     const UserInfoBtn = () => (
-      <button type="button" onClick={handleOnClick}>유저 정보 입력하러 가기 !!</button>
+      <button type="button" onClick={handleOnClick}>
+        유저 정보 입력하러 가기 !!
+      </button>
     );
 
     return <>{formToggle ? <UserInfoForm /> : <UserInfoBtn />}</>;

@@ -22,7 +22,7 @@ const getDistrictInfo = async (req, res, next) => {
   })
     .createReadStream()
     .on('error', (error) => {
-      return res.json({ result: 'error', msg: error });
+      //return res.json({ result: 'error', msg: error });
     })
     .pipe(res);
 };

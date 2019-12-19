@@ -16,18 +16,20 @@ const resolvers = {
     },
     PendingMatches: (
       _,
-      { first, area, startTime, endTime, date },
+      { first, skip, area, startTime, endTime, date },
       { prisma }
     ) => {
       return prisma.matches({
         where: {
           guest: null,
+          status: 'OPEN',
           area_in: area,
           startTime_gte: startTime,
           endTime_lte: endTime,
           date,
         },
         first,
+        skip,
         orderBy: 'startTime_ASC',
       });
     },
@@ -222,17 +224,17 @@ const resolvers = {
     UpdatePlayersTeamInfo: (_, { seq, teamUniqueId }, { prisma }) => {
       return prisma.updatePlayer({
         data: {
-          team:{
+          team: {
             connect: {
-              teamUniqueId
-            }
+              teamUniqueId,
+            },
           },
         },
         where: {
           seq,
         },
       });
-    }
+    },
   }, // mutation
   Match: {
     author: ({ seq }, _, { prisma }) => {
