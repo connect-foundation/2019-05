@@ -263,7 +263,9 @@ const ContentButton = ({ className = '', children, onClick }) => {
   );
 };
 
-const Emblem = ({ playerInfo }) => {
+const Emblem = () => {
+  const { userState } = useContext(UserContext);
+  const { playerInfo } = userState;
   const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
   const teamName =
     playerInfo && playerInfo.team ? playerInfo.team.name : '팀 정보 없음';
