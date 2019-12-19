@@ -263,7 +263,7 @@ const ContentButton = ({ className = '', children, onClick }) => {
   );
 };
 
-const Emblem = ({ playerInfo }) => {
+const Emblem = () => {
   const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
   const teamName =
     playerInfo && playerInfo.team ? playerInfo.team.name : '팀 정보 없음';
@@ -299,5 +299,4 @@ const AuthButton = ({ provider }) => {
 };
 
 const EmptySpace = () => <div className="empty" />;
-
 export default SideBar;
