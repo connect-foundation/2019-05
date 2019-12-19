@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useContext, useEffect } from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
@@ -10,7 +10,7 @@ import {
 } from '../../../contexts/SideBar';
 import { UserContext } from '../../../contexts/User';
 import './index.scss';
-import { UserInfoForm, TeamCodeForm } from '../../sidebar/';
+import { UserInfoForm, TeamCodeForm } from '../../sidebar';
 
 const SideBar = () => {
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
@@ -38,28 +38,30 @@ const SideBar = () => {
   );
 };
 
-const NowInnerLayer = (id, team) => {
-  if (!id) return <WhenLoggedOut />;
-  if (!team) return <WhenLoggedInWithoutTeam />;
-  return <WhenLoggedInWithTeam />;
-};
-
 const InnerLayer = () => {
   const { userState } = useContext(UserContext);
-  const { playerInfo } = userState;
-  const [id, setId] = useState(null);
+  const [playerId, setPlayerId] = useState(null);
   const [team, setTeam] = useState(null);
+  const [name, setName] = useState(null);
 
   useEffect(() => {
+    const { playerInfo } = userState;
     if (!playerInfo) return;
-    setId(playerInfo.playerId);
+    setPlayerId(playerInfo.playerId);
     setTeam(playerInfo.team);
-  }, [playerInfo]);
+    setName(playerInfo.name);
+  }, [userState]);
 
-  return <>{NowInnerLayer(id, team)}</>;
+  const NowInnerLayer = () => {
+    if (!playerId) return <WhenLoggedOut />;
+    if (!team || !name) return <WhenLoggedInWithoutInfo />;
+    return <WhenLoggedInWithInfo />;
+  };
+
+  return <>{NowInnerLayer()}</>;
 };
 
-const WhenLoggedInWithTeam = () => {
+const WhenLoggedInWithInfo = () => {
   return (
     <>
       <NotiToggleButton />
@@ -77,13 +79,38 @@ const WhenLoggedInWithTeam = () => {
   );
 };
 
-const WhenLoggedInWithoutTeam = () => {
+const WhenLoggedInWithoutInfo = () => {
+  const { userState } = useContext(UserContext);
+  const { name, team } = userState.playerInfo;
+
+  const TeamCodeLayer = () => {
+    const [formToggle, setFormToggle] = useState(false);
+    const handleOnClick = () => {
+      setFormToggle(!formToggle);
+    };
+    return (
+      <>
+        {formToggle ? <TeamCodeForm /> : <button type="button" onClick={handleOnClick}>팀 정보 입력하러 가기 !!</button>}
+      </>
+    );
+  };
+  const UserInfoLayer = () => {
+    const [formToggle, setFormToggle] = useState(false);
+    const handleOnClick = () => {
+      setFormToggle(!formToggle);
+    };
+    return (
+      <>
+        {formToggle ? <UserInfoForm /> : <button type="button" onClick={handleOnClick}>유저 정보 입력하러 가기 !!</button>}
+      </>
+    );
+  };
+
   return (
     <>
-      <UserInfoForm />
-      <button>유저 정보 입력하러 가기 !!</button>
-      <TeamCodeForm />
-      <button>팀 정보 입력하러 가기 !!</button>
+      {team ? <TeamInfo /> : <TeamCodeLayer />}
+      {!name && <UserInfoLayer />}
+      <EmptySpace />
       <LogoutButton />
     </>
   );
@@ -133,9 +160,27 @@ const Notifications = () => {
   const [open, setOpen] = useState(false);
 
   const matches = [
-    { seq: 1, content: 'match 1' },
-    { seq: 2, content: 'match 2' },
-    { seq: 3, content: 'match 3' },
+    {
+      seq: 1,
+      content: 'match 1',
+      startTime: '08:00',
+      endTime: '10:00',
+      area: ['강동구', '강남구', '중구'],
+    },
+    {
+      seq: 2,
+      content: 'match 2',
+      startTime: '12:00',
+      endTime: '14:00',
+      area: ['서대문구', '강남구', '중구', '종로구', '용산구'],
+    },
+    {
+      seq: 3,
+      content: 'match 3',
+      startTime: '15:00',
+      endTime: '17:00',
+      area: ['서초구', '중구'],
+    },
   ];
   const handleBtnClick = () => {
     setOpen(!open);
@@ -146,29 +191,52 @@ const Notifications = () => {
   return (
     <>
       <ContentButton className={btnClass} onClick={handleBtnClick}>
-        🛎 알림 신청 내역 &nbsp;{' '}
-        {open ? (
-          <span role="img" aria-label="monkey_with_open_eyes">
-            🙉
-          </span>
-        ) : (
-          <span role="img" aria-label="monkey_with_closed_eyes">
-            🙈
-          </span>
-        )}
-        {open ? <NotiList matches={matches} /> : null}
+        <div className="noti-pane">
+          {open ? (
+            <span role="img" aria-label="monkey_with_open_eyes">
+              🙉
+            </span>
+          ) : (
+            <span role="img" aria-label="monkey_with_closed_eyes">
+              🙈
+            </span>
+          )}
+          내가 신청한 알림 &nbsp; {open ? <NotiList matches={matches} /> : null}
+        </div>
       </ContentButton>
     </>
   );
 };
 
-const NotiList = ({ matches }) => (
-  <ul>
-    {matches.map((match) => (
-      <li key={match.seq}>{match.content}</li>
-    ))}
-  </ul>
-);
+const NotiList = ({ matches }) => {
+  const handleCancelBtnClick = (e) => {
+    e.stopPropagation();
+    alert('알림을 취소하였습니다. ');
+  };
+  return (
+    <ul>
+      {matches.map((match) => (
+        <>
+          <li key={match.seq}>
+            <hr />
+            <div className="noti-item">
+              <div>
+                {match.startTime} - {match.endTime}
+              </div>
+              <div>@{`${match.area[0]} 외 ${match.area.length - 1}개 구`}</div>
+              <button
+                className="noti-item__cancel-btn"
+                onClick={handleCancelBtnClick}
+              >
+                🔕
+              </button>
+            </div>
+          </li>
+        </>
+      ))}
+    </ul>
+  );
+};
 
 const CloseBtn = ({ activated, setActivated }) => (
   <div className="close-btn">
@@ -190,7 +258,7 @@ const NotiToggleButton = () => {
   };
   return (
     <div className={toggleClass} onClick={handleClick}>
-      알림 &nbsp; {toggle ? 'ON' : 'OFF'}
+      PUSH:&nbsp; {toggle ? 'ON' : 'OFF'}
     </div>
   );
 };
@@ -222,9 +290,7 @@ const ContentButton = ({ className = '', children, onClick }) => {
   );
 };
 
-const Emblem = () => {
-  const { userState } = useContext(UserContext);
-  const { playerInfo } = userState;
+const Emblem = ({ playerInfo }) => {
   const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
   const teamName =
     playerInfo && playerInfo.team ? playerInfo.team.name : '팀 정보 없음';
@@ -243,14 +309,12 @@ const Emblem = () => {
           <h2>{teamName}</h2>
         </div>
       </div>
-      <div>userId: {playerInfo.playerId}</div>
-      <div>user seq: {playerInfo.seq}</div>
     </>
   );
 };
 
 const AuthButton = ({ provider }) => {
-  const message = `${provider === 'naver' ? '네이버' : '카카오'} 로그인`;
+  const message = `${provider === 'naver' ? '네이버' : '카카오'}  로그인`;
   return (
     <>
       <div className={`new-auth-button new-auth-button--${provider}`}>
@@ -262,5 +326,4 @@ const AuthButton = ({ provider }) => {
 };
 
 const EmptySpace = () => <div className="empty" />;
-
 export default SideBar;

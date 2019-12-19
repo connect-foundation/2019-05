@@ -3,7 +3,11 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { MatchActionCreator, MatchContext } from '../../../contexts/Match';
+import { post } from '../../../util/requestOptionCreator';
 import './index.scss';
+
+const GET_SUBSCRIPTION_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/findSubscription`;
+const SEND_NOTIFICATION_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/sendNotification`;
 
 const ModalHeader = () => {
   const { matchDispatch } = useContext(MatchContext);
@@ -46,30 +50,34 @@ const MatchTeamInfoSection = () => {
   );
 };
 
-const getSubscription = async () => {
+const getSubscription = async (hostId) => {
   const subscription = await axios(
-    `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/subscription`
+    post(GET_SUBSCRIPTION_REQUEST_URL, {
+      userId: hostId,
+    })
   );
   return subscription.data.subscription;
 };
 
-const ApplyButton = ({ matchInfo }) => {
+const ApplyButton = (props) => {
+  // eslint-disable-next-line react/prop-types
+  const { matchInfo } = props;
   const handleApplyBtn = async () => {
-    const subscription = await getSubscription();
-    await axios(
-      `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/sendNotification`,
-      {
-        method: 'post',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        data: JSON.stringify({
+    // eslint-disable-next-line react/prop-types
+    const hostId = matchInfo.author.playerId;
+    const subscription = await getSubscription(hostId);
+    try {
+      await axios(
+        post(SEND_NOTIFICATION_REQUEST_URL, {
           matchInfo,
           subscription,
-        }),
-      }
-    );
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return (
     <div>
       <button type="button" onClick={handleApplyBtn}>
