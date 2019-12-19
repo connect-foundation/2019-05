@@ -65,7 +65,6 @@ const ApplyButton = (props) => {
   const { playerInfo } = userState;
   // eslint-disable-next-line react/prop-types
   const { matchInfo } = props;
-  const { userState } = useContext(UserContext);
 
   const handleApplyBtn = async () => {
     try {
