@@ -2,6 +2,7 @@ import actions from './Actions';
 import {
   findDistrictToName,
   changeDistrictInfo,
+  initializeDistrict,
   getDistrict,
 } from '../../util';
 
@@ -31,6 +32,13 @@ const Reducer = (state, action) => {
       const selected = { ...findDistrictToName(clickedDName) };
       selected.isSelected = !selected.isSelected;
       changeDistrictInfo(selected);
+      return {
+        ...state,
+        districtInfo: getDistrict(),
+      };
+    }
+    case actions.INITIALIZE_DISTRICT: {
+      initializeDistrict();
       return {
         ...state,
         districtInfo: getDistrict(),
