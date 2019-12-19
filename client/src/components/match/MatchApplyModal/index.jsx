@@ -3,6 +3,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { MatchActionCreator, MatchContext } from '../../../contexts/Match';
+import { UserContext } from '../../../contexts/User';
 import { post } from '../../../util/requestOptionCreator';
 import './index.scss';
 
@@ -50,10 +51,10 @@ const MatchTeamInfoSection = () => {
   );
 };
 
-const getSubscription = async (hostId) => {
+const getSubscription = async (userId) => {
   const subscription = await axios(
     post(GET_SUBSCRIPTION_REQUEST_URL, {
-      userId: hostId,
+      userId,
     })
   );
   return subscription.data.subscription;
@@ -62,15 +63,35 @@ const getSubscription = async (hostId) => {
 const ApplyButton = (props) => {
   // eslint-disable-next-line react/prop-types
   const { matchInfo } = props;
+  const { userState } = useContext(UserContext);
+
   const handleApplyBtn = async () => {
-    // eslint-disable-next-line react/prop-types
-    const hostId = matchInfo.author.playerId;
-    const subscription = await getSubscription(hostId);
     try {
+      if (!userState.playerInfo) {
+        alert('로그인을 해야 신청을 할 수 있습니다!');
+        return;
+      }
+
+      if (!userState.playerInfo.team) {
+        alert('팀이 등록되야 신청을 할 수 있습니다!');
+        return;
+      }
+      const applicantId = userState.playerInfo.playerId;
+      const applicantSub = await getSubscription(applicantId);
+      // eslint-disable-next-line react/prop-types
+      const hostId = matchInfo.author.playerId;
+      const hostSub = await getSubscription(hostId);
+      if (!applicantSub || !hostSub) {
+        alert(
+          '푸시 알람을 보내는데 있어 에러가 났습니다. 새로고침을 해주세요 :('
+        );
+        return;
+      }
+
       await axios(
         post(SEND_NOTIFICATION_REQUEST_URL, {
           matchInfo,
-          subscription,
+          subscription: hostSub,
         })
       );
     } catch (error) {
