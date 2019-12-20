@@ -1,5 +1,12 @@
 .match {
   .match-container {
     display: flex;
+    position: relative;
+    padding-top: 20px;
+  }
+  .match-filter__container {
+    position: absolute;
+    left: 545px;
+    padding: 30px 0 0;
   }
 }

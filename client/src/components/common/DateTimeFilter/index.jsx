@@ -5,6 +5,7 @@ import { SingleDatePicker } from 'react-dates';
 import TimePicker from 'react-times';
 import 'react-times/css/classic/default.css';
 import 'react-dates/lib/css/_datepicker.css';
+import classNames from 'classnames';
 import { FilterContext, FilterActionCreator } from '../../../contexts/Filter';
 import { MatchContext } from '../../../contexts/Match';
 import { UserContext } from '../../../contexts/User';
@@ -12,8 +13,12 @@ import { convertDistrictCode } from '../../../util';
 import './index.scss';
 
 const DateTimeFilter = ({ where }) => {
+  const filterClass = classNames({
+    'match-filter': true,
+    'in-match': where === 'match',
+  });
   return (
-    <div className="match-filter">
+    <div className={filterClass}>
       <DatePicker />
       <TimeRangePicker />
       {where === 'match' ? <NotificationBtn /> : null}

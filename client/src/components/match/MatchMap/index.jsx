@@ -18,7 +18,7 @@ const DISTRICT_FETCH_ERROR_MSG = '지역 정보 불러오기를 실패했습니�
 
 const markerElement = {
   mapTitle:
-    '<div style="display:inline-block; text-align:center; font-size:20px; margin-top: 50px; width: 265px; height: 25px;"> <span>서울 지역구 풋살 매칭 현황 지도</span> </div>',
+    '<div style="display:inline-block; text-align:center; font-size:16px; padding-left:15px; margin-top: 50px; width: 280px; height: 25px; "> <span>지역을 선택하여 경기를 필터링해 보세요!</span> </div>',
   districtName: (name) => {
     const width = (name.length + 2) * 10;
     return `

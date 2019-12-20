@@ -9,6 +9,9 @@ $box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.15);
   display: flex;
   justify-content: center;
   padding: 30px 0 40px;
+  &.in-match {
+    padding: 0 0 15px;
+  }
 }
 .date-picker {
   margin-right: 10px;
