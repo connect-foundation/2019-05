@@ -20,6 +20,18 @@ const TEAM_INFO_FETCH_QUERY = `
     }
   }`;
 
+const MY_NOTIFICATIONS_QUERY = `
+query($playerSeq: Int) {
+  Notifiers(player: $playerSeq){
+    seq
+    date
+    area
+    startTime
+    endTime
+  }
+}`;
+
 module.exports = {
   TEAM_INFO_FETCH_QUERY,
+  MY_NOTIFICATIONS_QUERY,
 };

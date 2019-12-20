@@ -1,11 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
-
 import useAsync from '../../hooks/useAsync';
 import { UserContext, UserActionCreator } from '../../contexts/User';
 import urlBase64ToUint8Array from '../../util/convertBase64';
-import updatePlayerInfo from '../../util/functions';
+import { updatePlayerInfo } from '../../util/functions';
 import { get, post, cookie } from '../../util/requestOptionCreator';
 
 const REGIST_SUBSCRIPTION_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/registSubscription`;
