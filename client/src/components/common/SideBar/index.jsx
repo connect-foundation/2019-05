@@ -11,7 +11,7 @@ import {
 import { UserContext, UserActionCreator } from '../../../contexts/User';
 import { UserInfoForm, TeamCodeForm } from '../../sidebar';
 import useAsync from '../../../hooks/useAsync';
-import updatePlayerInfo from '../../../util/functions';
+import { updatePlayerInfo } from '../../../util/functions';
 import './index.scss';
 import { getNotiList } from '../../../util/functions';
 import { convertDistrictCode } from '../../../util/district';
@@ -211,7 +211,7 @@ const NotiList = () => {
   const [notiState, dispatch] = useAsync(getNotiList.bind(null, seq), [
     userState,
   ]);
-
+  console.log(notiState);
   const handleCancelBtnClick = (e) => {
     e.stopPropagation();
     alert('알림을 취소하였습니다. ');
@@ -220,7 +220,7 @@ const NotiList = () => {
   return notiState.data ? (
     <ul>
       {notiState.data.map((noti) => (
-        <li key={noti}>
+        <li key={noti.seq}>
           <hr />
           <div className="noti-item">
             <div>
