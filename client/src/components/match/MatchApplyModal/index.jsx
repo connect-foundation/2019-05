@@ -7,6 +7,22 @@ import { UserContext } from '../../../contexts/User';
 import { post } from '../../../util/requestOptionCreator';
 import './index.scss';
 
+const gql = `
+mutation($team: Int, $player: Int, $match: Int){
+  ApplyMatch(team: $team, player: $player, match: $match){
+    seq
+    team{
+      name
+    }
+    match{
+      host{
+        name
+      }
+    }
+  }
+}
+`;
+
 const GET_SUBSCRIPTION_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/findSubscription`;
 const SEND_NOTIFICATION_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/sendNotification`;
 
@@ -42,10 +58,21 @@ const MatchTeamInfoSection = () => {
     setHostInfo(matchState.selectedMatchInfo.host);
   }, [matchState.selectedMatchInfo]);
 
+  if (!hostInfo) return null;
   return (
     <div className="modal-main-section">
       <div className="host-name-container">
-        <span className="host-name">{hostInfo ? hostInfo.name : ''}</span>
+        <div className="modal-host-info">
+          <span className="host-info__title">간단한 소개</span>
+          <h3 className="host-name">{hostInfo.name}</h3>
+          <p className="host-info__txt">{hostInfo.introduction}</p>
+        </div>
+        <div className="modal-match-information">
+          <span className="modal-info__title">매치 정보</span>
+          <p className="match-info__datetime">{`${matchInfo.date}, ${matchInfo.startTime} - ${matchInfo.endTime}`}</p>
+          <p className="match-info__location">{`${matchInfo.address} ${matchInfo.stadium}`}</p>
+          <p className="modal-info__txt">{matchInfo.description}</p>
+        </div>
       </div>
     </div>
   );
@@ -61,19 +88,20 @@ const getSubscription = async (userId) => {
 };
 
 const ApplyButton = (props) => {
+  const { matchDispatch } = useContext(MatchContext);
   const { userState } = useContext(UserContext);
   const { playerInfo } = userState;
   // eslint-disable-next-line react/prop-types
   const { matchInfo } = props;
 
   const handleApplyBtn = async () => {
-    if (!userState.playerInfo) {
+    if (!playerInfo) {
       alert('로그인을 해야 신청을 할 수 있습니다!');
       return;
     }
 
-    if (!userState.playerInfo.team) {
-      alert('팀이 등록되야 신청을 할 수 있습니다!');
+    if (!playerInfo.team) {
+      alert('팀에 등록이 되어있어야 신청을 할 수 있습니다!');
       return;
     }
     const applicantId = playerInfo.playerId;
@@ -84,6 +112,29 @@ const ApplyButton = (props) => {
       alert('자기 자신의 매치를 신청할 수는 없어요... :(');
       return;
     }
+    const requestBody = {
+      query: gql,
+      variables: {
+        player: playerInfo.seq,
+        team: playerInfo.team.seq,
+        match: matchInfo.seq,
+      },
+    };
+    const response = await axios({
+      method: 'post',
+      url: process.env.REACT_APP_GRAPHQL_ENDPOINT,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: JSON.stringify(requestBody),
+    });
+    const result = response.data.data.ApplyMatch;
+    if (!result) {
+      alert('매치신청이 처리되지 않았습니다. 재시도를 부탁드립니다.');
+      return;
+    }
+    alert('신청이 완료되었습니다.');
+    matchDispatch(MatchActionCreator.toggleViewMatchApplyModal());
 
     await axios(
       post(SEND_NOTIFICATION_REQUEST_URL, {
@@ -92,6 +143,7 @@ const ApplyButton = (props) => {
         playerInfo,
       })
     );
+    matchDispatch(MatchActionCreator.deselectMatchInfo());
   };
 
   return (

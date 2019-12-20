@@ -178,7 +178,7 @@ const DistrictSection = (props) => {
       <select
         id="matchRegistDistrict"
         name="matchRegistDistrict"
-        className="match-register__select match-register__input"
+        className="register__select register__input"
       >
         {Object.entries(SEOUL_DISTRICT).map(([code, district]) => {
           return (
@@ -190,7 +190,7 @@ const DistrictSection = (props) => {
       </select>
       <label
         htmlFor="matchRegistDistrict"
-        className="match-register__label has-default-value"
+        className="register__label has-default-value"
       >
         지역
       </label>
@@ -217,7 +217,7 @@ const DateSection = ({ matchDate, setMatchDate }) => {
       />
       <label
         htmlFor="matchRegistDate"
-        className="match-register__label has-default-value"
+        className="register__label has-default-value"
       >
         날짜
       </label>

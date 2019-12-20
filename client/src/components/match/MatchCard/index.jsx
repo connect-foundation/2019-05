@@ -2,13 +2,21 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { convertDistrictCode } from '../../../util';
 import { MatchContext, MatchActionCreator } from '../../../contexts/Match';
+import { UserContext } from '../../../contexts/User';
 import './index.scss';
 
 const MatchCard = (props) => {
   const { matchInfo } = props;
   const { date, startTime, endTime, host, stadium, area } = matchInfo;
   const { matchDispatch } = useContext(MatchContext);
+  const { userState } = useContext(UserContext);
+
   const handleMatchApplyBtn = () => {
+    if (!userState.playerInfo)
+      return alert('매치 신청을 위해서는 로그인하셔야 합니다.');
+    if (!userState.playerInfo.team)
+      return alert('매치 신청을 하기 위해서는 팀에 등록되어 있어야 합니다.');
+
     matchDispatch(MatchActionCreator.toggleViewMatchApplyModal());
     matchDispatch(MatchActionCreator.selectMatchInfo(matchInfo));
   };
