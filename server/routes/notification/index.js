@@ -18,7 +18,7 @@ notification.post(
   sendPushNotification
 );
 
-notification.post('/vapidPublicKey', bodyChecker, getVapPublicId);
+notification.get('/vapidPublicKey', getVapPublicId);
 
 notification.post('/findSubscription', bodyChecker, getSubscription);
 
