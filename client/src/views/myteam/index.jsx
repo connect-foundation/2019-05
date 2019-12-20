@@ -42,6 +42,7 @@ query ($seq: Int){
     }
     onApplyingList {
       match {
+        seq
         host {
           name
         }
