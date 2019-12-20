@@ -23,7 +23,8 @@ const TeamMatchList = ({ uploadMatches, applyingMatches }) => {
         <div className="team-match__no-result">해당하는 경기가 없습니다.</div>
       );
     return matchList.map((val) => {
-      return <TeamMatchCard matchInfo={val} key={val.seq} />;
+      const cardValue = listMode === 'upload' ? val : val.match;
+      return <TeamMatchCard matchInfo={cardValue} key={cardValue.seq} />;
     });
   };
   const handleCategoryBtnClick = () => {
