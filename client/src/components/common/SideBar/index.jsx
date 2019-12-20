@@ -10,8 +10,11 @@ import {
 } from '../../../contexts/SideBar';
 import { UserContext, UserActionCreator } from '../../../contexts/User';
 import { UserInfoForm, TeamCodeForm } from '../../sidebar';
+import useAsync from '../../../hooks/useAsync';
 import updatePlayerInfo from '../../../util/functions';
 import './index.scss';
+import { getNotiList } from '../../../util/functions';
+import { convertDistrictCode } from '../../../util/district';
 
 const SideBar = () => {
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
@@ -177,30 +180,6 @@ const LoginButtons = () => {
 
 const Notifications = () => {
   const [open, setOpen] = useState(false);
-
-  const matches = [
-    {
-      seq: 1,
-      content: 'match 1',
-      startTime: '08:00',
-      endTime: '10:00',
-      area: ['강동구', '강남구', '중구'],
-    },
-    {
-      seq: 2,
-      content: 'match 2',
-      startTime: '12:00',
-      endTime: '14:00',
-      area: ['서대문구', '강남구', '중구', '종로구', '용산구'],
-    },
-    {
-      seq: 3,
-      content: 'match 3',
-      startTime: '15:00',
-      endTime: '17:00',
-      area: ['서초구', '중구'],
-    },
-  ];
   const handleBtnClick = () => {
     setOpen(!open);
   };
@@ -209,53 +188,61 @@ const Notifications = () => {
   });
 
   return (
-    <>
-      <ContentButton className={btnClass} onClick={handleBtnClick}>
-        <div className="noti-pane">
-          {open ? (
-            <span role="img" aria-label="monkey_with_open_eyes">
-              🙉
-            </span>
-          ) : (
-            <span role="img" aria-label="monkey_with_closed_eyes">
-              🙈
-            </span>
-          )}
-          내가 신청한 알림 &nbsp; {open ? <NotiList matches={matches} /> : null}
-        </div>
-      </ContentButton>
-    </>
+    <ContentButton className={btnClass} onClick={handleBtnClick}>
+      <div className="noti-pane">
+        {open ? (
+          <span role="img" aria-label="monkey_with_open_eyes">
+            🙉
+          </span>
+        ) : (
+          <span role="img" aria-label="monkey_with_closed_eyes">
+            🙈
+          </span>
+        )}
+        내가 신청한 알림 &nbsp; {open ? <NotiList /> : null}
+      </div>
+    </ContentButton>
   );
 };
 
-const NotiList = ({ matches }) => {
+const NotiList = () => {
+  const { userState } = useContext(UserContext);
+  const { seq } = userState.playerInfo;
+  const [notiState, dispatch] = useAsync(getNotiList.bind(null, seq), [
+    userState,
+  ]);
+
   const handleCancelBtnClick = (e) => {
     e.stopPropagation();
     alert('알림을 취소하였습니다. ');
   };
 
-  return (
+  return notiState.data ? (
     <ul>
-      {matches.map((match) => (
-        <>
-          <li key={match.seq}>
-            <hr />
-            <div className="noti-item">
-              <div>
-                {match.startTime} - {match.endTime}
-              </div>
-              <div>@{`${match.area[0]} 외 ${match.area.length - 1}개 구`}</div>
-              <button
-                className="noti-item__cancel-btn"
-                onClick={handleCancelBtnClick}
-              >
-                🔕
-              </button>
+      {notiState.data.map((noti) => (
+        <li key={noti}>
+          <hr />
+          <div className="noti-item">
+            <div>
+              {noti.startTime} - {noti.endTime}
             </div>
-          </li>
-        </>
+            <div>
+              @
+              {`${convertDistrictCode(noti.area[0])} 외 ${noti.area.length -
+                1}개 구`}
+            </div>
+            <button
+              className="noti-item__cancel-btn"
+              onClick={handleCancelBtnClick}
+            >
+              🔕
+            </button>
+          </div>
+        </li>
       ))}
     </ul>
+  ) : (
+    <div>로딩중...</div>
   );
 };
 
