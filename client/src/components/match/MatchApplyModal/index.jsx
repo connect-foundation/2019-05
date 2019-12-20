@@ -7,6 +7,22 @@ import { UserContext } from '../../../contexts/User';
 import { post } from '../../../util/requestOptionCreator';
 import './index.scss';
 
+const gql = `
+mutation($team: Int, $player: Int, $match: Int){
+  ApplyMatch(team: $team, player: $player, match: $match){
+    seq
+    team{
+      name
+    }
+    match{
+      host{
+        name
+      }
+    }
+  }
+}
+`;
+
 const GET_SUBSCRIPTION_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/findSubscription`;
 const SEND_NOTIFICATION_REQUEST_URL = `${process.env.REACT_APP_API_SERVER_ADDRESS}/notification/sendNotification`;
 
@@ -72,6 +88,7 @@ const getSubscription = async (userId) => {
 };
 
 const ApplyButton = (props) => {
+  const { matchDispatch } = useContext(MatchContext);
   const { userState } = useContext(UserContext);
   const { playerInfo } = userState;
   // eslint-disable-next-line react/prop-types
@@ -95,6 +112,29 @@ const ApplyButton = (props) => {
       alert('자기 자신의 매치를 신청할 수는 없어요... :(');
       return;
     }
+    const requestBody = {
+      query: gql,
+      variables: {
+        player: playerInfo.seq,
+        team: playerInfo.team.seq,
+        match: matchInfo.seq,
+      },
+    };
+    const response = await axios({
+      method: 'post',
+      url: process.env.REACT_APP_GRAPHQL_ENDPOINT,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: JSON.stringify(requestBody),
+    });
+    const result = response.data.data.ApplyMatch;
+    if (!result) {
+      alert('매치신청이 처리되지 않았습니다. 재시도를 부탁드립니다.');
+      return;
+    }
+    alert('신청이 완료되었습니다.');
+    matchDispatch(MatchActionCreator.toggleViewMatchApplyModal());
 
     await axios(
       post(SEND_NOTIFICATION_REQUEST_URL, {
@@ -103,6 +143,7 @@ const ApplyButton = (props) => {
         playerInfo,
       })
     );
+    matchDispatch(MatchActionCreator.deselectMatchInfo());
   };
 
   return (

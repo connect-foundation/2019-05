@@ -129,7 +129,7 @@ type Mutation {
     MatchGuest(seq: Int, guest: Int): Match
     CreateNotifier(player:Int, area:[Area], date:String, startTime: String, endTime: String): Notifier
     UpdateTeamInfo(seq: Int, name: String, logo: String, homeArea: Area, introduction: String): Team
-    ApplyMatch(team: Int, player:String, match: Int): Apply
+    ApplyMatch(team: Int, player:Int, match: Int): Apply
     UpdatePlayerInfo(seq: Int, name: String, phone: String, email: String): Player
     UpdatePlayersTeamInfo(seq: Int, teamUniqueId: String): Player
 }

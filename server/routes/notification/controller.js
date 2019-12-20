@@ -80,7 +80,7 @@ const sendSMSNotification = async (req, _, next) => {
     content,
   };
   try {
-    // const result = await axios.post(URL, JSON.stringify(requestBody), headerOp);
+    const result = await axios.post(URL, JSON.stringify(requestBody), headerOp);
     // console.log(result);
   } catch (e) {
     console.error(e);
