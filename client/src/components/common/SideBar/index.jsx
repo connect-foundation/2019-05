@@ -197,7 +197,7 @@ const NotiList = () => {
   const [notiState, dispatch] = useAsync(getNotiList.bind(null, seq), [
     userState,
   ]);
-
+  console.log(notiState);
   const handleCancelBtnClick = (e) => {
     e.stopPropagation();
     alert('알림을 취소하였습니다. ');

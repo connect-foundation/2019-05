@@ -12,14 +12,24 @@ const makeFetchBody = (query, variable) => ({
 
 const updatePlayerInfo = async (playerId) => {
   if (!playerId) return;
-  const fetchBody = makeFetchBody(TEAM_INFO_FETCH_QUERY, playerId);
+  const fetchBody = {
+    query: TEAM_INFO_FETCH_QUERY,
+    variables: {
+      playerId,
+    },
+  };
   const { data } = await axios.post(API_URL, JSON.stringify(fetchBody), CONFIG);
   const [realInfo] = data.data.Players;
   return realInfo;
 };
 
 const getNotiList = async (playerSeq) => {
-  const fetchBody = makeFetchBody(MY_NOTIFICATIONS_QUERY, playerSeq);
+  const fetchBody = {
+    query: MY_NOTIFICATIONS_QUERY,
+    variables: {
+      playerSeq,
+    },
+  };
   const { data } = await axios.post(API_URL, JSON.stringify(fetchBody), CONFIG);
   console.log(data);
   const notiList = data.data.Notifiers;
