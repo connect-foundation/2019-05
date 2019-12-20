@@ -21,13 +21,15 @@ const match = () => (
     <div className="match">
       <Header />
       <div className="grid-container">
-        <DateTimeFilter where="match" />
         <div className="match-container">
           <div className="match-board">
             <MatchRegist />
             <MatchList />
           </div>
-          <MatchMap />
+          <div className="match-filter__container">
+            <DateTimeFilter where="match" />
+            <MatchMap />
+          </div>
         </div>
       </div>
       <MatchRegistModal />
