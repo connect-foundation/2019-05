@@ -78,36 +78,14 @@ const ApplyButton = (props) => {
   const { matchInfo } = props;
 
   const handleApplyBtn = async () => {
-    if (!userState.playerInfo) {
+    if (!playerInfo) {
       alert('로그인을 해야 신청을 할 수 있습니다!');
       return;
     }
 
-      if (!userState.playerInfo.team) {
-        alert('팀에 등록이 되어있어야 신청을 할 수 있습니다!');
-        return;
-      }
-      const applicantId = userState.playerInfo.playerId;
-      const applicantSub = await getSubscription(applicantId);
-      // eslint-disable-next-line react/prop-types
-      const hostId = matchInfo.author.playerId;
-      const hostSub = await getSubscription(hostId);
-      if (!applicantSub || !hostSub) {
-        alert(
-          '푸시 알람을 보내는데 있어 에러가 났습니다. 새로고침을 해주세요 :('
-        );
-        return;
-      }
-
-      await axios(
-        post(SEND_NOTIFICATION_REQUEST_URL, {
-          matchInfo,
-          subscription: hostSub,
-          playerInfo,
-        })
-      );
-    } catch (error) {
-      console.log(error);
+    if (!playerInfo.team) {
+      alert('팀에 등록이 되어있어야 신청을 할 수 있습니다!');
+      return;
     }
     const applicantId = playerInfo.playerId;
     // eslint-disable-next-line react/prop-types
