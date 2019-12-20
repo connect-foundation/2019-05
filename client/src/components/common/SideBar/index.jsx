@@ -8,9 +8,10 @@ import {
   SideBarActionCreator,
   SideBarContext,
 } from '../../../contexts/SideBar';
-import { UserContext } from '../../../contexts/User';
+import { UserContext, UserActionCreator } from '../../../contexts/User';
 import { UserInfoForm, TeamCodeForm } from '../../sidebar';
 import useAsync from '../../../hooks/useAsync';
+import updatePlayerInfo from '../../../util/functions';
 import './index.scss';
 import { getNotiList } from '../../../util/functions';
 import { convertDistrictCode } from '../../../util/district';
@@ -41,10 +42,11 @@ const SideBar = () => {
 };
 
 const InnerLayer = () => {
-  const { userState } = useContext(UserContext);
+  const { userState, userDispatch } = useContext(UserContext);
   const [playerId, setPlayerId] = useState(null);
   const [team, setTeam] = useState(null);
   const [name, setName] = useState(null);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   useEffect(() => {
     const { playerInfo } = userState;
@@ -53,6 +55,18 @@ const InnerLayer = () => {
     setTeam(playerInfo.team);
     setName(playerInfo.name);
   }, [userState]);
+
+  useEffect(() => {
+    if (isFirstRender) {
+      setIsFirstRender(false);
+      return;
+    }
+    const fetchPlayerInfo = async () => {
+      const newPlayerInfo = await updatePlayerInfo(playerId);
+      userDispatch(UserActionCreator.updatePlayerInfo(newPlayerInfo));
+    };
+    fetchPlayerInfo();
+  }, [userState.isUpdateTeamCode, userState.isUpdateUserInfo]);
 
   const NowInnerLayer = () => {
     if (!playerId) return <WhenLoggedOut />;

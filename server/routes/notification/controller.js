@@ -1,43 +1,38 @@
 const { env } = process;
 const webpush = require('web-push');
-const keyMap = {}; // 객체 키 => id, 속성 => publickey, privateKey
 const subscriptionMap = {};
 const axios = require('axios');
 const mailSender = require('../../utils/nodemailer');
 const makeMsgContent = require('../../utils/makeMsgContent');
 const makeMailContent = require('../../utils/makeMailContent');
 
-const createVapIdKey = () => {
-  return webpush.generateVAPIDKeys();
-};
-
-const setUpVapIdKey = (id) => {
-  keyMap[id] = { ...createVapIdKey() };
-  webpush.setVapidDetails(
-    `${process.env.DOMAIN}`,
-    keyMap[id].publicKey,
-    keyMap[id].privateKey
-  );
-};
+const HOST_STATUS_LOGOUT = 410;
 
 const getVapPublicId = (req, res) => {
-  const userId = req.body.userId;
-  if (!keyMap[userId]) {
-    setUpVapIdKey(userId);
+  if (!process.env.PUBLIC_KEY || !process.env.PRIVATE_KEY) {
+    const keys = webpush.generateVAPIDKeys();
+    process.env.PUBLIC_KEY = keys.publicKey;
+    process.env.PRIVATE_KEY = keys.privateKey;
+    webpush.setVapidDetails(
+      `${process.env.DOMAIN}`,
+      process.env.PUBLIC_KEY,
+      process.env.PRIVATE_KEY
+    );
   }
-  res.status(201).json({ publicKey: keyMap[userId].publicKey });
+  res.status(201).json({ publicKey: process.env.PUBLIC_KEY });
 };
 
-const sendPushNotification = (req, res) => {
+const sendPushNotification = async (req, res) => {
   const sub = req.body.subscription;
-  webpush
-    .sendNotification(sub)
-    .then(() => {
+  try {
+    await webpush.sendNotification(sub);
+    res.sendStatus(200);
+  } catch (error) {
+    if (error.statusCode === HOST_STATUS_LOGOUT) {
       res.sendStatus(200);
-    })
-    .catch((err) => {
-      res.status(500).json({ errorMsg: err });
-    });
+    }
+    res.status(500).json({ errorMsg: error });
+  }
 };
 
 const getSubscription = (req, res) => {
@@ -48,6 +43,7 @@ const getSubscription = (req, res) => {
 const setSubscription = (req, res) => {
   const myId = req.body.userId;
   subscriptionMap[myId] = req.body.subscription;
+  console.log(subscriptionMap);
   res.sendStatus(201);
 };
 
