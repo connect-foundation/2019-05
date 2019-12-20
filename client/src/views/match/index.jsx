@@ -10,6 +10,7 @@ import {
   MatchMap,
   MatchRegist,
   MatchRegistModal,
+  MatchApplyModal,
 } from '../../components/match';
 import { MatchProvider } from '../../contexts/Match';
 import './index.scss';
@@ -20,7 +21,6 @@ const match = () => (
     <div className="match">
       <Header />
       <div className="grid-container">
-        <ViewTitle title="match" />
         <DateTimeFilter where="match" />
         <div className="match-container">
           <div className="match-board">
@@ -31,6 +31,7 @@ const match = () => (
         </div>
       </div>
       <MatchRegistModal />
+      <MatchApplyModal />
     </div>
   </MatchProvider>
 );

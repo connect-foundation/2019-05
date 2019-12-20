@@ -8,6 +8,45 @@ img {
   max-width: 100%;
   max-height: 100%;
 }
+.noti-toggle-btn {
+  position: absolute;
+  top: 25px;
+  width: fit-content;
+  font-size: 13px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 5px;
+  box-shadow: none;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  &--on {
+    background-color: green;
+  }
+  &--off {
+    background-color: transparent;
+    border: 1px solid crimson;
+    color: crimson;
+  }
+}
+.noti-item {
+  position: relative;
+
+  &__cancel-btn {
+    position: absolute;
+    top: 0;
+    right: 2px;
+    font-size: 20px;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+}
 
 .side-bar {
   // padding: 80px 30px 10px;
@@ -34,7 +73,7 @@ img {
       text-align: center;
     }
     &--loggedin {
-      padding: 50px 30px 10px;
+      padding: 100px 30px 10px;
     }
   }
   &--open {
@@ -46,7 +85,7 @@ img {
     border: 1px solid $quick_light_navy;
     border-radius: 5px;
     padding: 6px 12px;
-    margin: 3px 0;
+    margin: 4px 0;
     width: 200px;
     display: inline-block;
     color: $quick_light_navy;
@@ -69,6 +108,9 @@ img {
   &__emblem {
     width: 80%;
     display: flex;
+    img {
+      border-radius: 5%;
+    }
   }
   &__team-name-wrapper {
     display: flex;
@@ -90,10 +132,12 @@ img {
     cursor: pointer;
   }
 }
+
 .pressed {
   background: $quick_light_navy;
   color: $quick_white;
 }
+
 .btn {
   display: block;
   width: 80px;
@@ -134,7 +178,6 @@ img {
     transition: all 0.2s ease-in-out;
     cursor: pointer;
     &:hover {
-      font-size: 19px;
       border: 1px solid crimson;
       background: $quick_white;
       color: crimson;
@@ -155,6 +198,7 @@ img {
   border-radius: 5px;
   display: flex;
   align-items: center;
+  transition: all 0.2s ease-in-out;
   &--naver {
     background-color: $naver_background;
     color: $naver_text_color;

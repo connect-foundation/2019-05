@@ -1,5 +1,8 @@
 const initialState = {
-  playerId: null,
+  playerInfo: null,
+  subscription: null,
+  isUpdateTeamCode: false,
+  isUpdateUserInfo: false,
 };
 
 export default initialState;

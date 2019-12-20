@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { convertDistrictCode } from '../../../util';
+import { MatchContext, MatchActionCreator } from '../../../contexts/Match';
+import { UserContext } from '../../../contexts/User';
 import './index.scss';
 
 const MatchCard = (props) => {
   const { matchInfo } = props;
   const { date, startTime, endTime, host, stadium, area } = matchInfo;
+  const { matchDispatch } = useContext(MatchContext);
+  const { userState } = useContext(UserContext);
 
-  //if (host.logo === null) host.logo = '/default_logo.png';
+  const handleMatchApplyBtn = () => {
+    if (!userState.playerInfo)
+      return alert('매치 신청을 위해서는 로그인하셔야 합니다.');
+    if (!userState.playerInfo.team)
+      return alert('매치 신청을 하기 위해서는 팀에 등록되어 있어야 합니다.');
+
+    matchDispatch(MatchActionCreator.toggleViewMatchApplyModal());
+    matchDispatch(MatchActionCreator.selectMatchInfo(matchInfo));
+  };
+
   return (
     <div className="match-card">
       <div className="match-info">
@@ -37,7 +49,11 @@ const MatchCard = (props) => {
         <div className="team-info__name">{host.name}</div>
       </div>
       <div className="button-box">
-        <button type="button" className="match-apply__btn">
+        <button
+          type="button"
+          className="match-apply__btn"
+          onClick={handleMatchApplyBtn}
+        >
           매치 신청
         </button>
       </div>

@@ -7,20 +7,31 @@ import { MatchContext } from '../../../contexts/Match';
 import { FetchLoadingView, FetchErrorView } from '../../../template';
 import './index.scss';
 
+const MATCH_LIST_COUNT_PER_PAGE = 5;
 const MATCH_LIST_FETCH_QUERY = `
-query ($startTime: String, $endTime: String, $date: String, $area: [Area]){
-  PendingMatches(first:20, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
+query ($first: Int, $skip: Int, $startTime: String, $endTime: String, $date: String, $area: [Area]){
+  PendingMatches(first: $first, skip: $skip, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
     seq
+    author {
+      seq
+      playerId
+      name
+      phone
+      email
+    }
     host{
       seq
       name
       logo
+      introduction
     }
+    address
     area
     stadium
     date
     startTime
     endTime
+    description
   }
 }`;
 
@@ -40,33 +51,37 @@ const ListView = (matchList) => {
   );
 };
 
-const renderingMatchListView = (listState, reFetchList) => {
+const renderingMatchListView = (listState, reFetchList, currentList) => {
   const { loading, data: matchList, error } = listState;
   if (loading) return FetchLoadingView();
   if (error) return FetchErrorView(reFetchList, LIST_FETCH_ERROR_MSG);
   if (!matchList) return [];
-  if (matchList.length === 0) return NoListView();
-  return ListView(matchList);
+  //const newList = [...currentList, ...matchList];
+  if (currentList.length === 0) return NoListView();
+  return ListView(currentList);
 };
 
-const getSelectedDistrictArray = (match) => {
-  let newArr = Object.keys(match.districtInfo).filter((districtCode) => {
-    if (match.districtInfo[districtCode].isSelected) return true;
-  });
+const getSelectedDistrictArray = (districtInfo) => {
+  let newArr = Object.keys(districtInfo).filter(
+    (districtCode) => districtInfo[districtCode].isSelected
+  );
   if (newArr.length === 0) newArr = undefined;
   return newArr;
 };
 
-const createQueryBaseOnState = (filter, match) => {
-  return {
+const createQueryBaseOnState = (filter, districtInfo, page) => {
+  const queryValue = {
     query: MATCH_LIST_FETCH_QUERY,
     variables: {
       startTime: filter.startTime,
       endTime: filter.endTime,
       date: filter.matchDay.format('YYYY[-]MM[-]DD'),
-      area: getSelectedDistrictArray(match),
+      area: getSelectedDistrictArray(districtInfo),
+      skip: page * MATCH_LIST_COUNT_PER_PAGE,
+      first: MATCH_LIST_COUNT_PER_PAGE,
     },
   };
+  return queryValue;
 };
 
 const getMatchList = async (fetchQuery) => {
@@ -86,20 +101,50 @@ const MatchList = () => {
   const { filterState } = useContext(FilterContext);
   const { matchState } = useContext(MatchContext);
   const [fetchQuery, setFetchQuery] = useState(null);
+  const [currentPage, setPage] = useState(0);
+  const [currentList, setMatchList] = useState([]);
+  const [pageEnd, setPageEnd] = useState(false);
 
   useEffect(() => {
-    setFetchQuery(createQueryBaseOnState(filterState, matchState));
-  }, [filterState, matchState]);
+    setPage(0);
+    setPageEnd(false);
+    setMatchList([]);
+  }, [filterState, matchState.districtInfo]);
 
   const [listState, reFetchList] = useAsync(
     getMatchList.bind(null, fetchQuery),
     [fetchQuery]
   );
 
+  useEffect(() => {
+    if (!matchState.districtInfo) return null;
+    setFetchQuery(
+      createQueryBaseOnState(filterState, matchState.districtInfo, currentPage)
+    );
+  }, [filterState, matchState.districtInfo, currentPage]);
+
+  useEffect(() => {
+    if (!listState.data) return;
+    if (listState.data.length < MATCH_LIST_COUNT_PER_PAGE) setPageEnd(true);
+    setMatchList([...currentList, ...listState.data]);
+  }, [listState.data]);
+
+  const handleFetchMore = () => {
+    setPage(currentPage + 1);
+  };
+
+  const moreButton = pageEnd ? null : (
+    <button type="button" className="fetch-more__btn" onClick={handleFetchMore}>
+      더 불러오기
+    </button>
+  );
   return (
-    <div className="match-list">
-      {renderingMatchListView(listState, reFetchList)}
-    </div>
+    <>
+      <div className="match-list">
+        {renderingMatchListView(listState, reFetchList, currentList)}
+      </div>
+      <div className="fetch-more">{moreButton}</div>
+    </>
   );
 };
 

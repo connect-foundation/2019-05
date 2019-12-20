@@ -1,3 +1,4 @@
+const findNotifier = require('./middlewares/matchNotification');
 const resolvers = {
   Query: {
     Matches: (_, { seq, area, host }, { prisma }) => {
@@ -15,19 +16,21 @@ const resolvers = {
     },
     PendingMatches: (
       _,
-      { first, area, startTime, endTime, date },
+      { first, skip, area, startTime, endTime, date },
       { prisma }
     ) => {
       return prisma.matches({
         where: {
           guest: null,
+          status: 'OPEN',
           area_in: area,
           startTime_gte: startTime,
           endTime_lte: endTime,
           date,
         },
         first,
-        orderBy: 'date_ASC',
+        skip,
+        orderBy: 'startTime_ASC',
       });
     },
     Match: (_, { seq }, { prisma }) => {
@@ -40,8 +43,8 @@ const resolvers = {
         },
       });
     },
-    Team: (_, { seq }, { prisma }) => {
-      return prisma.team({ seq });
+    Team: (_, { seq, teamUniqueId }, { prisma }) => {
+      return prisma.team({ seq, teamUniqueId });
     },
     Players: (_, { seq, playerId, team }, { prisma }) => {
       return prisma.players({
@@ -64,12 +67,14 @@ const resolvers = {
     },
     Notifiers: (_, { seq, player }, { prisma }) => {
       return prisma.notifiers({
-        seq,
-        player: player
-          ? {
-              seq: player,
-            }
-          : undefined,
+        where: {
+          seq,
+          player: player
+            ? {
+                seq: player,
+              }
+            : undefined,
+        },
       });
     },
     Notifier: (_, { seq }, { prisma }) => {
@@ -100,17 +105,34 @@ const resolvers = {
         email,
       });
     },
-    CreateMatch: (
+    CreateMatch: async (
       _,
-      { host, stadium, address, area, date, startTime, endTime, description },
+      {
+        host,
+        author,
+        stadium,
+        address,
+        area,
+        date,
+        startTime,
+        endTime,
+        description,
+      },
       { prisma }
     ) => {
+      const notiList = await findNotifier(date, startTime, endTime, area);
       return prisma.createMatch({
         host: {
           connect: {
             seq: host,
           },
         },
+        author: {
+          connect: {
+            playerId: author,
+          },
+        },
+        status: 'OPEN',
         stadium,
         address,
         area,
@@ -170,6 +192,51 @@ const resolvers = {
         },
       });
     },
+    ApplyMatch: (_, { team, player, match }, { prisma }) => {
+      return prisma.createApply({
+        team: {
+          connect: {
+            seq: team,
+          },
+        },
+        match: {
+          connect: {
+            seq: match,
+          },
+        },
+        player: {
+          connect: {
+            seq: player,
+          },
+        },
+      });
+    },
+    UpdatePlayerInfo: (_, { seq, name, phone, email }, { prisma }) => {
+      return prisma.updatePlayer({
+        data: {
+          name,
+          phone,
+          email,
+        },
+        where: {
+          seq,
+        },
+      });
+    },
+    UpdatePlayersTeamInfo: (_, { seq, teamUniqueId }, { prisma }) => {
+      return prisma.updatePlayer({
+        data: {
+          team: {
+            connect: {
+              teamUniqueId,
+            },
+          },
+        },
+        where: {
+          seq,
+        },
+      });
+    },
   }, // mutation
   Match: {
     author: ({ seq }, _, { prisma }) => {
@@ -200,11 +267,14 @@ const resolvers = {
     onApplyingList: ({ seq }, _, { prisma }) => {
       return prisma.team({ seq }).onApplyingList();
     },
+    owner: ({ seq }, _, { prisma }) => {
+      return prisma.team({ seq }).owner();
+    },
   },
 
   Player: {
     team: ({ seq }, _, { prisma }) => {
-      return prisma.team({ seq });
+      return prisma.player({ seq }).team();
     },
     notiList: ({ seq }, _, { prisma }) => {
       return prisma.player({ seq }).notiList();
@@ -212,7 +282,18 @@ const resolvers = {
   },
   Notifier: {
     player: ({ seq }, _, { prisma }) => {
-      return prisma.player({ seq });
+      return prisma.notifier({ seq }).player();
+    },
+  },
+  Apply: {
+    team: ({ seq }, _, { prisma }) => {
+      return prisma.apply({ seq }).team();
+    },
+    player: ({ seq }, _, { prisma }) => {
+      return prisma.apply({ seq }).player();
+    },
+    match: ({ seq }, _, { prisma }) => {
+      return prisma.apply({ seq }).match();
     },
   },
 };

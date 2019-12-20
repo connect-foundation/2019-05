@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Redirect } from 'react-router-dom';
 import useAsync from '../../hooks/useAsync';
 import { Header, SideBar } from '../../components/common';
 import {
@@ -6,6 +7,8 @@ import {
   TeamMembers,
   TeamMatchList,
 } from '../../components/myteam';
+import { UserContext } from '../../contexts/User';
+import { FetchLoadingView, FetchErrorView } from '../../template';
 
 const gql = `
 query ($seq: Int){
@@ -52,12 +55,14 @@ query ($seq: Int){
     }
   }
 }`;
+const FETCH_ERROR_MSG = '팀정보 불러오기를 실패했습니다..';
 
-const getTeamData = async () => {
+const getTeamData = async (playerInfo) => {
+  if (!playerInfo) return;
   const fetchBody = {
     query: gql,
     variables: {
-      seq: 5,
+      seq: playerInfo.team.seq,
     },
   };
   const fetchOption = {
@@ -73,17 +78,30 @@ const getTeamData = async () => {
 };
 
 const Myteam = () => {
-  const [teamFetchData, reFetchTeamData] = useAsync(getTeamData, []);
+  const { userState } = useContext(UserContext);
+
+  const [teamFetchData, reFetch] = useAsync(
+    getTeamData.bind(null, userState.playerInfo),
+    [userState.playerInfo]
+  );
+
   const {
     loading: teamDataLoading,
     data: teamData,
     error: teamError,
   } = teamFetchData;
+
   const [teamInfo, setTeamInfo] = useState();
+
   useEffect(() => {
-    if (!teamData) return;
+    if (!userState.playerInfo || !teamData) return;
     setTeamInfo(teamData.Team);
   }, [teamData]);
+
+  if (!userState.playerInfo || !userState.playerInfo.team)
+    return <Redirect to="/" />;
+  if (teamDataLoading) return FetchLoadingView();
+  if (teamError) return FetchErrorView(reFetch, FETCH_ERROR_MSG);
   if (teamDataLoading || teamError || !teamInfo) return null;
   return (
     <>
