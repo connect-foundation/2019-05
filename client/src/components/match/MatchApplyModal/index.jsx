@@ -78,11 +78,10 @@ const ApplyButton = (props) => {
   const { matchInfo } = props;
 
   const handleApplyBtn = async () => {
-    try {
-      if (!userState.playerInfo) {
-        alert('로그인을 해야 신청을 할 수 있습니다!');
-        return;
-      }
+    if (!userState.playerInfo) {
+      alert('로그인을 해야 신청을 할 수 있습니다!');
+      return;
+    }
 
       if (!userState.playerInfo.team) {
         alert('팀에 등록이 되어있어야 신청을 할 수 있습니다!');
@@ -110,6 +109,22 @@ const ApplyButton = (props) => {
     } catch (error) {
       console.log(error);
     }
+    const applicantId = playerInfo.playerId;
+    // eslint-disable-next-line react/prop-types
+    const hostId = matchInfo.author.playerId;
+    const hostSub = await getSubscription(hostId);
+    if (applicantId === hostId) {
+      alert('자기 자신의 매치를 신청할 수는 없어요... :(');
+      return;
+    }
+
+    await axios(
+      post(SEND_NOTIFICATION_REQUEST_URL, {
+        matchInfo,
+        subscription: hostSub,
+        playerInfo,
+      })
+    );
   };
 
   return (
