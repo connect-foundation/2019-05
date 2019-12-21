@@ -34,6 +34,11 @@ img {
     color: crimson;
   }
 }
+.noti-pane {
+  max-height: 220px;
+  overflow-y: scroll;
+}
+
 .noti-item {
   position: relative;
 
