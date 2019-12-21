@@ -37,6 +37,14 @@ img {
 .noti-pane {
   max-height: 220px;
   overflow-y: scroll;
+  &__link {
+    color: yellow !important;
+    font-weight: 500;
+    &:hover {
+      text-decoration: underline;
+      font-weight: bolder;
+    }
+  }
 }
 
 .noti-item {
@@ -229,4 +237,22 @@ img {
 .auth-message {
   width: calc(100% - 50px);
   font-weight: bold;
+}
+
+.double-button {
+  display: flex;
+}
+
+.btn__gotohome {
+  div {
+    width: 90px;
+    padding: 6px 0 6px 12px;
+  }
+}
+
+.btn__gototeam {
+  div {
+    margin-left: 10px;
+    width: 100px;
+  }
 }

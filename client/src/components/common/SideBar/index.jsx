@@ -81,9 +81,11 @@ const WhenLoggedInWithInfo = () => {
   return (
     <>
       <TeamInfo />
-      <GoToHomeBtn />
+      <div className="double-button">
+        <GoToHomeBtn />
+        <GoToTeamBtn />
+      </div>
       <GoToMatchBtn />
-      <GoToTeamBtn />
       <Notifications />
       <EmptySpace />
       <LogoutButton />
@@ -234,36 +236,57 @@ const NotiList = () => {
     deleteNotification(seq).then((_) => dispatch());
   };
 
-  return notiState.data ? (
-    notiState.data.length ? (
-      <ul>
-        {notiState.data.map((noti) => (
-          <li key={noti.seq}>
-            <hr />
-            <div className="noti-item">
-              <div>
-                {noti.startTime} - {noti.endTime}
-              </div>
-              <div>
-                @
-                {`${convertDistrictCode(noti.area[0])} 외 ${noti.area.length -
-                  1}개 구`}
-              </div>
-              <button
-                className="noti-item__cancel-btn"
-                onClick={handleCancelBtnClick.bind(null, noti.seq)}
-              >
-                🔕
-              </button>
+  if (!notiState.data) return <NotiLoading />;
+  if (!notiState.data.length) return <NotiNotFound />;
+
+  return (
+    <ul>
+      {notiState.data.map((noti) => (
+        <li key={noti.seq}>
+          <hr />
+          <div className="noti-item">
+            <div>
+              {noti.startTime} - {noti.endTime}
             </div>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <div>데이터가 없습니다.</div>
-    )
-  ) : (
-    <div>로딩중...</div>
+            <div>
+              {`@${convertDistrictCode(noti.area[0])} 외 ${noti.area.length -
+                1}개 구`}
+            </div>
+            <button
+              className="noti-item__cancel-btn"
+              onClick={handleCancelBtnClick.bind(null, noti.seq)}
+            >
+              🔕
+            </button>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const NotiLoading = () => <div>로딩중...</div>;
+const NotiNotFound = () => {
+  const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
+  const handleCloseSideBar = () => {
+    if (sideBarState.activated)
+      sideBarDispatch(SideBarActionCreator.toggleActivated());
+  };
+
+  return (
+    <>
+      <div>알림을 찾을 수 없습니다.</div>
+      <div>
+        <Link
+          onClick={handleCloseSideBar}
+          className="noti-pane__link"
+          to="/match"
+        >
+          여기
+        </Link>
+        서 등록해 보세요!
+      </div>
+    </>
   );
 };
 
@@ -275,7 +298,7 @@ const CloseBtn = ({ activated, setActivated }) => (
   </div>
 );
 
-const NavButton = ({ to, title }) => {
+const NavButton = ({ className = '', to, title }) => {
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
   const handleCloseSideBar = () => {
     if (sideBarState.activated)
@@ -283,7 +306,7 @@ const NavButton = ({ to, title }) => {
   };
 
   return (
-    <Link to={to} onClick={handleCloseSideBar}>
+    <Link className={className} to={to} onClick={handleCloseSideBar}>
       <ContentButton>{title}</ContentButton>
     </Link>
   );
@@ -295,9 +318,15 @@ const ContentButton = ({ className = '', children, onClick }) => (
   </div>
 );
 
-const GoToHomeBtn = () => <NavButton to="/" title="🏠홈으로" />;
-const GoToMatchBtn = () => <NavButton to="/match" title="🔥매치 페이지" />;
-const GoToTeamBtn = () => <NavButton to="/myteam" title="⚙️팀 페이지" />;
+const GoToHomeBtn = () => (
+  <NavButton className="btn__gotohome" to="/" title="🏠홈으로" />
+);
+const GoToMatchBtn = () => (
+  <NavButton to="/match" title="⚽️매치 & 알림 신청" />
+);
+const GoToTeamBtn = () => (
+  <NavButton className="btn__gototeam" to="/myteam" title="🏆나의 팀" />
+);
 
 const TeamInfo = () => {
   const { userState } = useContext(UserContext);
