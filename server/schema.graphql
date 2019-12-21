@@ -123,7 +123,7 @@ type Query {
 }
 
 type Mutation {
-    CreateTeam(name: String, logo:String, homeArea: Area, introduction: String ): Team
+    CreateTeam(name:String, teamUniqueId:String, owner:Int): Team
     CreatePlayer(playerId:String, team:Int, name: String, phone: String, email:String): Player
     CreateMatch(host: Int, author:String, stadium: String, area:Area, date:String, startTime: String, endTime: String, description: String, address: String): Match
     MatchGuest(seq: Int, guest: Int): Match
