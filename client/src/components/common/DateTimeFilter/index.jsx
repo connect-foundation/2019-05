@@ -114,15 +114,13 @@ const NotificationBtn = () => {
 
   const setNotifier = async () => {
     const selectedArea = getSelectedDistrictArray(matchState.districtInfo);
+    if (!userState.playerInfo)
+      return alert('로그인한 회원만 알림 신청을 사용할 수 있습니다.');
     if (!selectedArea)
       return alert(
         '알림 신청을 하시려면 최소 한 개 이상의 지역구를 선택하셔야 합니다.'
       );
     const { seq } = userState.playerInfo;
-    if (!seq) {
-      alert('로그인한 회원만 알림 신청을 사용할 수 있습니다.');
-      return;
-    }
     const requestBody = {
       query: gql,
       variables: {
