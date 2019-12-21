@@ -2,6 +2,21 @@
 
 .match-list {
   width: $match-card-width + 16px;
-  //height: calc(100vh - #{$header-height});
-  //overflow-y: scroll;
+}
+.fetch-more__btn {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto 50px auto;
+  width: 130px;
+  height: 40px;
+  background-color: $quick_navy;
+  border: 0 none;
+  border-radius: 10px;
+  color: #fff;
+  appearance: none;
+  cursor: pointer;
+  .fet-more__btn--span {
+    font-size: 15px;
+    font-weight: bold;
+  }
 }

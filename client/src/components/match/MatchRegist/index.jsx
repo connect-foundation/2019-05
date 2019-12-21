@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { MatchContext, MatchActionCreator } from '../../../contexts/Match';
 import { UserContext } from '../../../contexts/User';
+import plusImage from '../../../assets/images/plus_icon.png';
 
 import './index.scss';
 
@@ -23,7 +24,8 @@ const MatchRegist = () => {
         className="match-register__btn"
         onClick={handleMatchRegisterBtn}
       >
-        매치 등록
+        <img src={plusImage} alt="" className="plus__image" />
+        <span>매치 등록</span>
       </button>
     </div>
   );
