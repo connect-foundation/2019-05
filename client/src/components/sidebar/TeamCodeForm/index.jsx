@@ -2,17 +2,7 @@ import React, { useContext, useRef } from 'react';
 import sanitizeHtml from 'sanitize-html';
 import TextInputSection from '../TextInputSection';
 import { UserActionCreator, UserContext } from '../../../contexts/User';
-
-const gql = `
-mutation ($seq: Int, $teamUniqueId: String){
-  UpdatePlayersTeamInfo(seq: $seq, teamUniqueId: $teamUniqueId){
-    seq
-    team {
-      seq
-    }
-  }
-}
-`;
+import { UPDATE_PLAYERS_TEAM_INFO } from '../../../util/query';
 
 const TeamCodeForm = () => {
   const { userState, userDispatch } = useContext(UserContext);
@@ -23,7 +13,7 @@ const TeamCodeForm = () => {
   const fetchToUpdatePlayersTeamInfo = async () => {
     const teamCodeData = makeFormData();
     const fetchBody = {
-      query: gql,
+      query: UPDATE_PLAYERS_TEAM_INFO,
       variables: {
         seq: userState.playerInfo.seq,
         teamUniqueId: sanitizeHtml(teamCodeData.get('teamCode')),
