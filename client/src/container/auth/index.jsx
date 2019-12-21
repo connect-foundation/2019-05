@@ -89,11 +89,9 @@ const Auth = ({ children }) => {
     }
     // 쿠키가 있지만, 완료되지 않았을때,
     if (!userState.subscription) {
-      console.log('완료되지 않았어!');
       return null;
     }
   }
-  console.log('완료가 되었어!');
   return <div>{children}</div>;
 };
 
