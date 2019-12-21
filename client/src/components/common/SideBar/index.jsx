@@ -275,9 +275,6 @@ const CloseBtn = ({ activated, setActivated }) => (
   </div>
 );
 
-const GoToHomeBtn = () => <NavButton to="/" title="🏠홈으로" />;
-const GoToMatchBtn = () => <NavButton to="/match" title="🔥매치 페이지" />;
-const GoToTeamBtn = () => <NavButton to="/myteam" title="⚙️팀 페이지" />;
 const NavButton = ({ to, title }) => {
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
   const handleCloseSideBar = () => {
@@ -297,6 +294,10 @@ const ContentButton = ({ className = '', children, onClick }) => (
     {children}
   </div>
 );
+
+const GoToHomeBtn = () => <NavButton to="/" title="🏠홈으로" />;
+const GoToMatchBtn = () => <NavButton to="/match" title="🔥매치 페이지" />;
+const GoToTeamBtn = () => <NavButton to="/myteam" title="⚙️팀 페이지" />;
 
 const TeamInfo = () => {
   const { userState } = useContext(UserContext);
