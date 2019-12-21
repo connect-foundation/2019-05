@@ -50,6 +50,7 @@ const sendEmailNotification = async (uniquePlayerList) => {
 
 const sendSMSNotification = async (uniquePlayerList) => {
   const receivers = uniquePlayerList.map((playerObj) => playerObj.player.phone);
+  console.log(receivers, 'receivers');
   if (!receivers.length) return;
   const content = '문자 메세지 테스트. ';
   const serviceId = env.NAVER_SMS_API_ID;

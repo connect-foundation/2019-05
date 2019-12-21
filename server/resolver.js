@@ -237,6 +237,9 @@ const resolvers = {
         },
       });
     },
+    DeleteNotifier: (_, { seq }, { prisma }) => {
+      return prisma.deleteNotifier({ seq });
+    },
   }, // mutation
   Match: {
     author: ({ seq }, _, { prisma }) => {
