@@ -91,3 +91,17 @@ $box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.15);
     cursor: pointer;
   }
 }
+
+.DayPickerKeyboardShortcuts {
+  &_show__bottomRight {
+    &:hover {
+      &::before {
+        border-right: 33px solid $quick_light_navy;
+      }
+    }
+    &::before {
+      border-top: 26px solid transparent;
+      border-right: 33px solid $quick_background;
+    }
+  }
+}
