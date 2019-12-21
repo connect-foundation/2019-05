@@ -9,12 +9,13 @@ import {
   SideBarContext,
 } from '../../../contexts/SideBar';
 import { UserContext, UserActionCreator } from '../../../contexts/User';
-import { UserInfoForm, TeamCodeForm } from '../../sidebar';
+import { UserInfoForm, TeamCodeForm, TeamCreationForm } from '../../sidebar';
 import useAsync from '../../../hooks/useAsync';
 import { updatePlayerInfo } from '../../../util/functions';
 import './index.scss';
 import { getNotiList } from '../../../util/functions';
 import { convertDistrictCode } from '../../../util/district';
+
 
 const SideBar = () => {
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
@@ -98,6 +99,30 @@ const WhenLoggedInWithInfo = () => {
 const WhenLoggedInWithoutInfo = () => {
   const { userState } = useContext(UserContext);
   const { name, team } = userState.playerInfo;
+  console.log(userState.playerInfo);
+
+  const TeamLayer = () => {
+    return (
+      <>
+        <TeamCreateLayer />
+        <TeamCodeLayer />
+      </>
+    );
+  };
+
+  const TeamCreateLayer = () => {
+    const [formToggle, setFormToggle] = useState(false);
+    const handleOnClick = () => {
+      setFormToggle(!formToggle);
+    };
+    const TeamCodeBtn = () => (
+      <button type="button" onClick={handleOnClick}>
+        팀 생성하러 가기 !!
+      </button>
+    );
+
+    return <>{formToggle ? <TeamCreationForm /> : <TeamCodeBtn />}</>;
+  };
 
   const TeamCodeLayer = () => {
     const [formToggle, setFormToggle] = useState(false);
@@ -129,7 +154,7 @@ const WhenLoggedInWithoutInfo = () => {
 
   return (
     <>
-      {team ? <TeamInfo /> : <TeamCodeLayer />}
+      {team ? <TeamInfo /> : <TeamLayer />}
       {!name && <UserInfoLayer />}
       <EmptySpace />
       <LogoutButton />
