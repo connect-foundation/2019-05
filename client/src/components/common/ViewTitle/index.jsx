@@ -1,10 +1,11 @@
 import React from 'react';
+import './index.scss';
 
 const ViewTitle = (props) => {
   const { title } = props;
   return (
     <div className="view-title">
-      <h2>{title}</h2>
+      <span>{title}</span>
     </div>
   );
 };
