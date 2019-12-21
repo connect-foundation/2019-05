@@ -80,14 +80,10 @@ const InnerLayer = () => {
 const WhenLoggedInWithInfo = () => {
   return (
     <>
-      <NotiToggleButton />
       <TeamInfo />
-      <ContentButton>
-        <span role="img" aria-label="rocket">
-          🚀
-        </span>
-        예시 버튼
-      </ContentButton>
+      <GoToHomeBtn />
+      <GoToMatchBtn />
+      <GoToTeamBtn />
       <Notifications />
       <EmptySpace />
       <LogoutButton />
@@ -256,41 +252,20 @@ const CloseBtn = ({ activated, setActivated }) => (
   </div>
 );
 
-const NotiToggleButton = () => {
-  const [toggle, setToggle] = useState(true);
-  const toggleClass = classNames({
-    'noti-toggle-btn': true,
-    'noti-toggle-btn--on': toggle,
-    'noti-toggle-btn--off': !toggle,
-  });
-  const handleClick = () => {
-    setToggle(!toggle);
-  };
-
-  return (
-    <div className={toggleClass} onClick={handleClick}>
-      PUSH:&nbsp; {toggle ? 'ON' : 'OFF'}
-    </div>
-  );
-};
-
-const TeamInfo = () => {
-  const { sideBarDispatch } = useContext(SideBarContext);
+const GoToHomeBtn = () => <NavButton to="/" title="🏠홈으로" />;
+const GoToMatchBtn = () => <NavButton to="/match" title="🔥매치 페이지" />;
+const GoToTeamBtn = () => <NavButton to="/myteam" title="⚙️팀 페이지" />;
+const NavButton = ({ to, title }) => {
+  const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
   const handleCloseSideBar = () => {
-    sideBarDispatch(SideBarActionCreator.toggleActivated());
+    if (sideBarState.activated)
+      sideBarDispatch(SideBarActionCreator.toggleActivated());
   };
 
   return (
-    <div>
-      <Emblem />
-      <Link to="/myteam" onClick={handleCloseSideBar}>
-        <ContentButton>
-          <span role="img" aria-label="config">
-            ⚙️팀 페이지
-          </span>
-        </ContentButton>
-      </Link>
-    </div>
+    <Link to={to} onClick={handleCloseSideBar}>
+      <ContentButton>{title}</ContentButton>
+    </Link>
   );
 };
 
@@ -300,7 +275,7 @@ const ContentButton = ({ className = '', children, onClick }) => (
   </div>
 );
 
-const Emblem = () => {
+const TeamInfo = () => {
   const { userState } = useContext(UserContext);
   const { playerInfo } = userState;
   const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
@@ -330,12 +305,10 @@ const AuthButton = ({ provider }) => {
   const message = `${provider === 'naver' ? '네이버' : '카카오'}  로그인`;
 
   return (
-    <>
-      <div className={`new-auth-button new-auth-button--${provider}`}>
-        <img className="auth-logo" src={`${provider}.svg`} alt="" />
-        <span className="auth-message">{message}</span>
-      </div>
-    </>
+    <div className={`new-auth-button new-auth-button--${provider}`}>
+      <img className="auth-logo" src={`${provider}.svg`} alt="" />
+      <span className="auth-message">{message}</span>
+    </div>
   );
 };
 
