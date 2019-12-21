@@ -28,7 +28,7 @@ const TeamMembers = ({ members }) => {
       <div className="grid-container">
         <h2>멤버 리스트</h2>
         <div className="members-list">
-          <table className="members-table">
+          <table className="quickkick-table">
             <thead>
               <tr>
                 <th>순서</th>

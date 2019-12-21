@@ -38,9 +38,14 @@ query ($seq: Int){
         team{
           name
         }
+        player{
+          phone
+          email
+        }
       }
     }
     onApplyingList {
+      seq
       match {
         seq
         host {
