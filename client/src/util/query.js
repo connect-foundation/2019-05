@@ -51,7 +51,8 @@ mutation($name: String, $teamUniqueId: String, $owner: Int){
     owner {
       seq
     }
-`;
+  }
+}`;
 
 const DELETE_NOTI_MUTATION = `
 mutation($notiSeq: Int) {

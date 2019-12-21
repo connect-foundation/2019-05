@@ -16,7 +16,6 @@ import './index.scss';
 import { getNotiList, deleteNotification } from '../../../util/functions';
 import { convertDistrictCode } from '../../../util/district';
 
-
 const SideBar = () => {
   const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
   const { userState } = useContext(UserContext);
@@ -95,7 +94,6 @@ const WhenLoggedInWithInfo = () => {
 const WhenLoggedInWithoutInfo = () => {
   const { userState } = useContext(UserContext);
   const { name, team } = userState.playerInfo;
-  console.log(userState.playerInfo);
 
   const TeamLayer = () => {
     return (

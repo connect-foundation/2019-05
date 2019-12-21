@@ -206,7 +206,9 @@ const TeamNameSection = forwardRef(
         {mod ? (
           <TeamAreaSelect home={home} ref={homeRef} />
         ) : (
-          <span className="team-name__area">{convertDistrictCode(home)}</span>
+          <span className="team-name__area">
+            {home ? convertDistrictCode(home) : ''}
+          </span>
         )}
         <p className="team-uniqueId">
           <span className="team-uniqueId__title">TeamId:</span> {teamUniqueId}
