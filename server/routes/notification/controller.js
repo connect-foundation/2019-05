@@ -83,8 +83,7 @@ const sendSMSNotification = async (req, _, next) => {
   };
   try {
     // 여기를 주석처리하면 문자메세지가 전송이 되지 않는다.
-    // const result = await axios.post(URL, JSON.stringify(requestBody), headerOp);
-    // console.log(result);
+    const result = await axios.post(URL, JSON.stringify(requestBody), headerOp);
   } catch (e) {
     console.error(e);
   }

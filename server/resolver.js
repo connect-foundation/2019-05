@@ -206,7 +206,7 @@ const resolvers = {
         },
         player: {
           connect: {
-            playerId: player,
+            seq: player,
           },
         },
       });

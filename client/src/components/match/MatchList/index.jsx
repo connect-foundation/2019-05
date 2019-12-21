@@ -7,7 +7,7 @@ import { MatchContext } from '../../../contexts/Match';
 import { FetchLoadingView, FetchErrorView } from '../../../template';
 import './index.scss';
 
-const MATCH_LIST_COUNT_PER_PAGE = 5;
+const MATCH_LIST_COUNT_PER_PAGE = 10;
 const MATCH_LIST_FETCH_QUERY = `
 query ($first: Int, $skip: Int, $startTime: String, $endTime: String, $date: String, $area: [Area]){
   PendingMatches(first: $first, skip: $skip, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
@@ -23,12 +23,15 @@ query ($first: Int, $skip: Int, $startTime: String, $endTime: String, $date: Str
       seq
       name
       logo
+      introduction
     }
+    address
     area
     stadium
     date
     startTime
     endTime
+    description
   }
 }`;
 
