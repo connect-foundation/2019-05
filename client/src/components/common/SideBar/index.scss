@@ -49,7 +49,6 @@ img {
 }
 
 .side-bar {
-  // padding: 80px 30px 10px;
   height: 100%;
   z-index: 3000;
   box-sizing: border-box;
@@ -73,11 +72,11 @@ img {
       text-align: center;
     }
     &--loggedin {
-      padding: 100px 30px 10px;
+      padding: 80px 30px 10px;
     }
   }
   &--open {
-    background-color: whitesmoke;
+    background-color: $quick_white;
     right: 0;
   }
   &__content-button {
@@ -91,10 +90,16 @@ img {
     color: $quick_light_navy;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
+    a {
+      color: $quick_light_navy;
+    }
     &:hover,
     &:active {
       background: $quick_light_navy;
       color: $quick_white;
+      a {
+        color: $quick_white;
+      }
     }
   }
   &__content-subject {
@@ -106,13 +111,13 @@ img {
     align-items: center;
   }
   &__emblem {
-    width: 80%;
     display: flex;
     img {
       border-radius: 5%;
     }
   }
   &__team-name-wrapper {
+    margin-bottom: 30px;
     display: flex;
     justify-content: center;
     align-items: center;

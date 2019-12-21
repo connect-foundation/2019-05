@@ -1,6 +1,6 @@
 <h1 align="center">Quick Kick</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-0.9.0-blue.svg?cacheSeconds=2592000" />
   <!--doc -->
   <a href="https://github.com/connect-foundation/2019-05/wiki" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
@@ -62,10 +62,10 @@ yarn start
 
 -   Github:
 
-    -   [@eastgerm](https://github.com/eastgerm) : (verbal)축구 담당
-    -   [@polarb-raf](https://github.com/polarb-raf) : 무게(both of internal and external) 담당
-    -   [@jongnan](https://github.com/jongnan) : (dog)드립 담당
-    -   [@samrho](https://github.com/samrho) : Responsible for English and Documentation (추정)
+    -   [@eastgerm](https://github.com/eastgerm) : 뭐든 알고 쓰고 싶은 유쾌한 개발자 킹동
+    -   [@polarb-raf](https://github.com/polarb-raf) : 내가 만드는 서비스로 세상이 더 행복해지기 바라는 행정학과 출신 개발자 라파엘
+    -   [@jongnan](https://github.com/jongnan) : 언제든지 성장하고 싶어하는 개발자 성개 종난
+    -   [@samrho](https://github.com/samrho) : 기본기의 중요성을 철석같이 믿는 호기심 많은 개발자 샘로
 
 ## 사용 기술
 
@@ -74,45 +74,6 @@ yarn start
 ## 인프라
 
 ![infra](https://ifh.cc/g/7Ng1G.png)
-
-## 프로젝트 폴더 구조
-
-```
-
-📁client
-├── 📁public
-├── 📁src
-│   ├── 📁App
-│   ├── 📁assets
-│   │   └── 📁images
-│   ├── 📁components
-│   │   ├── 📁common
-│   │   │   ├── 📁Footer
-│   │   │   ├── 📁Header
-│   │   ├── 📁home
-│   │   ├── 📁match
-│   │   ├── 📁ranking
-│   │   └── 📁team
-📁server
-├── 📁bin
-├── 📁generated
-│   └── 📁prisma-client
-├── 📁middlewares
-├── 📁routes
-└── 📁views
-```
-
-## 🤝 Contributing
-
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/connect-foundation/2019-05/issues).
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
----
-
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
 
 [wiki]: https://github.com/connect-foundation/2019-05/wiki
 [domain]: https://quickkick.site

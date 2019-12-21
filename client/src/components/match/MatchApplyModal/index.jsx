@@ -63,12 +63,12 @@ const MatchTeamInfoSection = () => {
     <div className="modal-main-section">
       <div className="host-name-container">
         <div className="modal-host-info">
-          <span className="host-info__title">간단한 소개</span>
+          <span className="info__title">호스트 팀 소개</span>
           <h3 className="host-name">{hostInfo.name}</h3>
           <p className="host-info__txt">{hostInfo.introduction}</p>
         </div>
-        <div className="modal-match-information">
-          <span className="modal-info__title">매치 정보</span>
+        <div className="modal-match-info">
+          <span className="info__title">매치 정보</span>
           <p className="match-info__datetime">{`${matchInfo.date}, ${matchInfo.startTime} - ${matchInfo.endTime}`}</p>
           <p className="match-info__location">{`${matchInfo.address} ${matchInfo.stadium}`}</p>
           <p className="modal-info__txt">{matchInfo.description}</p>
@@ -147,7 +147,7 @@ const ApplyButton = (props) => {
   };
 
   return (
-    <div>
+    <div className="apply-btn-container">
       <button type="button" onClick={handleApplyBtn}>
         신청 하기
       </button>

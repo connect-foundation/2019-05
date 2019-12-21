@@ -1,0 +1,55 @@
+/* project color */
+/* common value */
+.header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  height: 60px;
+  background-color: white;
+  -webkit-box-shadow: 0px -4px 24px 2px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px -4px 24px 2px rgba(0, 0, 0, 0.2);
+  z-index: 900;
+}
+
+.header .grid-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 60px;
+  padding: 0 15px;
+}
+
+.header .grid-container > * {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.header__left a {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: #272a51;
+  font-style: italic;
+}
+
+.header__left a .pointChar {
+  color: #28aae2;
+}
+
+.header__left .logo {
+  width: 100%;
+}
+
+.header__right button {
+  position: relative;
+  -webkit-transform: scale(0.7);
+          transform: scale(0.7);
+  outline: none;
+}

@@ -51,6 +51,12 @@ mutation($name: String, $teamUniqueId: String, $owner: Int){
     owner {
       seq
     }
+`;
+
+const DELETE_NOTI_MUTATION = `
+mutation($notiSeq: Int) {
+  DeleteNotifier(seq: $notiSeq) {
+    seq
   }
 }`;
 
@@ -59,4 +65,5 @@ module.exports = {
   MY_NOTIFICATIONS_QUERY,
   UPDATE_PLAYERS_TEAM_INFO,
   CREATE_TEAM,
+  DELETE_NOTI_MUTATION,
 };
