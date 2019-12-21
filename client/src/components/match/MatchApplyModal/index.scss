@@ -45,6 +45,55 @@
         }
       }
     }
+
+    .modal-main-section {
+      padding: 0 50px;
+      .info__title {
+        display: block;
+        width: 100%;
+        padding-bottom: 5px;
+        border-bottom: 1px solid $quick_mint;
+        margin-bottom: 25px;
+        font-size: 16px;
+        font-weight: bold;
+        color: $quick_mint;
+      }
+    }
+
+    .modal-host-info {
+      margin-bottom: 50px;
+      .host-name {
+        margin-bottom: 10px;
+        color: $quick_black;
+        font-size: 16px;
+      }
+      .host-info__txt {
+        word-break: keep-all;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+    }
+
+    .modal-match-info {
+      p {
+        font-size: 14px;
+        line-height: 1.7;
+        color: $quick_black;
+      }
+    }
+
+    .apply-btn-container {
+      padding: 30px 50px;
+      text-align: right;
+      button {
+        padding: 10px 15px;
+        border-radius: 10px;
+        background-color: $quick_navy;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+      }
+    }
   }
   .modal-background {
     width: 100%;
