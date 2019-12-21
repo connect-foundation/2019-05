@@ -73,6 +73,7 @@ $box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.15);
 
 .react_times_button {
   border-radius: $border_radius;
+  text-align: center;
 }
 
 .notification-btn {
@@ -89,6 +90,9 @@ $box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.15);
     font-size: 13px;
     outline: none;
     cursor: pointer;
+    &:hover {
+      opacity: 0.9;
+    }
   }
 }
 
