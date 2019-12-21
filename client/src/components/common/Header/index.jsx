@@ -9,13 +9,11 @@ import './hamburger.css';
 
 const Header = () => (
   <div className="header">
-    <div className="grid-container">
-      <div className="header__left">
-        <ServiceLogo />
-      </div>
-      <div className="header__right">
-        <HamburgerBtn />
-      </div>
+    <div className="header__left">
+      <ServiceLogo />
+    </div>
+    <div className="header__right">
+      <HamburgerBtn />
     </div>
   </div>
 );
