@@ -17,11 +17,15 @@
       margin-right: 10px;
       appearance: none;
       border: 0 none;
-      border-radius: 12px;
+      border-radius: 8px;
       background-color: $quick_navy;
       font-size: 12px;
       font-weight: bold;
       color: #fff;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
 
