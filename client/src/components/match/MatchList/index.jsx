@@ -135,7 +135,7 @@ const MatchList = () => {
 
   const moreButton = pageEnd ? null : (
     <button type="button" className="fetch-more__btn" onClick={handleFetchMore}>
-      더 불러오기
+      <span className="fet-more__btn--span">매치 더보기</span>
     </button>
   );
   return (
@@ -143,7 +143,7 @@ const MatchList = () => {
       <div className="match-list">
         {renderingMatchListView(listState, reFetchList, currentList)}
       </div>
-      <div className="fetch-more">{moreButton}</div>
+      <div className="fetch-more__wrraper">{moreButton}</div>
     </>
   );
 };

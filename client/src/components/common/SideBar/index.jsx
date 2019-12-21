@@ -13,7 +13,7 @@ import { UserInfoForm, TeamCodeForm } from '../../sidebar';
 import useAsync from '../../../hooks/useAsync';
 import { updatePlayerInfo } from '../../../util/functions';
 import './index.scss';
-import { getNotiList } from '../../../util/functions';
+import { getNotiList, deleteNotification } from '../../../util/functions';
 import { convertDistrictCode } from '../../../util/district';
 
 const SideBar = () => {
@@ -208,39 +208,41 @@ const Notifications = () => {
 const NotiList = () => {
   const { userState } = useContext(UserContext);
   const { seq } = userState.playerInfo;
-  const [notiState, dispatch] = useAsync(getNotiList.bind(null, seq), [
-    userState,
-  ]);
-  console.log(notiState);
-  const handleCancelBtnClick = (e) => {
+  const [notiState, dispatch] = useAsync(getNotiList.bind(null, seq), [seq]);
+
+  const handleCancelBtnClick = async (seq, e) => {
     e.stopPropagation();
-    alert('알림을 취소하였습니다. ');
+    deleteNotification(seq).then((_) => dispatch());
   };
 
   return notiState.data ? (
-    <ul>
-      {notiState.data.map((noti) => (
-        <li key={noti.seq}>
-          <hr />
-          <div className="noti-item">
-            <div>
-              {noti.startTime} - {noti.endTime}
+    notiState.data.length ? (
+      <ul>
+        {notiState.data.map((noti) => (
+          <li key={noti.seq}>
+            <hr />
+            <div className="noti-item">
+              <div>
+                {noti.startTime} - {noti.endTime}
+              </div>
+              <div>
+                @
+                {`${convertDistrictCode(noti.area[0])} 외 ${noti.area.length -
+                  1}개 구`}
+              </div>
+              <button
+                className="noti-item__cancel-btn"
+                onClick={handleCancelBtnClick.bind(null, noti.seq)}
+              >
+                🔕
+              </button>
             </div>
-            <div>
-              @
-              {`${convertDistrictCode(noti.area[0])} 외 ${noti.area.length -
-                1}개 구`}
-            </div>
-            <button
-              className="noti-item__cancel-btn"
-              onClick={handleCancelBtnClick}
-            >
-              🔕
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div>데이터가 없습니다.</div>
+    )
   ) : (
     <div>로딩중...</div>
   );

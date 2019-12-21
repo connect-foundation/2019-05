@@ -47,6 +47,7 @@ const setSubscription = (req, res) => {
   res.sendStatus(201);
 };
 
+// 매치 신청을 했을 때 매치 주인(갑)에게 보내는 이메일
 const sendEmailNotification = async (req, _, next) => {
   console.log('---email---');
   const { playerInfo } = req.body;
@@ -59,6 +60,7 @@ const sendEmailNotification = async (req, _, next) => {
   next();
 };
 
+// 매치 신청을 했을 때 매치 주인(갑)에게 보내는 문자메세지
 const sendSMSNotification = async (req, _, next) => {
   console.log('---sms---');
   const { playerInfo, matchInfo } = req.body;
@@ -80,8 +82,8 @@ const sendSMSNotification = async (req, _, next) => {
     content,
   };
   try {
+    // 여기를 주석처리하면 문자메세지가 전송이 되지 않는다.
     const result = await axios.post(URL, JSON.stringify(requestBody), headerOp);
-    // console.log(result);
   } catch (e) {
     console.error(e);
   }

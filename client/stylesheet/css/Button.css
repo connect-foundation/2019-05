@@ -1,0 +1,27 @@
+/* project color */
+/* common value */
+.button {
+  border-radius: 4px;
+}
+
+.button--big {
+  width: 50px;
+  height: 30px;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button--team {
+  width: 100px;
+  height: 30px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  background-color: #373d75;
+}
+
+.button--team:hover {
+  background-color: #272a51;
+}

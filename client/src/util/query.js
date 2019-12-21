@@ -31,7 +31,15 @@ query($playerSeq: Int) {
   }
 }`;
 
+const DELETE_NOTI_MUTATION = `
+mutation($notiSeq: Int) {
+  DeleteNotifier(seq: $notiSeq) {
+    seq
+  }
+}`;
+
 module.exports = {
   TEAM_INFO_FETCH_QUERY,
   MY_NOTIFICATIONS_QUERY,
+  DELETE_NOTI_MUTATION,
 };

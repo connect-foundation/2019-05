@@ -7,7 +7,9 @@
   height: $match-card-height;
   box-sizing: border-box;
   border: 1px solid #cecece;
-  margin: 0 0 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 10px auto;
 
   &:before {
     position: absolute;
