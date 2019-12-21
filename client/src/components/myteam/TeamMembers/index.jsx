@@ -26,7 +26,7 @@ const TeamMembers = ({ members }) => {
   return (
     <div className="team-members">
       <div className="grid-container">
-        <h2>멤버리스트</h2>
+        <h2>멤버 리스트</h2>
         <div className="members-list">
           <table>
             <thead>
