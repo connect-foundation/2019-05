@@ -9,11 +9,11 @@ import {
   SideBarContext,
 } from '../../../contexts/SideBar';
 import { UserContext, UserActionCreator } from '../../../contexts/User';
-import { UserInfoForm, TeamCodeForm } from '../../sidebar';
+import { UserInfoForm, TeamCodeForm, TeamCreationForm } from '../../sidebar';
 import useAsync from '../../../hooks/useAsync';
 import { updatePlayerInfo } from '../../../util/functions';
 import './index.scss';
-import { getNotiList } from '../../../util/functions';
+import { getNotiList, deleteNotification } from '../../../util/functions';
 import { convertDistrictCode } from '../../../util/district';
 
 const SideBar = () => {
@@ -80,14 +80,10 @@ const InnerLayer = () => {
 const WhenLoggedInWithInfo = () => {
   return (
     <>
-      <NotiToggleButton />
       <TeamInfo />
-      <ContentButton>
-        <span role="img" aria-label="rocket">
-          🚀
-        </span>
-        예시 버튼
-      </ContentButton>
+      <GoToHomeBtn />
+      <GoToMatchBtn />
+      <GoToTeamBtn />
       <Notifications />
       <EmptySpace />
       <LogoutButton />
@@ -98,6 +94,29 @@ const WhenLoggedInWithInfo = () => {
 const WhenLoggedInWithoutInfo = () => {
   const { userState } = useContext(UserContext);
   const { name, team } = userState.playerInfo;
+
+  const TeamLayer = () => {
+    return (
+      <>
+        <TeamCreateLayer />
+        <TeamCodeLayer />
+      </>
+    );
+  };
+
+  const TeamCreateLayer = () => {
+    const [formToggle, setFormToggle] = useState(false);
+    const handleOnClick = () => {
+      setFormToggle(!formToggle);
+    };
+    const TeamCodeBtn = () => (
+      <button type="button" onClick={handleOnClick}>
+        팀 생성하러 가기 !!
+      </button>
+    );
+
+    return <>{formToggle ? <TeamCreationForm /> : <TeamCodeBtn />}</>;
+  };
 
   const TeamCodeLayer = () => {
     const [formToggle, setFormToggle] = useState(false);
@@ -129,7 +148,7 @@ const WhenLoggedInWithoutInfo = () => {
 
   return (
     <>
-      {team ? <TeamInfo /> : <TeamCodeLayer />}
+      {team ? <TeamInfo /> : <TeamLayer />}
       {!name && <UserInfoLayer />}
       <EmptySpace />
       <LogoutButton />
@@ -208,39 +227,41 @@ const Notifications = () => {
 const NotiList = () => {
   const { userState } = useContext(UserContext);
   const { seq } = userState.playerInfo;
-  const [notiState, dispatch] = useAsync(getNotiList.bind(null, seq), [
-    userState,
-  ]);
-  console.log(notiState);
-  const handleCancelBtnClick = (e) => {
+  const [notiState, dispatch] = useAsync(getNotiList.bind(null, seq), [seq]);
+
+  const handleCancelBtnClick = async (seq, e) => {
     e.stopPropagation();
-    alert('알림을 취소하였습니다. ');
+    deleteNotification(seq).then((_) => dispatch());
   };
 
   return notiState.data ? (
-    <ul>
-      {notiState.data.map((noti) => (
-        <li key={noti.seq}>
-          <hr />
-          <div className="noti-item">
-            <div>
-              {noti.startTime} - {noti.endTime}
+    notiState.data.length ? (
+      <ul>
+        {notiState.data.map((noti) => (
+          <li key={noti.seq}>
+            <hr />
+            <div className="noti-item">
+              <div>
+                {noti.startTime} - {noti.endTime}
+              </div>
+              <div>
+                @
+                {`${convertDistrictCode(noti.area[0])} 외 ${noti.area.length -
+                  1}개 구`}
+              </div>
+              <button
+                className="noti-item__cancel-btn"
+                onClick={handleCancelBtnClick.bind(null, noti.seq)}
+              >
+                🔕
+              </button>
             </div>
-            <div>
-              @
-              {`${convertDistrictCode(noti.area[0])} 외 ${noti.area.length -
-                1}개 구`}
-            </div>
-            <button
-              className="noti-item__cancel-btn"
-              onClick={handleCancelBtnClick}
-            >
-              🔕
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div>데이터가 없습니다.</div>
+    )
   ) : (
     <div>로딩중...</div>
   );
@@ -254,41 +275,17 @@ const CloseBtn = ({ activated, setActivated }) => (
   </div>
 );
 
-const NotiToggleButton = () => {
-  const [toggle, setToggle] = useState(true);
-  const toggleClass = classNames({
-    'noti-toggle-btn': true,
-    'noti-toggle-btn--on': toggle,
-    'noti-toggle-btn--off': !toggle,
-  });
-  const handleClick = () => {
-    setToggle(!toggle);
-  };
-
-  return (
-    <div className={toggleClass} onClick={handleClick}>
-      PUSH:&nbsp; {toggle ? 'ON' : 'OFF'}
-    </div>
-  );
-};
-
-const TeamInfo = () => {
-  const { sideBarDispatch } = useContext(SideBarContext);
+const NavButton = ({ to, title }) => {
+  const { sideBarState, sideBarDispatch } = useContext(SideBarContext);
   const handleCloseSideBar = () => {
-    sideBarDispatch(SideBarActionCreator.toggleActivated());
+    if (sideBarState.activated)
+      sideBarDispatch(SideBarActionCreator.toggleActivated());
   };
 
   return (
-    <div>
-      <Emblem />
-      <Link to="/myteam" onClick={handleCloseSideBar}>
-        <ContentButton>
-          <span role="img" aria-label="config">
-            ⚙️팀 페이지
-          </span>
-        </ContentButton>
-      </Link>
-    </div>
+    <Link to={to} onClick={handleCloseSideBar}>
+      <ContentButton>{title}</ContentButton>
+    </Link>
   );
 };
 
@@ -298,7 +295,11 @@ const ContentButton = ({ className = '', children, onClick }) => (
   </div>
 );
 
-const Emblem = () => {
+const GoToHomeBtn = () => <NavButton to="/" title="🏠홈으로" />;
+const GoToMatchBtn = () => <NavButton to="/match" title="🔥매치 페이지" />;
+const GoToTeamBtn = () => <NavButton to="/myteam" title="⚙️팀 페이지" />;
+
+const TeamInfo = () => {
   const { userState } = useContext(UserContext);
   const { playerInfo } = userState;
   const logo = playerInfo && playerInfo.team ? playerInfo.team.logo : null;
@@ -328,12 +329,10 @@ const AuthButton = ({ provider }) => {
   const message = `${provider === 'naver' ? '네이버' : '카카오'}  로그인`;
 
   return (
-    <>
-      <div className={`new-auth-button new-auth-button--${provider}`}>
-        <img className="auth-logo" src={`${provider}.svg`} alt="" />
-        <span className="auth-message">{message}</span>
-      </div>
-    </>
+    <div className={`new-auth-button new-auth-button--${provider}`}>
+      <img className="auth-logo" src={`${provider}.svg`} alt="" />
+      <span className="auth-message">{message}</span>
+    </div>
   );
 };
 

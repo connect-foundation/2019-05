@@ -1,6 +1,6 @@
 /* project color */
 $quick_navy: #272a51;
-$quick_mint: #71acad;
+$quick_mint: #28aae2;
 $quick_black: #1a252a;
 $quick_white: #fff;
 $quick_light_navy: #373d75;
@@ -12,3 +12,33 @@ $footer-height: 80px;
 
 $match-card-height: 130px;
 $match-card-width: 530px;
+
+td,
+th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+tr {
+  th {
+    text-align: center;
+  }
+  td {
+    padding: 10px 30px;
+  }
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: $quick_mint;
+  color: white;
+}
+
+.CalendarDay__selected {
+  background-color: $quick_mint;
+}

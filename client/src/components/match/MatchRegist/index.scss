@@ -1,19 +1,29 @@
 @import '../../../commonStyle';
 
 .match-register__btn--wrapper {
-  padding: 10px 20px;
+  box-sizing: border-box;
+  margin: 30px 0 30px 0;
   .match-register__btn {
-    display: block;
-    margin: 0 0 0 auto;
-    width: 80px;
-    height: 30px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 0 auto;
+    width: 532px;
+    height: 50px;
     background-color: $quick_navy;
     border: 0 none;
-    border-radius: 15px;
-    font-size: 13px;
+    border-radius: 10px;
+    font-size: 20px;
     font-weight: bold;
     color: #fff;
     appearance: none;
     cursor: pointer;
+    .plus__image {
+      width: 23px;
+      height: 23px;
+      margin-right: 5px;
+    }
+    &:hover {
+      opacity: 0.7;
+    }
   }
 }

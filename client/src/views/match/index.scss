@@ -1,5 +1,18 @@
 .match {
+  position: relative;
   .match-container {
     display: flex;
+    .match-board__container {
+      position: relative;
+    }
+    .match-filter__container {
+      position: sticky;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      top: 150px;
+      margin-top: 90px;
+      height: 530px;
+    }
   }
 }

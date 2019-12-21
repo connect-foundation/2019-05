@@ -47,8 +47,8 @@ const setSubscription = (req, res) => {
   res.sendStatus(201);
 };
 
+// 매치 신청을 했을 때 매치 주인(갑)에게 보내는 이메일 ---email---
 const sendEmailNotification = async (req, _, next) => {
-  console.log('---email---');
   const { playerInfo } = req.body;
   const { author } = req.body.matchInfo;
   const to = author.email;
@@ -59,10 +59,9 @@ const sendEmailNotification = async (req, _, next) => {
   next();
 };
 
+// 매치 신청을 했을 때 매치 주인(갑)에게 보내는 문자메세지 ---sms---
 const sendSMSNotification = async (req, _, next) => {
-  console.log('---sms---');
   const { playerInfo, matchInfo } = req.body;
-  console.log(matchInfo);
   const content = makeMsgContent(matchInfo, playerInfo);
   const serviceId = env.NAVER_SMS_API_ID;
   const headerOp = {
@@ -80,8 +79,8 @@ const sendSMSNotification = async (req, _, next) => {
     content,
   };
   try {
+    // 여기를 주석처리하면 문자메세지가 전송이 되지 않는다.
     const result = await axios.post(URL, JSON.stringify(requestBody), headerOp);
-    // console.log(result);
   } catch (e) {
     console.error(e);
   }

@@ -82,12 +82,21 @@ const resolvers = {
     },
   }, // query
   Mutation: {
-    CreateTeam: (_, { name, logo, homeArea, introduction }, { prisma }) => {
+    CreateTeam: (_, { name, teamUniqueId, owner }, { prisma }) => {
       return prisma.createTeam({
         name,
-        logo,
-        homeArea,
-        introduction,
+        teamUniqueId,
+        owner: owner
+          ? {
+              connect: {
+                seq: owner,
+              },
+            }
+          : null,
+        win: 0,
+        draw: 0,
+        lose: 0,
+        rating: 1000,
       });
     },
     CreatePlayer: (_, { playerId, team, name, phone, email }, { prisma }) => {
@@ -236,6 +245,9 @@ const resolvers = {
           seq,
         },
       });
+    },
+    DeleteNotifier: (_, { seq }, { prisma }) => {
+      return prisma.deleteNotifier({ seq });
     },
   }, // mutation
   Match: {

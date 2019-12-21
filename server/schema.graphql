@@ -1,129 +1,136 @@
 type Team {
-    seq: Int!
-    name: String!
-    logo: String
-    homeArea: Area
-    introduction: String
-    win: Int!
-    draw: Int!
-    lose: Int!
-    rating: Int!
-    teamUniqueId: String!
-    owner: Player
-    members: [Player!]
-    uploadMatchList: [Match!]
-    matchingDoneList: [Match!]
-    onApplyingList: [Apply!]
+  seq: Int!
+  name: String!
+  logo: String
+  homeArea: Area
+  introduction: String
+  win: Int!
+  draw: Int!
+  lose: Int!
+  rating: Int!
+  teamUniqueId: String!
+  owner: Player
+  members: [Player!]
+  uploadMatchList: [Match!]
+  matchingDoneList: [Match!]
+  onApplyingList: [Apply!]
 }
 
 type Player {
-    seq: Int!
-    playerId: String!
-    team: Team
-    name: String
-    phone: String
-    email: String
-    authProvider: Auth!
-    notiList: [Notifier!]
-    uploadMatchList: [Match!]
-    teamCreate: [Team]
-    applyingList: [Apply]
+  seq: Int!
+  playerId: String!
+  team: Team
+  name: String
+  phone: String
+  email: String
+  authProvider: Auth!
+  notiList: [Notifier!]
+  uploadMatchList: [Match!]
+  teamCreate: [Team]
+  applyingList: [Apply]
 }
 enum Auth {
-    KAKAO
-    NAVER
+  KAKAO
+  NAVER
 }
 enum Result {
-    HOST
-    GUEST
-    DRAW
+  HOST
+  GUEST
+  DRAW
 }
-enum Area{
-    CNO
-    CGS
-    YSN
-    SDG
-    KJI
-    TDM
-    CNG
-    SBK
-    KBK
-    TBG
-    NWN
-    UPG
-    SDM
-    MPO
-    YGC
-    KSS
-    KRO
-    KCN
-    YDP
-    TJK
-    KNK
-    SCO
-    KNM
-    SPA
-    KDG
+enum Area {
+  CNO
+  CGS
+  YSN
+  SDG
+  KJI
+  TDM
+  CNG
+  SBK
+  KBK
+  TBG
+  NWN
+  UPG
+  SDM
+  MPO
+  YGC
+  KSS
+  KRO
+  KCN
+  YDP
+  TJK
+  KNK
+  SCO
+  KNM
+  SPA
+  KDG
 }
 
 type Match {
-    seq: Int!
-    author: Player!
-    host: Team!
-    guest: Team
-    status: Status!
-    stadium: String!
-    address: String
-    area: Area!
-    date: String!
-    startTime: String!
-    endTime: String!
-    description: String
-    result: Result
-    appliedLists: [Apply!]
+  seq: Int!
+  author: Player!
+  host: Team!
+  guest: Team
+  status: Status!
+  stadium: String!
+  address: String
+  area: Area!
+  date: String!
+  startTime: String!
+  endTime: String!
+  description: String
+  result: Result
+  appliedLists: [Apply!]
 }
 
 enum Status {
-    OPEN
-    CLOSED
+  OPEN
+  CLOSED
 }
 
-type Apply{
-    seq: Int!
-    team: Team
-    player: Player
-    match: Match
+type Apply {
+  seq: Int!
+  team: Team
+  player: Player
+  match: Match
 }
 
-type Notifier{
-    seq: Int!
-    player: Player!
-    area: [Area]
-    date: String
-    startTime: String
-    endTime: String
+type Notifier {
+  seq: Int!
+  player: Player!
+  area: [Area]
+  date: String
+  startTime: String
+  endTime: String
 }
 
 type Stadium {
-    seq: Int!
-    name: String
-    address: String
+  seq: Int!
+  name: String
+  address: String
 }
 
 type Query {
-    Matches(seq:Int, area:Area, host:Int): [Match!]
-    PendingMatches(first: Int, skip: Int, area: [Area], startTime: String, endTime: String, date: String): [Match!]
-    Match(seq:Int): Match
-    Teams(seq: Int): [Team]
-    Team(seq:Int, teamUniqueId:String): Team
-    Players(seq:Int, playerId:String, team:Int): [Player]
-    Player(seq: Int, playerId: String): Player
-    Notifiers(seq:Int, player:Int): [Notifier]
-    Notifier(seq:Int): Notifier
+  Matches(seq: Int, area: Area, host: Int): [Match!]
+  PendingMatches(
+    first: Int
+    skip: Int
+    area: [Area]
+    startTime: String
+    endTime: String
+    date: String
+  ): [Match!]
+  Match(seq: Int): Match
+  Teams(seq: Int): [Team]
+  Team(seq: Int, teamUniqueId: String): Team
+  Players(seq: Int, playerId: String, team: Int): [Player]
+  Player(seq: Int, playerId: String): Player
+  Notifiers(seq: Int, player: Int): [Notifier]
+  Notifier(seq: Int): Notifier
 }
 
 type Mutation {
-    CreateTeam(name: String, logo:String, homeArea: Area, introduction: String ): Team
+    CreateTeam(name:String, teamUniqueId:String, owner:Int): Team
     CreatePlayer(playerId:String, team:Int, name: String, phone: String, email:String): Player
     CreateMatch(host: Int, author:String, stadium: String, area:Area, date:String, startTime: String, endTime: String, description: String, address: String): Match
     MatchGuest(seq: Int, guest: Int): Match
@@ -132,4 +139,5 @@ type Mutation {
     ApplyMatch(team: Int, player:Int, match: Int): Apply
     UpdatePlayerInfo(seq: Int, name: String, phone: String, email: String): Player
     UpdatePlayersTeamInfo(seq: Int, teamUniqueId: String): Player
+    DeleteNotifier(seq: Int): Notifier
 }
