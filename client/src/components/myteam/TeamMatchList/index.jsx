@@ -2,15 +2,34 @@ import React, { useState } from 'react';
 import { convertDistrictCode } from '../../../util';
 import './index.scss';
 
-const TeamMatchCard = ({ matchInfo }) => {
+const TeamMatchCard = ({ matchInfo, mode }) => {
+  const appliedList =
+    mode && matchInfo.appliedLists.length > 0 ? (
+      <div className="applied-team-list">
+        {matchInfo.appliedLists.map((val) => {
+          return (
+            <div className="applied-team-card">
+              <div className="applied-team-info">{val.team.name}</div>
+              <div className="applied-team-info">{val.player.phone}</div>
+              <div className="applied-team-info">{val.player.email}</div>
+            </div>
+          );
+        })}
+      </div>
+    ) : null;
   return (
-    <div className="team-match__card">
-      <p className="team-match__date">{matchInfo.date}</p>
-      <p className="team-match__time">
-        {matchInfo.startTime}-{matchInfo.endTime}
-      </p>
-      <p className="team-match__area">{convertDistrictCode(matchInfo.area)}</p>
-      <p className="team-match__stadium">{matchInfo.stadium}</p>
+    <div>
+      <div className="team-match__card">
+        <p className="team-match__date">{matchInfo.date}</p>
+        <p className="team-match__time">
+          {matchInfo.startTime}-{matchInfo.endTime}
+        </p>
+        <p className="team-match__area">
+          {convertDistrictCode(matchInfo.area)}
+        </p>
+        <p className="team-match__stadium">{matchInfo.stadium}</p>
+      </div>
+      {appliedList}
     </div>
   );
 };
@@ -24,7 +43,13 @@ const TeamMatchList = ({ uploadMatches, applyingMatches }) => {
       );
     return matchList.map((val) => {
       const cardValue = listMode === 'upload' ? val : val.match;
-      return <TeamMatchCard matchInfo={cardValue} key={cardValue.seq} />;
+      return (
+        <TeamMatchCard
+          matchInfo={cardValue}
+          key={cardValue.seq}
+          mode={listMode === 'upload'}
+        />
+      );
     });
   };
   const handleCategoryBtnClick = () => {
@@ -32,6 +57,7 @@ const TeamMatchList = ({ uploadMatches, applyingMatches }) => {
     setListMode(nextMode);
   };
   const matchList = listMode === 'upload' ? uploadMatches : applyingMatches;
+  if (!matchList) return null;
   return (
     <div className="team-match">
       <div className="grid-container">
@@ -44,7 +70,7 @@ const TeamMatchList = ({ uploadMatches, applyingMatches }) => {
             }`}
             onClick={handleCategoryBtnClick}
           >
-            업로드한 경기
+            내가 등록한 경기
           </button>
           <button
             type="button"
@@ -53,7 +79,7 @@ const TeamMatchList = ({ uploadMatches, applyingMatches }) => {
             }`}
             onClick={handleCategoryBtnClick}
           >
-            신청한 경기
+            내가 신청한 경기
           </button>
         </div>
         <div className="team-match__container">

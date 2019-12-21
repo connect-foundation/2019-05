@@ -38,6 +38,10 @@ query ($seq: Int){
         team{
           name
         }
+        player{
+          phone
+          email
+        }
       }
     }
     onApplyingList {
