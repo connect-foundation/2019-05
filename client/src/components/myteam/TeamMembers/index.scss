@@ -38,13 +38,3 @@
     color: white;
   }
 }
-
-.CalendarDay__selected {
-  background-color: $quick_mint;
-  border: 1px solid $quick_mint;
-  &:hover,
-  &:active {
-    background-color: $quick_light_navy;
-    border: 1px solid $quick_light_navy;
-  }
-}
