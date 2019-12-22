@@ -75,7 +75,7 @@ const sendSMSNotification = async (req, _, next) => {
   const requestBody = {
     type: 'SMS',
     from: env.UNDERDOGGS_PHONE,
-    to: [matchInfo.author.phone],
+    to: [matchInfo.author.phone.replace(/-/g, '')],
     content,
   };
   try {
