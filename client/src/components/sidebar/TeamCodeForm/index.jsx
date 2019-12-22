@@ -4,7 +4,7 @@ import TextInputSection from '../TextInputSection';
 import { UserActionCreator, UserContext } from '../../../contexts/User';
 import { UPDATE_PLAYERS_TEAM_INFO } from '../../../util/query';
 
-const TeamCodeForm = () => {
+const TeamCodeForm = ({ handleCancel }) => {
   const { userState, userDispatch } = useContext(UserContext);
   const formRef = useRef();
   const makeFormData = () => {
@@ -57,9 +57,14 @@ const TeamCodeForm = () => {
         idText="teamCode"
         required={Boolean(true)}
       />
-      <button type="submit" className="submit-btn">
-        등록하기
-      </button>
+      <div className="form-buttons">
+        <button type="submit" className="btn child-btn">
+          등록하기
+        </button>
+        <button type="button" className="btn child-btn" onClick={handleCancel}>
+          취소
+        </button>
+      </div>
     </form>
   );
 };
