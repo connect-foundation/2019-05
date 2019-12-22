@@ -62,6 +62,10 @@ img {
 }
 
 .side-bar {
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
   height: 100%;
   z-index: 3000;
   box-sizing: border-box;
