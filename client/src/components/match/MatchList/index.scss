@@ -2,7 +2,7 @@
 
 .match-list {
   width: $match-card-width + 16px;
-  text-align: center;
+  //text-align: center;
   .no-list-view {
     display: flex;
     align-items: center;
@@ -10,6 +10,7 @@
     font-size: 20px;
     color: #272a51;
     white-space: pre-wrap;
+    text-align: center;
   }
 }
 .fetch-more__btn {

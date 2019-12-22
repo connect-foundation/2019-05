@@ -1,7 +1,7 @@
 const { env } = process;
 const webpush = require('web-push');
-const subscriptionMap = {};
 const axios = require('axios');
+const subscriptionMap = require('../../utils/subscriptionMap');
 const mailSender = require('../../utils/nodemailer');
 const makeMsgContent = require('../../utils/makeMsgContent');
 const makeMailContent = require('../../utils/makeMailContent');

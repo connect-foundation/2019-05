@@ -2,6 +2,8 @@ require('dotenv').config({ path: '../.env.development' });
 const { env } = process;
 const { prisma } = require('../generated/prisma-client');
 const mailSender = require('../utils/nodemailer');
+const subscriptionMap = require('../utils/subscriptionMap');
+const webpush = require('web-push');
 const axios = require('axios');
 const _ = require('lodash');
 const convertDistrictCode = require('../utils/district');
@@ -26,6 +28,18 @@ const findNotifier = async (date, startTime, endTime, area) => {
   const uniquePlayerList = _.uniqWith(playerList, _.isEqual);
   sendEmailNotification(uniquePlayerList);
   sendSMSNotification(uniquePlayerList, { date, startTime, endTime, area });
+  sendWebpushNotification(uniquePlayerList);
+};
+
+const sendWebpushNotification = async (uniquePlayerList) => {
+  for await (const player of uniquePlayerList) {
+    const sub = subscriptionMap[player.player.playerId];
+    try {
+      await webpush.sendNotification(sub);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 
 const filterArea = (notiArray, areaString) => {
