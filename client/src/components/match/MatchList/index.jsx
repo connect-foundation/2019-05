@@ -87,6 +87,10 @@ const MatchList = () => {
     setPageEnd(!hasNext);
     setMatchList((prev) => {
       if (!prev) return [...matchList];
+      if (currentPage === 0) {
+        if (prev.length > 0) return [...prev];
+        return [...matchList];
+      }
       return [...prev, ...matchList];
     });
   }, [matchData]);
@@ -98,35 +102,24 @@ const MatchList = () => {
   return (
     <div className="match-list">
       {(() => {
-        if (!currentList) {
+        if (!currentList || !prevList) {
           return null;
         }
-        if (loading) {
-          if (!prevList) {
-            return null;
+        if (prevList.length > 0 && currentList.length === 0) {
+          const view = prevList.map((match) => (
+            <MatchCard key={match.seq} matchInfo={match} />
+          ));
+          if (!isPageEnd) {
+            view.push(
+              <MoreButton key="more-btn" handleFetchMore={handleFetchMore} />
+            );
           }
-          if (
-            prevList.length === 0 &&
-            currentList.length < MATCH_LIST_COUNT_PER_PAGE
-          ) {
+          return view;
+        }
+        if (currentList.length === 0 && prevList.length === 0) {
+          if (loading) {
             return FetchLoadingView();
           }
-          if (
-            prevList.length > 0 &&
-            (prevList.length === currentList.length || currentList.length === 0)
-          ) {
-            const view = prevList.map((match) => (
-              <MatchCard key={match.seq} matchInfo={match} />
-            ));
-            if (!isPageEnd && prevList.length > 0) {
-              view.push(
-                <MoreButton key="more-btn" handleFetchMore={handleFetchMore} />
-              );
-            }
-            return view;
-          }
-        }
-        if (currentList.length === 0) {
           return <span className="no-list-view">{NO_MATCHED_LIST_MSG}</span>;
         }
         const view = currentList.map((match) => (
