@@ -65,7 +65,9 @@ const sendEmailNotification = async (uniquePlayerList) => {
 
 const sendSMSNotification = async (uniquePlayerList, matchInfo) => {
   const { date, startTime, area } = matchInfo;
-  const receivers = uniquePlayerList.map((playerObj) => playerObj.player.phone);
+  const receivers = uniquePlayerList.map((playerObj) =>
+    playerObj.player.phone.replace(/-/g, '')
+  );
   console.log(receivers, 'receivers');
   if (!receivers.length) return;
   const content = `[퀵킥 매치 알림] 

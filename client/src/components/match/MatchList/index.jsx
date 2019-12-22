@@ -5,37 +5,11 @@ import useAsync from '../../../hooks/useAsync';
 import { FilterContext } from '../../../contexts/Filter';
 import { MatchContext } from '../../../contexts/Match';
 import { FetchLoadingView } from '../../../template';
+import { MATCH_LIST_FETCH_QUERY } from '../../../util/query';
 import './index.scss';
 
 const MATCH_LIST_COUNT_PER_PAGE = 10;
-const MATCH_LIST_FETCH_QUERY = `
-query ($first: Int, $skip: Int, $startTime: String, $endTime: String, $date: String, $area: [Area]){
-  PendingMatches(first: $first, skip: $skip, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
-    seq
-    author {
-      seq
-      playerId
-      name
-      phone
-      email
-    }
-    host{
-      seq
-      name
-      logo
-      introduction
-    }
-    address
-    area
-    stadium
-    date
-    startTime
-    endTime
-    description
-  }
-}`;
 
-const LIST_FETCH_ERROR_MSG = '리스트 불러오기를 실패했습니다...';
 const NO_MATCHED_LIST_MSG = `원하시는 조건에 맞는 경기가 없어요
   경기를 등록하거나 다른 날짜, 시간을 찾아보시는 것은 어떨까요? :)`;
 
@@ -48,7 +22,7 @@ const getSelectedDistrictArray = (districtInfo) => {
 };
 
 const createQueryBaseOnState = (filter, districtInfo, page) => {
-  const queryValue = {
+  return {
     query: MATCH_LIST_FETCH_QUERY,
     variables: {
       startTime: filter.startTime,
@@ -59,7 +33,6 @@ const createQueryBaseOnState = (filter, districtInfo, page) => {
       first: MATCH_LIST_COUNT_PER_PAGE,
     },
   };
-  return queryValue;
 };
 
 const getMatchList = async (fetchQuery) => {
@@ -72,7 +45,7 @@ const getMatchList = async (fetchQuery) => {
     },
     data: JSON.stringify(fetchQuery),
   });
-  return response.data.data.PendingMatches;
+  return response.data.data;
 };
 
 const MatchList = () => {
@@ -103,18 +76,20 @@ const MatchList = () => {
   const [listState] = useAsync(getMatchList.bind(null, fetchQuery), [
     fetchQuery,
   ]);
-  const { loading, data: matchList } = listState;
+  const { loading, data: matchData } = listState;
 
   useEffect(() => {
-    if (!matchList) return;
-    if (matchList.length < MATCH_LIST_COUNT_PER_PAGE) {
-      setPageEnd(true);
-    }
+    if (!matchData) return;
+    const {
+      PendingMatches: matchList,
+      MatchConnection: { hasNext },
+    } = matchData;
+    setPageEnd(!hasNext);
     setMatchList((prev) => {
       if (!prev) return [...matchList];
       return [...prev, ...matchList];
     });
-  }, [matchList]);
+  }, [matchData]);
 
   const handleFetchMore = () => {
     setPage(currentPage + 1);
@@ -124,10 +99,8 @@ const MatchList = () => {
     <div className="match-list">
       {(() => {
         if (!currentList) {
-          console.log('start');
           return null;
         }
-
         if (loading) {
           if (!prevList) {
             return null;
