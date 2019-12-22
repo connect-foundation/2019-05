@@ -61,10 +61,94 @@ mutation($notiSeq: Int) {
   }
 }`;
 
+const MATCH_LIST_FETCH_QUERY = `
+query ($first: Int, $skip: Int, $startTime: String, $endTime: String, $date: String, $area: [Area]){
+  PendingMatches(first: $first, skip: $skip, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
+    seq
+    author {
+      seq
+      playerId
+      name
+      phone
+      email
+    }
+    host{
+      seq
+      name
+      logo
+      introduction
+    }
+    address
+    area
+    stadium
+    date
+    startTime
+    endTime
+    description
+  }
+  MatchConnection(first: $first, skip: $skip, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
+    hasNext
+  }
+}`;
+
+const MYTEAM_INFO_FETCH_QUERY = `
+query ($seq: Int){
+  Team(seq:$seq){
+    seq
+    name
+    logo
+    homeArea
+    introduction
+    teamUniqueId
+    members{
+      seq
+      name
+      phone
+      email
+    }
+    uploadMatchList{
+      seq
+      stadium
+      address
+      area
+      date
+      startTime
+      endTime
+      appliedLists {
+        seq
+        team{
+          name
+        }
+        player{
+          phone
+          email
+        }
+      }
+    }
+    onApplyingList {
+      seq
+      match {
+        seq
+        host {
+          name
+        }
+        stadium
+        address
+        area
+        date
+        startTime
+        endTime
+      }
+    }
+  }
+}`;
+
 module.exports = {
   TEAM_INFO_FETCH_QUERY,
   MY_NOTIFICATIONS_QUERY,
   UPDATE_PLAYERS_TEAM_INFO,
   CREATE_TEAM,
   DELETE_NOTI_MUTATION,
+  MATCH_LIST_FETCH_QUERY,
+  MYTEAM_INFO_FETCH_QUERY,
 };

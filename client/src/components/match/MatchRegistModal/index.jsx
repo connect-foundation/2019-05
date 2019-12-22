@@ -125,6 +125,7 @@ const ModalForm = () => {
     const result = await data.json();
 
     if (result.error) return false;
+    formRef.current.reset();
     return result.data.CreateMatch;
   };
 
