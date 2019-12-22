@@ -30,8 +30,8 @@ const sendPushNotification = async (req, res) => {
   } catch (error) {
     if (error.statusCode === HOST_STATUS_LOGOUT) {
       res.sendStatus(200);
+      return;
     }
-    res.status(500).json({ errorMsg: error });
   }
 };
 

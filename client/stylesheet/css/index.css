@@ -1,31 +1,44 @@
-.match {
-  position: relative;
+/* project color */
+/* common value */
+.match-list {
+  width: 546px;
+  text-align: center;
 }
 
-.match .match-container {
+.match-list .no-list-view {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 60vh;
+  font-size: 20px;
+  color: #272a51;
+  white-space: pre-wrap;
 }
 
-.match .match-container .match-board__container {
-  position: relative;
-}
-
-.match .match-container .match-filter__container {
-  position: -webkit-sticky;
-  position: sticky;
+.fetch-more__btn {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  top: 150px;
-  margin-top: 90px;
-  height: 530px;
+  margin: 20px auto 50px auto;
+  width: 130px;
+  height: 40px;
+  background-color: #272a51;
+  border: 0 none;
+  border-radius: 10px;
+  color: #fff;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  cursor: pointer;
+}
+
+.fetch-more__btn .fet-more__btn--span {
+  font-size: 15px;
+  font-weight: bold;
 }
