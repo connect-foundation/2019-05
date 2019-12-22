@@ -33,6 +33,25 @@ const resolvers = {
         orderBy: 'startTime_ASC',
       });
     },
+    MatchConnection: (
+      _,
+      { first, skip, area, startTime, endTime, date },
+      { prisma }
+    ) => {
+      return prisma.matchesConnection({
+        where: {
+          guest: null,
+          status: 'OPEN',
+          area_in: area,
+          startTime_gte: startTime,
+          endTime_lte: endTime,
+          date,
+        },
+        first,
+        skip,
+        orderBy: 'startTime_ASC',
+      });
+    },
     Match: (_, { seq }, { prisma }) => {
       return prisma.match({ seq });
     },
@@ -306,6 +325,11 @@ const resolvers = {
     },
     match: ({ seq }, _, { prisma }) => {
       return prisma.apply({ seq }).match();
+    },
+  },
+  MatchConnection: {
+    hasNext: (root, _, { prisma }) => {
+      return root.pageInfo.hasNextPage;
     },
   },
 };
