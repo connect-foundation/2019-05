@@ -112,12 +112,12 @@ const WhenLoggedInWithoutInfo = () => {
       setFormToggle(!formToggle);
     };
     const TeamCodeBtn = () => (
-      <button type="button" onClick={handleOnClick}>
+      <button type="button" className="btn form-btn" onClick={handleOnClick}>
         팀 생성하러 가기 !!
       </button>
     );
 
-    return <>{formToggle ? <TeamCreationForm /> : <TeamCodeBtn />}</>;
+    return <>{formToggle ? <TeamCreationForm handleCancel={handleOnClick} /> : <TeamCodeBtn />}</>;
   };
 
   const TeamCodeLayer = () => {
@@ -126,12 +126,12 @@ const WhenLoggedInWithoutInfo = () => {
       setFormToggle(!formToggle);
     };
     const TeamCodeBtn = () => (
-      <button type="button" onClick={handleOnClick}>
+      <button type="button" className="btn form-btn" onClick={handleOnClick}>
         팀 정보 입력하러 가기 !!
       </button>
     );
 
-    return <>{formToggle ? <TeamCodeForm /> : <TeamCodeBtn />}</>;
+    return <>{formToggle ? <TeamCodeForm handleCancel={handleOnClick} /> : <TeamCodeBtn />}</>;
   };
 
   const UserInfoLayer = () => {
@@ -140,12 +140,12 @@ const WhenLoggedInWithoutInfo = () => {
       setFormToggle(!formToggle);
     };
     const UserInfoBtn = () => (
-      <button type="button" onClick={handleOnClick}>
+      <button type="button" className="btn form-btn" onClick={handleOnClick}>
         유저 정보 입력하러 가기 !!
       </button>
     );
 
-    return <>{formToggle ? <UserInfoForm /> : <UserInfoBtn />}</>;
+    return <>{formToggle ? <UserInfoForm handleCancel={handleOnClick} /> : <UserInfoBtn />}</>;
   };
 
   return (

@@ -156,6 +156,11 @@ img {
   color: $quick_white;
 }
 
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
 .btn {
   display: block;
   width: 80px;
@@ -168,6 +173,16 @@ img {
   color: #fff;
   appearance: none;
   cursor: pointer;
+
+  &.form-btn {
+    width: 100%;
+    height: 40px;
+    margin: 10px 0;
+  }
+
+  &.child-btn {
+    display: inline;
+  }
 }
 
 .auth-button {
