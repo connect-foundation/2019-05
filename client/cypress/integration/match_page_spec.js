@@ -3,13 +3,28 @@
 describe('match page', () => {
   it('moves to the match page', () => {
     cy.visit('/');
+
     cy.contains('Quick Match')
       .click()
       .url()
       .should('match', /\/match$/g);
   });
 
-  it('pops up a modal', () => {
+  it('should block the unauthorized users', () => {
+    cy.contains('매치 등록').click();
+    cy.get('.match-regist-modal').should('be.hidden');
+    cy.on('window:alert', (str) => {
+      expect(str).to.include('회원만');
+    });
+  });
+
+  it('should login successfully', () => {
+    cy.get('.hamburger-box').click();
+    cy.get('.new-auth-button--kakao').click();
+  });
+
+  it('should allow the authorized user', () => {
+    cy.contains('Quick Match!').click();
     cy.contains('매치 등록').click();
     cy.get('.match-regist-modal').should('be.visible');
   });
