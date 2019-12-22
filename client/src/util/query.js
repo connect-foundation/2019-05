@@ -16,6 +16,11 @@ const TEAM_INFO_FETCH_QUERY = `
         seq
         name
         introduction
+        onApplyingList {
+         match {
+           seq
+         }
+        }
       }
     }
   }`;

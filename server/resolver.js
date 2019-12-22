@@ -310,6 +310,9 @@ const resolvers = {
     notiList: ({ seq }, _, { prisma }) => {
       return prisma.player({ seq }).notiList();
     },
+    applyingList: ({ seq }, _, { prisma }) => {
+      return prisma.player({ seq }).applyingList();
+    },
   },
   Notifier: {
     player: ({ seq }, _, { prisma }) => {
