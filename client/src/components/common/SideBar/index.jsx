@@ -117,7 +117,15 @@ const WhenLoggedInWithoutInfo = () => {
       </button>
     );
 
-    return <>{formToggle ? <TeamCreationForm handleCancel={handleOnClick} /> : <TeamCodeBtn />}</>;
+    return (
+      <>
+        {formToggle ? (
+          <TeamCreationForm handleCancel={handleOnClick} />
+        ) : (
+          <TeamCodeBtn />
+        )}
+      </>
+    );
   };
 
   const TeamCodeLayer = () => {
@@ -131,7 +139,15 @@ const WhenLoggedInWithoutInfo = () => {
       </button>
     );
 
-    return <>{formToggle ? <TeamCodeForm handleCancel={handleOnClick} /> : <TeamCodeBtn />}</>;
+    return (
+      <>
+        {formToggle ? (
+          <TeamCodeForm handleCancel={handleOnClick} />
+        ) : (
+          <TeamCodeBtn />
+        )}
+      </>
+    );
   };
 
   const UserInfoLayer = () => {
@@ -145,7 +161,15 @@ const WhenLoggedInWithoutInfo = () => {
       </button>
     );
 
-    return <>{formToggle ? <UserInfoForm handleCancel={handleOnClick} /> : <UserInfoBtn />}</>;
+    return (
+      <>
+        {formToggle ? (
+          <UserInfoForm handleCancel={handleOnClick} />
+        ) : (
+          <UserInfoBtn />
+        )}
+      </>
+    );
   };
 
   return (

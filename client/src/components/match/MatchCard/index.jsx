@@ -14,6 +14,10 @@ const MatchCard = (props) => {
   const handleMatchApplyBtn = () => {
     if (!userState.playerInfo)
       return alert('매치 신청을 위해서는 로그인하셔야 합니다.');
+    if (!userState.playerInfo.phone || !userState.playerInfo.email)
+      return alert(
+        '매치 신청을 위해서는 개인 연락처 정보를 등록하셔야 합니다.'
+      );
     if (!userState.playerInfo.team)
       return alert('매치 신청을 하기 위해서는 팀에 등록되어 있어야 합니다.');
 
