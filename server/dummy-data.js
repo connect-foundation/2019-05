@@ -495,7 +495,7 @@ const Team = [
 
 const Player = boostCamperInfo.map((playerInfo, idx) => {
   return {
-    playerId: idx + 1,
+    playerId: `${idx + 1}`,
     team: null,
     name: playerInfo.name,
     phone: TEST_PHONE,
@@ -504,68 +504,6 @@ const Player = boostCamperInfo.map((playerInfo, idx) => {
   };
 });
 
-const isValidDate2020 = (month, day) => {
-  const createdDate = new Date(2020, month, day);
-  if (createdDate.getMonth() == month && createdDate.getDate() == day) {
-    return true;
-  }
-  return false;
-};
-
-const isValidDate2019 = (month, day) => {
-  const createdDate = new Date(2019, month, day);
-  if (createdDate.getMonth() == month && createdDate.getDate() == day) {
-    return true;
-  }
-  return false;
-};
-
-const changeDigitOneToTwo = (numStr) => {
-  if (numStr.length === 1) {
-    return '0' + numStr;
-  }
-  return numStr;
-};
-
-const createValidDate = () => {
-  while (true) {
-    const randomMonth = Math.random() > 0.5 ? 2 : 1;
-    const randomDay = createRandomNumber(31, 1);
-    if (isValidDate2020(randomMonth, randomDay)) {
-      return `${changeDigitOneToTwo(randomMonth + '')}-${changeDigitOneToTwo(
-        randomDay + ''
-      )}`;
-    }
-  }
-};
-
-const createValidDateDecember = () => {
-  while (true) {
-    const randomMonth = 11;
-    const randomDay = createRandomNumber(31, 9);
-
-    if (isValidDate2019(randomMonth, randomDay)) {
-      return `${changeDigitOneToTwo(
-        randomMonth + 1 + ''
-      )}-${changeDigitOneToTwo(randomDay + '')}`;
-    }
-  }
-};
-
-const checkingOverTime = (hour, min) => {
-  let hourStr = hour + '';
-  let minStr = min + '';
-  if (hourStr === '24') {
-    hourStr = '00';
-  }
-  return `${changeDigitOneToTwo(hourStr)}:${changeDigitOneToTwo(minStr)}`;
-};
-
-const makeMatchAuthor = (teamSeq) => {
-  return Player.findIndex((val) => {
-    return val.team.connect.seq === teamSeq;
-  });
-};
 const dates = [
   '2019-12-23',
   '2019-12-24',
@@ -662,28 +600,23 @@ const generateSet = () => {
   });
 };
 
-const matchDataSet = generateSet();
-
 const createData = () => {
   return dates.reduce((acc, date) => {
-    const oneDayMatch = times.reduce(
-      accumulator,
-      (time) => {
-        const oneTimezoneMatch = generateSet().map((set) => {
-          return {
-            ...set,
-            startTime: time.startTIme,
-            endTime: time.endTime,
-            date,
-          };
-        });
-        return [...accumulator, ...oneTimezoneMatch];
-      },
-      []
-    );
+    const oneDayMatch = times.reduce((accumulator, time) => {
+      const oneTimezoneMatch = generateSet().map((set) => {
+        return {
+          ...set,
+          startTime: time.startTime,
+          endTime: time.endTime,
+          date,
+        };
+      });
+      return [...accumulator, ...oneTimezoneMatch];
+    }, []);
     return [...acc, ...oneDayMatch];
   }, []);
 };
 
 const Match = createData();
+
 module.exports = { Player, Team, Match };
