@@ -33,7 +33,7 @@ const seed = async () => {
       data: {
         team: {
           connect: {
-            seq: Math.ceil(plidx / 4),
+            seq: Math.ceil(plIdx / 4),
           },
         },
       },
