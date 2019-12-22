@@ -4,6 +4,7 @@ const { prisma } = require('../generated/prisma-client');
 const mailSender = require('../utils/nodemailer');
 const axios = require('axios');
 const _ = require('lodash');
+const convertDistrictCode = require('../utils/district');
 
 const findNotifier = async (date, startTime, endTime, area) => {
   const result = await prisma.notifiers({
@@ -24,7 +25,7 @@ const findNotifier = async (date, startTime, endTime, area) => {
     .player();
   const uniquePlayerList = _.uniqWith(playerList, _.isEqual);
   sendEmailNotification(uniquePlayerList);
-  sendSMSNotification(uniquePlayerList);
+  sendSMSNotification(uniquePlayerList, { date, startTime, endTime, area });
 };
 
 const filterArea = (notiArray, areaString) => {
@@ -48,11 +49,17 @@ const sendEmailNotification = async (uniquePlayerList) => {
   return await mailSender.fireMail(emailOption);
 };
 
-const sendSMSNotification = async (uniquePlayerList) => {
+const sendSMSNotification = async (uniquePlayerList, matchInfo) => {
+  const { date, startTime, area } = matchInfo;
   const receivers = uniquePlayerList.map((playerObj) => playerObj.player.phone);
   console.log(receivers, 'receivers');
   if (!receivers.length) return;
-  const content = '문자 메세지 테스트. ';
+  const content = `[퀵킥 매치 알림] 
+날짜: ${date}
+시각: ${startTime < '12:00' ? '오전 ' : ''}${startTime}
+위치: ${convertDistrictCode(area)} 
+
+https://quickkick.site`;
   const serviceId = env.NAVER_SMS_API_ID;
   const headerOp = {
     headers: {
