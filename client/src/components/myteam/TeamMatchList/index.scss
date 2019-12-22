@@ -7,7 +7,7 @@
   }
   h2 {
     margin-bottom: 30px;
-    font-size: 28px;
+    font-size: 34px;
     color: $quick_black;
   }
   .team-match__category {
@@ -28,7 +28,6 @@
     }
     &--upload {
       position: relative;
-
       &:after {
         display: block;
         position: absolute;
@@ -44,11 +43,12 @@
       padding-left: 30px;
     }
   }
-
+  .team-match-info__container {
+    margin-bottom: 30px;
+  }
   .team-match__card {
     display: flex;
     width: 100%;
-    margin-bottom: 30px;
     padding: 40px 60px;
     box-sizing: border-box;
     background: #fff;
@@ -70,6 +70,46 @@
       padding-right: 60px;
       line-height: 24px;
     }
+    .team-match__btn-container {
+      display: flex;
+      justify-content: flex-end;
+      flex: 1;
+    }
+    .team-match__down-btn {
+      appearance: none;
+      border: 0 none;
+      background: none;
+      color: $quick_mint;
+      cursor: pointer;
+      outline: none;
+    }
+  }
+
+  .applied-team-list {
+    width: 100%;
+    height: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-color: #fff;
+    transition: all 0.3s ease-in-out;
+    &.active {
+      //height: inherit;
+    }
+    .applied-team-inner {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 15px 60px 50px;
+    }
+    .applied-team-title {
+      margin-bottom: 15px;
+      color: $quick_black;
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+  .applied-team-table {
+    font-size: 16px;
+    font-family: 'Noto Sans KR', sans-serif;
   }
 
   .team-match__no-result {

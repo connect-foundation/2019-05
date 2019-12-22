@@ -14,7 +14,7 @@ mutation ($seq: Int, $name: String, $phone: String, $email: String){
 }
 `;
 
-const UserInfoForm = () => {
+const UserInfoForm = ({ handleCancel }) => {
   const { userState, userDispatch } = useContext(UserContext);
   const formRef = useRef();
   const makeFormData = () => {
@@ -80,9 +80,14 @@ const UserInfoForm = () => {
         required={Boolean(true)}
         maxlen="50"
       />
-      <button type="submit" className="submit-btn">
-        등록하기
-      </button>
+      <div className="form-buttons">
+        <button type="submit" className="btn child-btn">
+          등록하기
+        </button>
+        <button type="button" className="btn child-btn" onClick={handleCancel}>
+          취소
+        </button>
+      </div>
     </form>
   );
 };

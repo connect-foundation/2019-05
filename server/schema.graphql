@@ -83,6 +83,10 @@ type Match {
   appliedLists: [Apply!]
 }
 
+type MatchConnection {
+  hasNext: Boolean
+}
+
 enum Status {
   OPEN
   CLOSED
@@ -127,6 +131,12 @@ type Query {
   Player(seq: Int, playerId: String): Player
   Notifiers(seq: Int, player: Int): [Notifier]
   Notifier(seq: Int): Notifier
+  MatchConnection(first: Int
+    skip: Int
+    area: [Area]
+    startTime: String
+    endTime: String
+    date: String) : MatchConnection
 }
 
 type Mutation {

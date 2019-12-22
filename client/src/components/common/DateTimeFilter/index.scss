@@ -73,6 +73,7 @@ $box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.15);
 
 .react_times_button {
   border-radius: $border_radius;
+  text-align: center;
 }
 
 .notification-btn {
@@ -89,5 +90,32 @@ $box-shadow: 2px 2px 15px 0 rgba(0, 0, 0, 0.15);
     font-size: 13px;
     outline: none;
     cursor: pointer;
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+.DayPickerKeyboardShortcuts {
+  &_show__bottomRight {
+    &:hover {
+      &::before {
+        border-right: 33px solid $quick_light_navy;
+      }
+    }
+    &::before {
+      border-top: 26px solid transparent;
+      border-right: 33px solid $quick_background;
+    }
+  }
+}
+
+.CalendarDay__selected {
+  background-color: $quick_mint;
+  border: 1px solid $quick_mint;
+  &:hover,
+  &:active {
+    background-color: $quick_light_navy;
+    border: 1px solid $quick_light_navy;
   }
 }

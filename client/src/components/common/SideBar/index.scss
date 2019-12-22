@@ -34,6 +34,19 @@ img {
     color: crimson;
   }
 }
+.noti-pane {
+  max-height: 220px;
+  overflow-y: scroll;
+  &__link {
+    color: yellow !important;
+    font-weight: 500;
+    &:hover {
+      text-decoration: underline;
+      font-weight: bolder;
+    }
+  }
+}
+
 .noti-item {
   position: relative;
 
@@ -143,6 +156,11 @@ img {
   color: $quick_white;
 }
 
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
 .btn {
   display: block;
   width: 80px;
@@ -155,6 +173,16 @@ img {
   color: #fff;
   appearance: none;
   cursor: pointer;
+
+  &.form-btn {
+    width: 100%;
+    height: 40px;
+    margin: 10px 0;
+  }
+
+  &.child-btn {
+    display: inline;
+  }
 }
 
 .auth-button {
@@ -224,4 +252,22 @@ img {
 .auth-message {
   width: calc(100% - 50px);
   font-weight: bold;
+}
+
+.double-button {
+  display: flex;
+}
+
+.btn__gotohome {
+  div {
+    width: 90px;
+    padding: 6px 0 6px 12px;
+  }
+}
+
+.btn__gototeam {
+  div {
+    margin-left: 10px;
+    width: 100px;
+  }
 }
