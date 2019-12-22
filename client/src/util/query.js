@@ -16,6 +16,11 @@ const TEAM_INFO_FETCH_QUERY = `
         seq
         name
         introduction
+        onApplyingList {
+         match {
+           seq
+         }
+        }
       }
     }
   }`;
@@ -92,8 +97,8 @@ query ($first: Int, $skip: Int, $startTime: String, $endTime: String, $date: Str
 }`;
 
 const MYTEAM_INFO_FETCH_QUERY = `
-query ($seq: Int){
-  Team(seq:$seq){
+query ($seq: Int, $date: String){
+  Team(seq:$seq, date: $date){
     seq
     name
     logo

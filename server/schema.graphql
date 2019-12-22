@@ -126,7 +126,7 @@ type Query {
   ): [Match!]
   Match(seq: Int): Match
   Teams(seq: Int): [Team]
-  Team(seq: Int, teamUniqueId: String): Team
+  Team(seq: Int, teamUniqueId: String, date: String): Team
   Players(seq: Int, playerId: String, team: Int): [Player]
   Player(seq: Int, playerId: String): Player
   Notifiers(seq: Int, player: Int): [Notifier]

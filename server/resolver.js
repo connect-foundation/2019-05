@@ -62,7 +62,7 @@ const resolvers = {
         },
       });
     },
-    Team: (_, { seq, teamUniqueId }, { prisma }) => {
+    Team: (_, { seq, teamUniqueId, date }, { prisma }) => {
       return prisma.team({ seq, teamUniqueId });
     },
     Players: (_, { seq, playerId, team }, { prisma }) => {
@@ -287,9 +287,12 @@ const resolvers = {
     members: ({ seq }, _, { prisma }) => {
       return prisma.team({ seq }).members();
     },
-    uploadMatchList: ({ seq }, _, { prisma }) => {
+    uploadMatchList: ({ seq }, _, { prisma }, { variableValues }) => {
       return prisma.team({ seq }).uploadMatchList({
-        orderBy: 'date_DESC',
+        where: {
+          date_gte: variableValues.date,
+        },
+        orderBy: 'date_ASC',
       });
     },
     matchingDoneList: ({ seq }, _, { prisma }) => {
@@ -309,6 +312,9 @@ const resolvers = {
     },
     notiList: ({ seq }, _, { prisma }) => {
       return prisma.player({ seq }).notiList();
+    },
+    applyingList: ({ seq }, _, { prisma }) => {
+      return prisma.player({ seq }).applyingList();
     },
   },
   Notifier: {

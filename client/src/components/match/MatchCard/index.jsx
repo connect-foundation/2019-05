@@ -7,19 +7,30 @@ import './index.scss';
 
 const MatchCard = (props) => {
   const { matchInfo } = props;
-  const { date, startTime, endTime, host, stadium, area } = matchInfo;
+  const { seq, date, startTime, endTime, host, stadium, area } = matchInfo;
   const { matchDispatch } = useContext(MatchContext);
-  const { userState } = useContext(UserContext);
+  const {
+    userState: { playerInfo },
+  } = useContext(UserContext);
 
+  const checkApplyingList = (sequence, applyingList) => {
+    return applyingList.some((val) => val.match.seq === sequence);
+  };
   const handleMatchApplyBtn = () => {
-    if (!userState.playerInfo)
-      return alert('매치 신청을 위해서는 로그인하셔야 합니다.');
-    if (!userState.playerInfo.phone || !userState.playerInfo.email)
+    if (!playerInfo) return alert('매치 신청을 위해서는 로그인하셔야 합니다.');
+    if (!playerInfo.phone || !playerInfo.email)
       return alert(
         '매치 신청을 위해서는 개인 연락처 정보를 등록하셔야 합니다.'
       );
-    if (!userState.playerInfo.team)
+    if (!playerInfo.team)
       return alert('매치 신청을 하기 위해서는 팀에 등록되어 있어야 합니다.');
+
+    const alreadyApplied = checkApplyingList(
+      seq,
+      playerInfo.team.onApplyingList
+    );
+
+    if (alreadyApplied) return alert('이미 신청한 매치입니다.');
 
     matchDispatch(MatchActionCreator.toggleViewMatchApplyModal());
     matchDispatch(MatchActionCreator.selectMatchInfo(matchInfo));
@@ -67,6 +78,7 @@ const MatchCard = (props) => {
 
 MatchCard.propTypes = {
   matchInfo: PropTypes.shape({
+    seq: PropTypes.number.isRequired,
     host: PropTypes.shape({
       seq: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,

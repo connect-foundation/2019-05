@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
+import moment from 'moment';
 import useAsync from '../../hooks/useAsync';
 import { Header, SideBar } from '../../components/common';
 import {
@@ -19,6 +20,7 @@ const getTeamData = async (playerInfo) => {
     query: MYTEAM_INFO_FETCH_QUERY,
     variables: {
       seq: playerInfo.team.seq,
+      date: moment().format('YYYY[-]MM[-]DD'),
     },
   };
   const fetchOption = {
