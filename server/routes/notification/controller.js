@@ -1,7 +1,7 @@
 const { env } = process;
 const webpush = require('web-push');
-const subscriptionMap = {};
 const axios = require('axios');
+const subscriptionMap = require('../../utils/subscriptionMap');
 const mailSender = require('../../utils/nodemailer');
 const makeMsgContent = require('../../utils/makeMsgContent');
 const makeMailContent = require('../../utils/makeMailContent');
@@ -30,8 +30,8 @@ const sendPushNotification = async (req, res) => {
   } catch (error) {
     if (error.statusCode === HOST_STATUS_LOGOUT) {
       res.sendStatus(200);
+      return;
     }
-    res.status(500).json({ errorMsg: error });
   }
 };
 
@@ -75,7 +75,7 @@ const sendSMSNotification = async (req, _, next) => {
   const requestBody = {
     type: 'SMS',
     from: env.UNDERDOGGS_PHONE,
-    to: [matchInfo.author.phone],
+    to: [matchInfo.author.phone.replace(/-/g, '')],
     content,
   };
   try {

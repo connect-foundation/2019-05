@@ -88,7 +88,7 @@ const NaverMap = (props) => {
   const [selectedNum, setSelectedNum] = useState(0);
 
   useEffect(() => {
-    matchDispatch(MatchActionCreator.initialDistrict());
+    // matchDispatch(MatchActionCreator.initialDistrict());
     return () => {
       matchDispatch(MatchActionCreator.initialDistrict());
     };

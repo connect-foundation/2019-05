@@ -4,62 +4,14 @@ import MatchCard from '../MatchCard';
 import useAsync from '../../../hooks/useAsync';
 import { FilterContext } from '../../../contexts/Filter';
 import { MatchContext } from '../../../contexts/Match';
-import { FetchLoadingView, FetchErrorView } from '../../../template';
+import { FetchLoadingView } from '../../../template';
+import { MATCH_LIST_FETCH_QUERY } from '../../../util/query';
 import './index.scss';
 
 const MATCH_LIST_COUNT_PER_PAGE = 10;
-const MATCH_LIST_FETCH_QUERY = `
-query ($first: Int, $skip: Int, $startTime: String, $endTime: String, $date: String, $area: [Area]){
-  PendingMatches(first: $first, skip: $skip, area: $area, startTime: $startTime, endTime: $endTime, date: $date){
-    seq
-    author {
-      seq
-      playerId
-      name
-      phone
-      email
-    }
-    host{
-      seq
-      name
-      logo
-      introduction
-    }
-    address
-    area
-    stadium
-    date
-    startTime
-    endTime
-    description
-  }
-}`;
 
-const LIST_FETCH_ERROR_MSG = '리스트 불러오기를 실패했습니다...';
-
-const NoListView = () => {
-  return <span>원하시는 조건에 맞는 경기가 없어요...</span>;
-};
-
-const ListView = (matchList) => {
-  return (
-    <>
-      {matchList.map((match) => (
-        <MatchCard key={match.seq} matchInfo={match} />
-      ))}
-    </>
-  );
-};
-
-const renderingMatchListView = (listState, reFetchList, currentList) => {
-  const { loading, data: matchList, error } = listState;
-  if (loading) return FetchLoadingView();
-  if (error) return FetchErrorView(reFetchList, LIST_FETCH_ERROR_MSG);
-  if (!matchList) return [];
-  //const newList = [...currentList, ...matchList];
-  if (currentList.length === 0) return NoListView();
-  return ListView(currentList);
-};
+const NO_MATCHED_LIST_MSG = `원하시는 조건에 맞는 경기가 없어요
+  경기를 등록하거나 다른 날짜, 시간을 찾아보시는 것은 어떨까요? :)`;
 
 const getSelectedDistrictArray = (districtInfo) => {
   let newArr = Object.keys(districtInfo).filter(
@@ -70,7 +22,7 @@ const getSelectedDistrictArray = (districtInfo) => {
 };
 
 const createQueryBaseOnState = (filter, districtInfo, page) => {
-  const queryValue = {
+  return {
     query: MATCH_LIST_FETCH_QUERY,
     variables: {
       startTime: filter.startTime,
@@ -81,7 +33,6 @@ const createQueryBaseOnState = (filter, districtInfo, page) => {
       first: MATCH_LIST_COUNT_PER_PAGE,
     },
   };
-  return queryValue;
 };
 
 const getMatchList = async (fetchQuery) => {
@@ -94,7 +45,7 @@ const getMatchList = async (fetchQuery) => {
     },
     data: JSON.stringify(fetchQuery),
   });
-  return response.data.data.PendingMatches;
+  return response.data.data;
 };
 
 const MatchList = () => {
@@ -102,49 +53,104 @@ const MatchList = () => {
   const { matchState } = useContext(MatchContext);
   const [fetchQuery, setFetchQuery] = useState(null);
   const [currentPage, setPage] = useState(0);
-  const [currentList, setMatchList] = useState([]);
-  const [pageEnd, setPageEnd] = useState(false);
+  const [currentList, setMatchList] = useState(null);
+  const [isPageEnd, setPageEnd] = useState(false);
+  const [prevList, setPrevList] = useState([]);
 
   useEffect(() => {
     setPage(0);
     setPageEnd(false);
-    setMatchList([]);
+    setMatchList((prev) => {
+      if (prev) setPrevList([...prev]);
+      return [];
+    });
   }, [filterState, matchState.districtInfo]);
 
-  const [listState, reFetchList] = useAsync(
-    getMatchList.bind(null, fetchQuery),
-    [fetchQuery]
-  );
-
   useEffect(() => {
-    if (!matchState.districtInfo) return null;
+    if (!matchState.districtInfo) return;
     setFetchQuery(
       createQueryBaseOnState(filterState, matchState.districtInfo, currentPage)
     );
   }, [filterState, matchState.districtInfo, currentPage]);
 
+  const [listState] = useAsync(getMatchList.bind(null, fetchQuery), [
+    fetchQuery,
+  ]);
+  const { loading, data: matchData } = listState;
+
   useEffect(() => {
-    if (!listState.data) return;
-    if (listState.data.length < MATCH_LIST_COUNT_PER_PAGE) setPageEnd(true);
-    setMatchList([...currentList, ...listState.data]);
-  }, [listState.data]);
+    if (!matchData) return;
+    const {
+      PendingMatches: matchList,
+      MatchConnection: { hasNext },
+    } = matchData;
+    setPageEnd(!hasNext);
+    setMatchList((prev) => {
+      if (!prev) return [...matchList];
+      if (currentPage === 0) {
+        if (prev.length > 0) return [...prev];
+        return [...matchList];
+      }
+      return [...prev, ...matchList];
+    });
+  }, [matchData]);
 
   const handleFetchMore = () => {
     setPage(currentPage + 1);
   };
 
-  const moreButton = pageEnd ? null : (
-    <button type="button" className="fetch-more__btn" onClick={handleFetchMore}>
-      <span className="fet-more__btn--span">매치 더보기</span>
-    </button>
-  );
   return (
-    <>
-      <div className="match-list">
-        {renderingMatchListView(listState, reFetchList, currentList)}
-      </div>
-      <div className="fetch-more__wrraper">{moreButton}</div>
-    </>
+    <div className="match-list">
+      {(() => {
+        if (!currentList || !prevList) {
+          return null;
+        }
+        if (prevList.length > 0 && currentList.length === 0) {
+          const view = prevList.map((match) => (
+            <MatchCard key={match.seq} matchInfo={match} />
+          ));
+          if (!isPageEnd) {
+            view.push(
+              <MoreButton key="more-btn" handleFetchMore={handleFetchMore} />
+            );
+          }
+          return view;
+        }
+        if (currentList.length === 0 && prevList.length === 0) {
+          if (loading) {
+            return FetchLoadingView();
+          }
+          return <span className="no-list-view">{NO_MATCHED_LIST_MSG}</span>;
+        }
+        const view = currentList.map((match) => (
+          <MatchCard key={match.seq} matchInfo={match} />
+        ));
+        if (currentList.length > 0 && loading) {
+          view.push(FetchLoadingView());
+        }
+        if (!isPageEnd) {
+          view.push(
+            <MoreButton key="more-btn" handleFetchMore={handleFetchMore} />
+          );
+        }
+        return view;
+      })()}
+    </div>
+  );
+};
+
+// eslint-disable-next-line react/prop-types
+const MoreButton = ({ handleFetchMore }) => {
+  return (
+    <div className="fetch-more__wrraper">
+      <button
+        type="button"
+        className="fetch-more__btn"
+        onClick={handleFetchMore}
+      >
+        <span className="fet-more__btn--span">매치 더보기</span>
+      </button>
+    </div>
   );
 };
 

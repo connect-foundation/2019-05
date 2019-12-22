@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
+import moment from 'moment';
 import useAsync from '../../hooks/useAsync';
 import { Header, SideBar } from '../../components/common';
 import {
@@ -9,66 +10,17 @@ import {
 } from '../../components/myteam';
 import { UserContext } from '../../contexts/User';
 import { FetchLoadingView, FetchErrorView } from '../../template';
+import { MYTEAM_INFO_FETCH_QUERY } from '../../util/query';
 
-const gql = `
-query ($seq: Int){
-  Team(seq:$seq){
-    seq
-    name
-    logo
-    homeArea
-    introduction
-    teamUniqueId
-    members{
-      seq
-      name
-      phone
-      email
-    }
-    uploadMatchList{
-      seq
-      stadium
-      address
-      area
-      date
-      startTime
-      endTime
-      appliedLists {
-        seq
-        team{
-          name
-        }
-        player{
-          phone
-          email
-        }
-      }
-    }
-    onApplyingList {
-      seq
-      match {
-        seq
-        host {
-          name
-        }
-        stadium
-        address
-        area
-        date
-        startTime
-        endTime
-      }
-    }
-  }
-}`;
 const FETCH_ERROR_MSG = '팀정보 불러오기를 실패했습니다..';
 
 const getTeamData = async (playerInfo) => {
   if (!playerInfo) return;
   const fetchBody = {
-    query: gql,
+    query: MYTEAM_INFO_FETCH_QUERY,
     variables: {
       seq: playerInfo.team.seq,
+      date: moment().format('YYYY[-]MM[-]DD'),
     },
   };
   const fetchOption = {

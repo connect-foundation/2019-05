@@ -125,6 +125,7 @@ const ModalForm = () => {
     const result = await data.json();
 
     if (result.error) return false;
+    formRef.current.reset();
     return result.data.CreateMatch;
   };
 
@@ -172,7 +173,7 @@ const ModalForm = () => {
   );
 };
 
-const DistrictSection = (props) => {
+const DistrictSection = () => {
   return (
     <div className="district-section input-box">
       <select
@@ -198,6 +199,7 @@ const DistrictSection = (props) => {
   );
 };
 
+// eslint-disable-next-line react/prop-types
 const DateSection = ({ matchDate, setMatchDate }) => {
   const [focused, setFocused] = useState(false);
 
@@ -225,7 +227,7 @@ const DateSection = ({ matchDate, setMatchDate }) => {
   );
 };
 
-const TimeSection = (prop) => {
+const TimeSection = () => {
   const [startTime, setStartTime] = useState('10:00');
   const [endTime, setEndTime] = useState('12:00');
   const handleTimeChange = (time, fn) => {
@@ -235,7 +237,7 @@ const TimeSection = (prop) => {
   return (
     <div className="time-container">
       <div className="time-section start-time">
-        <p className="match-register__label">시작시간</p>
+        <p className="match-register__label">시작시각</p>
         <TimePicker
           time={startTime}
           onTimeChange={(time) => handleTimeChange(time, setStartTime)}
@@ -249,7 +251,7 @@ const TimeSection = (prop) => {
         />
       </div>
       <div className="time-section end-time">
-        <p className="match-register__label">종료시간</p>
+        <p className="match-register__label">종료시각</p>
         <TimePicker
           time={endTime}
           onTimeChange={(time) => handleTimeChange(time, setEndTime)}
@@ -264,11 +266,6 @@ const TimeSection = (prop) => {
       </div>
     </div>
   );
-};
-
-DateSection.propTypes = {
-  matchDate: PropTypes.object.isRequired,
-  setMatchDate: PropTypes.func.isRequired,
 };
 
 export default MatchRegistModal;
