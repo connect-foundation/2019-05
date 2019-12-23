@@ -28,8 +28,8 @@ self.addEventListener('push', (event) => {
         '안녕하세요 Quick-Kick 입니다!',
         {
           body: notificationMsg,
-          icon: 'quick_48.png',
-          badge: 'quick_48.png',
+          icon: 'android-icon-48x48.png',
+          badge: 'android-icon-48x48.png',
         }
       );
     })
