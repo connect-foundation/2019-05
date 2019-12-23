@@ -87,6 +87,7 @@ const MatchList = () => {
     setPageEnd(!hasNext);
     setMatchList((prev) => {
       if (!prev) return [...matchList];
+      if (matchList.length === 0) setPrevList([]);
       if (currentPage === 0) {
         if (prev.length > 0) return [...prev];
         return [...matchList];
