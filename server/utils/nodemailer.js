@@ -12,7 +12,7 @@ const TRANSPORT_CONFIG = {
     pass: env.EMAIL_PW,
   },
   tls: {
-    rejectUnauthorize: false,
+    rejectUnauthorized: false,
   },
   maxConnections: 10,
   maxMessages: 10,
