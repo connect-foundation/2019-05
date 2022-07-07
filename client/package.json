@@ -16,7 +16,7 @@
     "axios": "^0.19.0",
     "classnames": "^2.2.6",
     "load-js": "^3.0.3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.27",
     "node-sass": "^4.13.0",
     "prop-types": "^15.7.2",
